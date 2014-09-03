@@ -4,5 +4,13 @@
 	"Html" : "",
 	"UserID$" :"",
 	"Password$" : "",
-	"SignIn$" : null
+	"SignInAuthToken$" : "",
+	"SignInEvent" : false,
+	"AuthToken" : "",
+	"IsSignedIn" : false,
+	"Message" : "",
+	"SignIn$" : null,
+	"OriginUrl": "",
+	"RedirectUrl" : "",
+	"SetCookie" : ""
 }

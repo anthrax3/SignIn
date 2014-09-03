@@ -1,3 +1,4 @@
+using SignInApp.Database;
 using Starcounter;
 using System;
 
@@ -6,33 +7,65 @@ namespace SignInApp.Server {
     [SignInUser_json]
     partial class SignInUser : Json {
 
-        void Handle(Input.UserID action) {
-
-            // TODO:
-            Console.WriteLine("TODO: UserID action");
-        }
-
+        /// <summary>
+        /// Sign-in operation
+        /// </summary>
+        /// <param name="action"></param>
         void Handle(Input.SignIn action) {
 
-            // TODO:
-            Console.WriteLine("TODO: SignIn action");
+            string message;
+            SystemUserSession userSession = SignInOut.SignInSystemUser(this.UserID, this.Password, this.SignInAuthToken, out message);
+            if (userSession == null) {
+                if (!string.IsNullOrEmpty(message)) {
+                    this.ClearViewModelProperties(true);
+                    this.Message = message;
+                }
+                else {
+                    this.ClearViewModelProperties(true);
+                }
+            }
+            else {
+                this.SetViewModelProperties(userSession);
 
-            // Successfull sign-in
+                // TODO: Set cookie?
 
-            // Redirect to page that initiated this request
-            // At the moment just redirect to root.
-            this.RedirectToPage("/");
-
-            // Close this page
+                // Trigger event on client
+                this.SignInEvent = !this.SignInEvent;
+            }
         }
 
         /// <summary>
-        /// Redirect to page
+        /// Set properties
         /// </summary>
-        /// <param name="url"></param>
-        private void RedirectToPage(string url) {
+        /// <param name="userSession"></param>
+        internal void SetViewModelProperties(SystemUserSession userSession) {
 
-            // TODO: Redirect to page
+            this.Message = string.Empty;
+            this.AuthToken = userSession.Token.Token;
+            this.IsSignedIn = true;
+        }
+
+        /// <summary>
+        /// Clear properties
+        /// </summary>
+        internal void ClearViewModelProperties() {
+
+            this.ClearViewModelProperties(false);
+        }
+
+        /// <summary>
+        /// Clear properties
+        /// </summary>
+        /// <param name="keepUserIDAndPassword"></param>
+        void ClearViewModelProperties(bool keepUserIDAndPassword) {
+
+            if (!keepUserIDAndPassword) {
+                this.UserID = string.Empty;
+                this.Password = string.Empty;
+            }
+            this.AuthToken = string.Empty;
+            this.Message = string.Empty;
+            this.IsSignedIn = false;
         }
 
         #region Base

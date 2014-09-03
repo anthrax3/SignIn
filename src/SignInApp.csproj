@@ -90,6 +90,7 @@
     <Compile Include="Server\SignIn.json.cs">
       <DependentUpon>SignIn.json</DependentUpon>
     </Compile>
+    <Compile Include="Server\SignInOut.cs" />
     <Compile Include="Server\SignInUser.json.cs">
       <DependentUpon>SignInUser.json</DependentUpon>
     </Compile>

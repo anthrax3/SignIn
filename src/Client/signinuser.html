@@ -1,4 +1,5 @@
-﻿
+﻿<link rel="import" href="/vendor/juicy-redirect/src/juicy-redirect.html">
+
 <template bind="{{SignInApp}}">
 
     <h1>Sign-in</h1>
@@ -6,6 +7,15 @@
     <input placeholder="Username" type="text"  name="username" value="{{UserID$}}">
     <input placeholder="Password" type="password" name="password" value="{{Password$}}">
 
+    <template if="{{Message}}">
+        <p  style="margin:0px;background:red;color:white">{{Message}}</p>
+    </template>
+
     <button onclick="getModel(this).SignIn$ = null">Sign in</button>
+
+    <link is="juicy-redirect" history url="{{ RedirectUrl }}">
+
+   
+
 
 </template>
