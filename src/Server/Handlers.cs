@@ -17,6 +17,14 @@ namespace SignInApp.Server {
                 };
                 return p;
             });
+
+            Starcounter.Handle.GET("/signinuser", (Request request) => {
+                var p = new SignInUser() {
+                    Html = "/signinuser.html",
+                };
+                return p;
+            });
+
         }
     }
 }

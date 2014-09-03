@@ -1,0 +1,11 @@
+﻿
+<template bind="{{SignInApp}}">
+
+    <h1>Sign-in</h1>
+
+    <input placeholder="Username" type="text"  name="username" value="{{UserID$}}">
+    <input placeholder="Password" type="password" name="password" value="{{Password$}}">
+
+    <button onclick="getModel(this).SignIn$ = null">Sign in</button>
+
+</template>

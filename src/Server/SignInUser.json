@@ -1,0 +1,8 @@
+{
+	"$":{"Namespace":"SignInApp.Server"},
+	"Uri" : "",
+	"Html" : "",
+	"UserID$" :"",
+	"Password$" : "",
+	"SignIn$" : null
+}

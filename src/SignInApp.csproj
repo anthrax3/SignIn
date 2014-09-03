@@ -90,6 +90,9 @@
     <Compile Include="Server\SignIn.json.cs">
       <DependentUpon>SignIn.json</DependentUpon>
     </Compile>
+    <Compile Include="Server\SignInUser.json.cs">
+      <DependentUpon>SignInUser.json</DependentUpon>
+    </Compile>
     <Compile Include="Server\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -98,6 +101,7 @@
     </TypedJSON>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Client\signinuser.html" />
     <Content Include="Client\elements\so-signin\so-signin.html" />
     <Content Include="Client\signin.html" />
     <Content Include="third_party\Concepts.Ring1.dll">
@@ -115,6 +119,11 @@
   </ItemGroup>
   <ItemGroup>
     <TypedJSON Include="Server\JSON\user.json">
+      <Generator>MsBuild:Compile</Generator>
+    </TypedJSON>
+  </ItemGroup>
+  <ItemGroup>
+    <TypedJSON Include="Server\SignInUser.json">
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
   </ItemGroup>
