@@ -17,13 +17,6 @@ namespace SignInApp.Server {
                 };
                 return p;
             });
-
-            Starcounter.Handle.GET("/menu", () => {
-                var p = new SignIn() {
-                    Html = "/signin.html",
-                };
-                return p;
-            });
         }
     }
 }

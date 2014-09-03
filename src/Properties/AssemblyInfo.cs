@@ -11,7 +11,7 @@ using Starcounter.Internal;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Polyjuice")]
 [assembly: AssemblyProduct("SignInApp")]
-[assembly: AssemblyCopyright("Coupyright 2014 Polyjuice")]
+[assembly: AssemblyCopyright("Copyright 2014 Polyjuice")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
