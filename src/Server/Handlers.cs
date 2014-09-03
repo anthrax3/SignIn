@@ -20,7 +20,10 @@ namespace SignInApp.Server {
                 return p;
             });
 
-            Starcounter.Handle.GET("/signinuser", (Request request) => {
+            // TODO: maybe alias this (tomalec) 
+            // Starcounter.Handle.GET("/signinuser", (Request request) =>
+            Starcounter.Handle.GET("/signinapp/signinuser", (Request request) =>
+            {
                 var p = new SignInUser() {
                     Html = "/signinuser.html",
                 };
