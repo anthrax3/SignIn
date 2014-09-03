@@ -1,0 +1,7 @@
+{
+	"$":{"Namespace":"SignInApp.Server.JSON"},
+	"userId" : "",
+	"fullName" : "",
+	"authToken" : "",
+	"sessionid" : ""
+}

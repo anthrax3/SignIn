@@ -1,0 +1,198 @@
+<!-- Copyright (c) 2014 Society Objects. All rights reserved. -->
+
+<!--https://github.com/PuppetJs/PuppetJs/blob/issue-4/src/puppet.js-->
+
+<polymer-element name="so-signin" attributes="popup">
+
+    <template>
+
+        <style>
+            :host {
+            }
+
+            #signin {
+                /*background-color: #ffd800;*/
+                /*padding: 20px;*/
+                font-size: 14px;
+                color:white;
+            }
+
+            .popup_content {
+                border: 1px #aaaaaa solid;
+                border-radius: 5px;
+                background-color: #fefefe;
+                box-shadow: 0px 0px 10px #dddddd;
+                display: none;
+                position: absolute;
+                top: 25%;
+                left: 25%;
+                width: 250px;
+                height: 150px;
+                padding: 8px;
+                z-index: 1002;
+                overflow: auto;
+            }
+        </style>
+
+        <div id="signin">
+         
+            <template if="{{!popup}}">
+                <template if="{{!templateInstance.model.IsSignedIn}}">
+                    <input placeholder="Username" type="text"  name="username" value="{{templateInstance.model.UserID$}}">
+                    <input placeholder="Password" type="password" name="password" value="{{templateInstance.model.Password$}}">
+                    <button type="submit" on-click="{{signInClick}}">Sign in</button>
+                </template>
+
+                <template if="{{templateInstance.model.IsSignedIn}}">
+                    <span style="margin-left:2px;">{{templateInstance.model.FullName}}</span>
+                    <button on-click="{{signOutClick}}">Sign out</button>
+                </template>
+
+                <template if="{{templateInstance.model.Message}}">
+                    <p  style="margin:0px;background:red;color:white">{{templateInstance.model.Message}}</p>
+                </template>
+
+            </template>        
+
+            <!-- POPUP Window -->
+           <template if="{{popup}}">
+
+                <template if="{{!templateInstance.model.IsSignedIn}}">
+                    
+                    <button on-click="{{openPopupClick}}">Sign in</button>
+
+                    <div id="popupWindow" style="display:{{popupDisplay}}"  class="popup_content">
+                            <input placeholder="Username" id="user" type="text" name="username" value="{{templateInstance.model.UserID$}}"><br>
+                            <input placeholder="Password" type="password" name="password" value="{{templateInstance.model.Password$}}">
+
+                            <template if="{{templateInstance.model.Message}}">
+                                <p style="background:red;color:white">{{templateInstance.model.Message}}</p>
+                            </template>
+                            <div>
+                            <button type="submit" on-click="{{signInClick}}">Sign in</button>
+                            <button  on-click="{{closePopup}}">Close</button>
+
+                            </div>
+                    </div>
+                </template>
+
+                <template if="{{templateInstance.model.IsSignedIn}}">
+                    Welcome {{templateInstance.model.FullName}}
+                    <button on-click="{{signOutClick}}">Sign out</button>
+                </template>
+
+            </template>
+        </div>
+
+    </template>
+
+	<script>
+
+	    "use strict";
+
+	    Polymer('so-signin', {
+	        isDomReady: false,
+	        popup: false,
+	        popupDisplay: "none",
+	        message: "",
+	        cookieName: "soauthtoken",
+	        observe: {
+	            'templateInstance.model.SignInEvent': 'SignInEventChanged'
+	        },
+	        SignInEventChanged: function (oldValue, newValue) {
+
+	            if (this.isDomReady == false) return;
+
+	            console.log("SignInEventChanged(" + oldValue + " => " + newValue + ")");
+
+	            var authTokenCookie = this.getCookie(this.cookieName);
+
+	            if (this.templateInstance.model.AuthToken) {
+
+	                if (authTokenCookie != this.templateInstance.model.AuthToken) {
+	                    this.setCookie(this.templateInstance.model.AuthToken);
+	                }
+	            }
+	            else {
+	                // remove cookie
+	                if (authTokenCookie) {
+	                    this.setCookie(this.templateInstance.model.AuthToken);
+	                }
+	            }
+	        },
+	        domReady: function () {
+
+	            this.isDomReady = true;
+
+	            if (this.templateInstance.model.IsSignedIn == false) {
+
+	                var authTokenCookie = this.getCookie(this.cookieName);
+	                if (authTokenCookie) {
+	                    this.templateInstance.model.SignInAuthToken$ = authTokenCookie;
+	                    this.signIn();
+	                }
+	            }
+	        },
+	        openPopupClick: function () {
+
+	            this.openPopup();
+	        },
+	        openPopup: function () {
+
+	            this.popupDisplay = "block";
+	        },
+	        closePopup: function () {
+
+	            this.popupDisplay = "none";
+	            this.message = null;
+	        },
+	        signInClick: function () {
+
+	            this.signIn();
+	        },
+	        signOutClick: function () {
+
+	            if (this.popup == true) {
+	                this.closePopup();
+	            }
+	            this.signOut();
+	        },
+	        signIn: function () {
+
+	            // Trigger sign-in event
+	            this.templateInstance.model.SignIn$ = null;
+	        },
+	        signOut: function () {
+
+	            // Trigger sign-in event
+	            this.templateInstance.model.SignOut$ = null;
+	        },
+	        getCookie: function (name) {
+
+	            var value = "; " + document.cookie;
+	            var parts = value.split("; " + name + "=");
+	            if (parts.length == 2) {
+	                var cookie = parts.pop().split(";").shift();
+	                console.log("gotCookie:" + cookie);
+	                return cookie;
+	            }
+	        },
+	        setCookie: function (value) {
+
+	            var cookie;
+
+	            if (value) {
+	                // Max-Age ( one week
+	                cookie = this.cookieName + "=" + value + "; max-age=" + 60 * 60 * 24 * 7 * 1 + "; Path=/";
+	                //cookie = this.cookieName + "=" + value + "; expires=Thu, 18 Dec 2015 12:00:00 UTC" + "; Path=/";
+	            }
+	            else {
+	                cookie = this.cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT"+"; Path=/";
+	            }
+
+	            document.cookie = cookie;
+	            console.log("setCookie:" + cookie);
+	        }
+	    });
+	</script>
+</polymer-element>
