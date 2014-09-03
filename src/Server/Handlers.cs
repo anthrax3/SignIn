@@ -11,6 +11,8 @@ namespace SignInApp.Server {
 
         internal static void RegisterHandlers() {
 
+            HandlerOptions opt = new HandlerOptions() { HandlerLevel = 0 };
+
             Starcounter.Handle.GET("/user", () => {
                 var p = new SignIn() {
                     Html = "/signin.html",
@@ -23,7 +25,7 @@ namespace SignInApp.Server {
                     Html = "/signinuser.html",
                 };
                 return p;
-            });
+            }, opt);
 
         }
     }
