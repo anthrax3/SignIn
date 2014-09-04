@@ -1,11 +1,5 @@
-﻿using SignInApp.Database;
-using Starcounter;
-using System;
-using System.Collections.Generic;
+﻿using Starcounter;
 using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace SignInApp.Server {
@@ -50,7 +44,9 @@ namespace SignInApp.Server {
                     Html = "/signinuser.html",
                 };
 
-                NameValueCollection queryCollection = HttpUtility.ParseQueryString(query);
+                string decodedQuery = HttpUtility.UrlDecode(query);
+
+                NameValueCollection queryCollection = HttpUtility.ParseQueryString(decodedQuery);
                 signInUserPage.OriginUrl = queryCollection.Get("originurl");
 
                 masterPage.MyPage = signInUserPage;
@@ -72,15 +68,17 @@ namespace SignInApp.Server {
                     user.PopulateFromJson(request.Body);
 
 
-                    SystemUserSession userSession = Db.SQL<SystemUserSession>("SELECT o FROM SignInApp.Database.SystemUserSession o WHERE o.SessionIdString=?", user.sessionid).First;
+                    Concepts.Ring5.SystemUserSession userSession = Db.SQL<Concepts.Ring5.SystemUserSession>("SELECT o FROM Concepts.Ring5.SystemUserSession o WHERE o.SessionIdString=?", user.sessionid).First;
                     if (userSession != null) {
                         page.SetViewModelProperties(userSession);
                         page.SignInEvent = !page.SignInEvent;
 
                         SignInUser signInUserPage = page.MyPage as SignInUser;
-                        signInUserPage.SetViewModelProperties(userSession);
-                        signInUserPage.SignInEvent = !signInUserPage.SignInEvent;
-                        signInUserPage.RedirectUrl = signInUserPage.OriginUrl;
+                        if (signInUserPage != null) {
+                            signInUserPage.SetViewModelProperties(userSession);
+                            signInUserPage.SignInEvent = !signInUserPage.SignInEvent;
+                            signInUserPage.RedirectUrl = signInUserPage.OriginUrl;
+                        }
                     }
                 }
 
@@ -100,9 +98,11 @@ namespace SignInApp.Server {
                     page.SignInEvent = !page.SignInEvent;
 
                     SignInUser signInUserPage = page.MyPage as SignInUser;
-                    signInUserPage.ClearViewModelProperties();
-                    signInUserPage.SignInEvent = !page.SignInEvent;
-                    signInUserPage.RedirectUrl = "/";
+                    if (signInUserPage != null) {
+                        signInUserPage.ClearViewModelProperties();
+                        signInUserPage.SignInEvent = !page.SignInEvent;
+                        signInUserPage.RedirectUrl = "/";
+                    }
                 }
 
                 response.StatusCode = (ushort)System.Net.HttpStatusCode.OK;

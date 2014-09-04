@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Concepts.Ring3;
 using Starcounter;
-using Concepts.Ring3;
-
+using System;
 namespace SignInApp.Database {
     public class SampleData {
 
@@ -13,9 +8,22 @@ namespace SignInApp.Database {
 
             // Clean database
 
+            // ** BUGGWORKAROUND **
+            // Assure that assemblies is loaded
+
+            var transaction = new Transaction(() => {
+                Concepts.Ring1.Address b = new Concepts.Ring1.Address();
+                Concepts.Ring2.AffiliatedOrganisation c = new Concepts.Ring2.AffiliatedOrganisation();
+                Concepts.Ring3.ApplicationConfiguration d = new ApplicationConfiguration();
+                Concepts.Ring4.ProjectEvent e = new Concepts.Ring4.ProjectEvent();
+                Concepts.Ring5.SystemUserSession a = new Concepts.Ring5.SystemUserSession();
+                return;
+            });
+            transaction.Rollback();
+
             Db.Transaction(() => {
 
-                var result = Db.SQL("SELECT o FROM SignInApp.Database.SystemUserSession o");
+                var result = Db.SQL("SELECT o FROM Concepts.Ring5.SystemUserSession o");
                 foreach (var item in result) {
                     item.Delete();
                 }
@@ -36,7 +44,7 @@ namespace SignInApp.Database {
             });
 
             Db.Transaction(() => {
-                var result = Db.SQL<SignInApp.Database.SystemUserTokenKey>("SELECT o FROM SignInApp.Database.SystemUserTokenKey o");
+                var result = Db.SQL<Concepts.Ring5.SystemUserTokenKey>("SELECT o FROM Concepts.Ring5.SystemUserTokenKey o");
                 foreach (var item in result) {
                     item.Delete();
                 }

@@ -1,8 +1,7 @@
-﻿using Concepts.Ring1;
-using Starcounter;
+﻿using Starcounter;
 using System;
 
-namespace SignInApp.Database {
+namespace Concepts.Ring5 {
     /// <summary>
     /// Table with Signed in users sessions
     /// </summary>
@@ -40,5 +39,9 @@ namespace SignInApp.Database {
         /// TODO:
         /// </summary>
         public string IP;
+
+        public static void Test() {
+        }
+
     }
 }

@@ -1,12 +1,4 @@
-﻿using SignInApp.Database;
-using Starcounter;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
+﻿using Concepts.Ring5;
 
 namespace SignInApp.Server {
     public class Utils {

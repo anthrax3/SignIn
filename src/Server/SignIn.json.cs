@@ -1,11 +1,6 @@
-using Concepts.Ring1;
-using Concepts.Ring3;
+using Concepts.Ring5;
 using SignInApp.Database;
 using Starcounter;
-using System;
-using System.Security.Authentication;
-using System.Security.Cryptography;
-using System.Web;
 
 namespace SignInApp.Server {
 

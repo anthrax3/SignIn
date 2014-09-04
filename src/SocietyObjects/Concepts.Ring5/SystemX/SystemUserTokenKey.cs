@@ -3,7 +3,7 @@ using System;
 using System.Security.Cryptography;
 using System.Web;
 
-namespace SignInApp.Database {
+namespace Concepts.Ring5 {
     [Database]
     public class SystemUserTokenKey {
 

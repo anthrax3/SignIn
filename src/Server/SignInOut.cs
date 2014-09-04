@@ -1,11 +1,7 @@
 ﻿using Concepts.Ring3;
-using SignInApp.Database;
+using Concepts.Ring5;
 using Starcounter;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SignInApp.Server {
     public class SignInOut {
@@ -69,7 +65,7 @@ namespace SignInApp.Server {
         /// <param name="authToken"></param>
         static private SystemUserSession SignInUser(string authToken) {
 
-            SystemUserTokenKey token = Db.SQL<SignInApp.Database.SystemUserTokenKey>("SELECT o FROM SignInApp.Database.SystemUserTokenKey o WHERE o.Token=?", authToken).First;
+            SystemUserTokenKey token = Db.SQL<Concepts.Ring5.SystemUserTokenKey>("SELECT o FROM Concepts.Ring5.SystemUserTokenKey o WHERE o.Token=?", authToken).First;
             if (token == null) {
                 // signed-out, Invalid or expired token key
                 return null;
@@ -96,13 +92,18 @@ namespace SignInApp.Server {
             SystemUserSession userSession = null;
 
             Db.Transaction(() => {
-                // TODO: Check for duplicated sessions
-                userSession = new SystemUserSession();
-                userSession.SessionIdString = Session.Current.SessionIdString;
+
+                userSession = Db.SQL<Concepts.Ring5.SystemUserSession>("SELECT o FROM Concepts.Ring5.SystemUserSession o WHERE o.SessionIdString=?", Session.Current.SessionIdString).First;
+                if (userSession == null) {
+                    userSession = new SystemUserSession();
+                    userSession.Created = DateTime.UtcNow;
+                    userSession.SessionIdString = Session.Current.SessionIdString;
+                }
+
                 userSession.Token = token;
                 userSession.User = token.User;
                 userSession.IP = "127.0.0.0"; // TODO
-                userSession.Touched = userSession.Created = DateTime.UtcNow;
+                userSession.Touched = DateTime.UtcNow;
             });
 
             // Simulate Commit-Hook handling
@@ -121,7 +122,7 @@ namespace SignInApp.Server {
                 return;
             }
 
-            SystemUserTokenKey token = Db.SQL<SignInApp.Database.SystemUserTokenKey>("SELECT o FROM SignInApp.Database.SystemUserTokenKey o WHERE o.Token=?", authToken).First;
+            SystemUserTokenKey token = Db.SQL<Concepts.Ring5.SystemUserTokenKey>("SELECT o FROM Concepts.Ring5.SystemUserTokenKey o WHERE o.Token=?", authToken).First;
             if (token == null) {
                 return;
             }
@@ -130,7 +131,7 @@ namespace SignInApp.Server {
 
             Db.Transaction(() => {
 
-                var result = Db.SQL<SystemUserSession>("SELECT o FROM SignInApp.Database.SystemUserSession o WHERE o.Token=?", token);
+                var result = Db.SQL<Concepts.Ring5.SystemUserSession>("SELECT o FROM Concepts.Ring5.SystemUserSession o WHERE o.Token=?", token);
 
                 if (result.First != null) {
                     userJson = Utils.SignedInUserToJson(result.First);
