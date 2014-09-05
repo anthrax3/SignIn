@@ -1,8 +1,7 @@
 {
-  "name": "core-component-page",
+  "name": "core-meta",
   "private": true,
   "dependencies": {
-    "platform": "Polymer/platform#>=0.4.0 <1.0.0",
     "polymer": "Polymer/polymer#>=0.4.0 <1.0.0"
   }
 }

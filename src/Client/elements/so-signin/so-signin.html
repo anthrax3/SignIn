@@ -2,86 +2,77 @@
 
 <!--https://github.com/PuppetJs/PuppetJs/blob/issue-4/src/puppet.js-->
 
+<link rel="import" href="../../vendor/core-icon-button/core-icon-button.html">
+
 <polymer-element name="so-signin" attributes="popup">
 
     <template>
 
         <style>
-            :host {
-            }
+            /*:host {
+
+            }*/
 
             #signin {
-                /*background-color: #ffd800;*/
-                /*padding: 20px;*/
                 font-size: 14px;
-                color:white;
+                color: white;
+            }
+
+            #holder {
+                position: relative;
+                display: block;
             }
 
             .popup_content {
                 border: 1px #aaaaaa solid;
-                border-radius: 5px;
+                border-radius: 2px;
                 background-color: #fefefe;
-                box-shadow: 0px 0px 10px #dddddd;
+                box-shadow: 0px 0px 10px #aaaaaa;
+                right: -100%;
+                color: black;
                 display: none;
+                padding: 20px;
                 position: absolute;
-                top: 25%;
-                left: 25%;
-                width: 250px;
-                height: 150px;
-                padding: 8px;
-                z-index: 1002;
-                overflow: auto;
+                z-index: 1;
+                min-width:200px;
             }
         </style>
 
         <div id="signin">
+
+            <!-- User signed in -->
+            <template if="{{templateInstance.model.IsSignedIn}}">
+
+                <core-icon-button id="accountbutton" on-click="{{togglePopup}}" icon="account-circle"></core-icon-button>
          
-            <template if="{{!popup}}">
-                <template if="{{!templateInstance.model.IsSignedIn}}">
-                    <input placeholder="Username" type="text"  name="username" value="{{templateInstance.model.UserID$}}">
-                    <input placeholder="Password" type="password" name="password" value="{{templateInstance.model.Password$}}">
-                    <button type="submit" on-click="{{signInClick}}">Sign in</button>
-                </template>
+                <span id="holder"  >
 
-                <template if="{{templateInstance.model.IsSignedIn}}">
-                    <span style="margin-left:2px;">{{templateInstance.model.FullName}}</span>
-                    <button on-click="{{signOutClick}}">Sign out</button>
-                </template>
+                    <div tabindex="-1" on-blur="{{test1}}"  on-focusout="{{test2}}" id="popupWindow" style="display:{{popupDisplay}}" class="popup_content">
 
-                <template if="{{templateInstance.model.Message}}">
-                    <p  style="margin:0px;background:red;color:white">{{templateInstance.model.Message}}</p>
-                </template>
+                        <p style="margin-left:2px;">{{templateInstance.model.FullName}}</p>
 
-            </template>        
-
-            <!-- POPUP Window -->
-           <template if="{{popup}}">
-
-                <template if="{{!templateInstance.model.IsSignedIn}}">
-                    
-                    <button on-click="{{openPopupClick}}">Sign in</button>
-
-                    <div id="popupWindow" style="display:{{popupDisplay}}"  class="popup_content">
-                            <input placeholder="Username" id="user" type="text" name="username" value="{{templateInstance.model.UserID$}}"><br>
-                            <input placeholder="Password" type="password" name="password" value="{{templateInstance.model.Password$}}">
-
-                            <template if="{{templateInstance.model.Message}}">
-                                <p style="background:red;color:white">{{templateInstance.model.Message}}</p>
-                            </template>
-                            <div>
-                            <button type="submit" on-click="{{signInClick}}">Sign in</button>
-                            <button  on-click="{{closePopup}}">Close</button>
-
-                            </div>
+                            <button on-click="{{signOutClick}}">Sign out</button>
                     </div>
-                </template>
-
-                <template if="{{templateInstance.model.IsSignedIn}}">
-                    Welcome {{templateInstance.model.FullName}}
-                    <button on-click="{{signOutClick}}">Sign out</button>
-                </template>
-
+                </span>
             </template>
+
+            <!-- User NOT signed in -->
+            <template if="{{!templateInstance.model.IsSignedIn}}">
+                
+                <template if="{{popup}}">
+                    <button style="width:80px" on-click="{{signInClick}}">Sign in</button>
+                </template>
+
+                <template if="{{!popup}}">
+
+                    <div style="margin-right:100px;width:300px">
+                        <input style="width:100px" placeholder="Username" type="text"  name="username" value="{{templateInstance.model.UserID$}}">
+                        <input style="width:100px" placeholder="Password" type="password" name="password" value="{{templateInstance.model.Password$}}">
+                        <button style="width:80px" on-click="{{signInClick}}">Sign in</button>
+                    </div>
+
+                </template>
+    </template>
         </div>
 
     </template>
@@ -98,6 +89,15 @@
 	        cookieName: "soauthtoken",
 	        observe: {
 	            'templateInstance.model.SignInEvent': 'SignInEventChanged'
+	        },
+	        onfocus: function () {
+	            console.log("onfocus");
+	        },
+	        onfocusin: function () {
+	            console.log("onfocusin");
+	        },
+	        onfocusout: function () {
+	            console.log("onfocusout");
 	        },
 	        SignInEventChanged: function (oldValue, newValue) {
 
@@ -120,10 +120,15 @@
 	                }
 	            }
 	        },
+	        attached: function () {
+
+	            //this.$.popupWindow.addEventListener('focusout', this.onDivlosefocus.bind(this), false);
+	            //this.$.accountbutton.addEventListener('focusout', this.onDivlosefocus.bind(this), false);
+
+	        },
 	        domReady: function () {
 
 	            this.isDomReady = true;
-
 	            if (this.templateInstance.model.IsSignedIn == false) {
 
 	                var authTokenCookie = this.getCookie(this.cookieName);
@@ -132,6 +137,17 @@
 	                    this.signIn();
 	                }
 	            }
+	        },
+	        togglePopup: function () {
+
+	            if (this.popupDisplay == "block") {
+
+	                this.closePopup();
+	            }
+	            else {
+	                this.openPopup();
+	            }
+
 	        },
 	        openPopupClick: function () {
 
@@ -187,7 +203,7 @@
 	                //cookie = this.cookieName + "=" + value + "; expires=Thu, 18 Dec 2015 12:00:00 UTC" + "; Path=/";
 	            }
 	            else {
-	                cookie = this.cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT"+"; Path=/";
+	                cookie = this.cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" + "; Path=/";
 	            }
 
 	            document.cookie = cookie;
