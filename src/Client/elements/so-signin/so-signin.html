@@ -8,14 +8,17 @@
 
     <template>
 
-        <style>
-            /*:host {
 
-            }*/
+        <style>
+
+      :host {
+        display:flex;
+      }
 
             #signin {
                 font-size: 14px;
                 color: white;
+                display: inline-block;
             }
 
             #holder {
@@ -34,7 +37,12 @@
                 padding: 20px;
                 position: absolute;
                 z-index: 1;
-                min-width:200px;
+                min-width: 200px;
+            }
+
+            input, button {
+                margin-left:2.5px;
+                margin-right:2.5px;
             }
         </style>
 
@@ -65,11 +73,13 @@
 
                 <template if="{{!popup}}">
 
-                    <div style="margin-right:100px;width:300px">
-                        <input style="width:100px" placeholder="Username" type="text"  name="username" value="{{templateInstance.model.UserID$}}">
-                        <input style="width:100px" placeholder="Password" type="password" name="password" value="{{templateInstance.model.Password$}}">
-                        <button style="width:80px" on-click="{{signInClick}}">Sign in</button>
+                    <div style="display:flex">
+                        <input style="width:150px" placeholder="Username" type="text"  name="username" value="{{templateInstance.model.UserID$}}">
+                        <input style="width:150px"  placeholder="Password" type="password" name="password" value="{{templateInstance.model.Password$}}">
+                        <button style="width:100px" on-click="{{signInClick}}">Sign in</button>
                     </div>
+
+                    <span>{{templateInstance.model.Message}}</span>
 
                 </template>
     </template>
@@ -168,9 +178,7 @@
 	        },
 	        signOutClick: function () {
 
-	            if (this.popup == true) {
-	                this.closePopup();
-	            }
+	            this.closePopup();
 	            this.signOut();
 	        },
 	        signIn: function () {
