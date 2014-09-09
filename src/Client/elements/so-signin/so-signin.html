@@ -10,10 +10,9 @@
 
 
         <style>
-
-      :host {
-        display:flex;
-      }
+            :host {
+                display: flex;
+            }
 
             #signin {
                 font-size: 14px;
@@ -41,8 +40,8 @@
             }
 
             input, button {
-                margin-left:2.5px;
-                margin-right:2.5px;
+                margin-left: 2.5px;
+                margin-right: 2.5px;
             }
         </style>
 
@@ -57,9 +56,11 @@
 
                     <div tabindex="-1" on-blur="{{test1}}"  on-focusout="{{test2}}" id="popupWindow" style="display:{{popupDisplay}}" class="popup_content">
 
+                        <img  src="http://www.gravatar.com/avatar/3b3be63a4c2a439b013787725dfce802?d=identicon" />
+
                         <p style="margin-left:2px;">{{templateInstance.model.FullName}}</p>
 
-                            <button on-click="{{signOutClick}}">Sign out</button>
+                         <button on-click="{{signOutClick}}">Sign out</button>
                     </div>
                 </span>
             </template>

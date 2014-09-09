@@ -91,7 +91,6 @@
     <Compile Include="Server\SignInUser.json.cs">
       <DependentUpon>SignInUser.json</DependentUpon>
     </Compile>
-    <Compile Include="Server\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <TypedJSON Include="Server\SignIn.json">
@@ -108,11 +107,6 @@
     <Content Include="third_party\Concepts.Ring4.dll" />
   </ItemGroup>
   <ItemGroup>
-    <TypedJSON Include="Server\JSON\user.json">
-      <Generator>MsBuild:Compile</Generator>
-    </TypedJSON>
-  </ItemGroup>
-  <ItemGroup>
     <TypedJSON Include="Server\SignInUser.json">
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
@@ -122,6 +116,11 @@
       <Project>{f6ec89a9-75b6-4f3d-bf31-6751705c0ee9}</Project>
       <Name>Concepts.Ring5</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <TypedJSON Include="Server\JSON\systemusersession.json">
+      <Generator>MsBuild:Compile</Generator>
+    </TypedJSON>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(StarcounterBin)\Starcounter.MsBuild.targets" />

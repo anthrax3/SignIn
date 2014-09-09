@@ -1,4 +1,7 @@
-﻿using Concepts.Ring3;
+﻿using Concepts.Ring1;
+using Concepts.Ring2;
+using Concepts.Ring3;
+using SignInApp.Server;
 using Starcounter;
 using System;
 namespace SignInApp.Database {
@@ -21,6 +24,16 @@ namespace SignInApp.Database {
             });
             transaction.Rollback();
 
+
+            ClearDatabase();
+
+            AddUsers();
+
+
+        }
+
+        static void ClearDatabase() {
+
             Db.Transaction(() => {
 
                 var result = Db.SQL("SELECT o FROM Concepts.Ring5.SystemUserSession o");
@@ -31,6 +44,20 @@ namespace SignInApp.Database {
 
             Db.Transaction(() => {
                 var result = Db.SQL<Concepts.Ring1.Person>("SELECT p FROM Concepts.Ring1.Person p");
+                foreach (var item in result) {
+                    item.Delete();
+                }
+            });
+
+            Db.Transaction(() => {
+                var result = Db.SQL<Concepts.Ring2.Company>("SELECT p FROM Concepts.Ring2.Company p");
+                foreach (var item in result) {
+                    item.Delete();
+                }
+            });
+
+            Db.Transaction(() => {
+                var result = Db.SQL<Concepts.Ring2.EMailAddress>("SELECT o FROM Concepts.Ring2.EMailAddress o");
                 foreach (var item in result) {
                     item.Delete();
                 }
@@ -49,46 +76,116 @@ namespace SignInApp.Database {
                     item.Delete();
                 }
             });
+        }
 
-            //Concepts.Ring1.Person person = Db.SQL<Concepts.Ring1.Person>("SELECT p FROM Concepts.Ring1.Person p WHERE p.FirstName=? AND p.Surname=?", "Albert", "Einstein").First;
-            //if (person != null) {
-            //    Db.Transaction(() => {
-            //        person.Delete();
-            //    });
-            //}
-            //Concepts.Ring1.Person person2 = Db.SQL<Concepts.Ring1.Person>("SELECT p FROM Concepts.Ring1.Person p WHERE p.FirstName=? AND p.Surname=?", "Stephen", "Hawking").First;
-            //if (person2 != null) {
-            //    Db.Transaction(() => {
-            //        person2.Delete();
-            //    });
-            //}
+        /// <summary>
+        /// Add some sample users
+        /// </summary>
+        static void AddUsers() {
 
-            //SystemUser systemUser = Db.SQL<SystemUser>("SELECT o FROM Concepts.Ring3.SystemUser o WHERE o.Username=?", "albert").First;
-            //if (systemUser != null) {
-            //    Db.Transaction(() => {
-            //        systemUser.Delete();
-            //    });
-            //}
-            //SystemUser systemUser2 = Db.SQL<SystemUser>("SELECT o FROM Concepts.Ring3.SystemUser o WHERE o.Username=?", "demo").First;
-            //if (systemUser2 != null) {
-            //    Db.Transaction(() => {
-            //        systemUser2.Delete();
-            //    });
-            //}
+            // Somebody
+            //    Group
+            //       Everybody
+            //    LegalEntity
+            //        Person
+            //        Organisation
+            //            Company
 
-            // Create basic database objects
-            Concepts.Ring1.Person person = null;
+            AddPerson("demo", "demo", "demo", "demo");
+            AddPerson("Anders", "Wahlgren", "anders.wahlgren@mydomain.com", "demo");
+            AddPerson("Albert", "Einstein", "albert.einstein@mydomain.com", "demo");
+
+            AddCompany("Starcounter AB", "Starcounter@mydomain.com", "demo");
+
+        }
+
+        /// <summary>
+        /// Add Person with a system user
+        /// </summary>
+        /// <param name="firstName"></param>
+        /// <param name="surname"></param>
+        /// <param name="email"></param>
+        static void AddPerson(string firstName, string surname, string email, string password) {
+
+            if (firstName == null) {
+                throw new ArgumentNullException("firstname");
+            }
+
+            if (surname == null) {
+                throw new ArgumentNullException("surname");
+            }
+
+            if (email == null) {
+                throw new ArgumentNullException("email");
+            }
+
+            if (string.IsNullOrEmpty(firstName)) {
+                throw new ArgumentException("firstname");
+            }
+
+            if (string.IsNullOrEmpty(surname)) {
+                throw new ArgumentException("surname");
+            }
+            if (string.IsNullOrEmpty(email)) {
+                throw new ArgumentException("email");
+            }
 
             Db.Transaction(() => {
-                person = new Concepts.Ring1.Person() { FirstName = "Albert", Surname = "Einstein" };
-                //person2 = new Concepts.Ring1.Person() { FirstName = "Stephen", Surname = "Hawking" };
 
-            });
+                Person person = new Person() { FirstName = firstName, Surname = surname };
+                Concepts.Ring3.SystemUser systemUser = new Concepts.Ring3.SystemUser(person);
+                systemUser.Password = password;
+                systemUser.Username = email;
 
-            Db.Transaction(() => {
-                new SystemUser(person) { Name = "albert", Password = "albert" };
-                new SystemUser() { Name = "demo", Password = "demo" };
+                //EMailAddress emailRel = new EMailAddress();
+                //emailRel.SetToWhat(systemUser);
+                //emailRel.Name = email;
+
+                EMailAddress emailRel = new EMailAddress();
+                emailRel.SetToWhat(person);
+                emailRel.Name = email;
             });
         }
+
+        /// <summary>
+        /// Add company with a system user
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="email"></param>
+        static void AddCompany(string name, string email, string password) {
+
+            if (name == null) {
+                throw new ArgumentNullException("name");
+            }
+
+            if (email == null) {
+                throw new ArgumentNullException("email");
+            }
+
+            if (string.IsNullOrEmpty(name)) {
+                throw new ArgumentException("name");
+            }
+
+            if (string.IsNullOrEmpty(email)) {
+                throw new ArgumentException("email");
+            }
+
+            Db.Transaction(() => {
+                Company company = new Company() { Name = name };
+
+                Concepts.Ring3.SystemUser systemUser = new Concepts.Ring3.SystemUser(company);
+                systemUser.Username = email;
+                systemUser.Password = password;
+
+                //EMailAddress emailRel = new EMailAddress();
+                //emailRel.SetToWhat(systemUser);
+                //emailRel.Name = email;
+
+                EMailAddress emailRel = new EMailAddress();
+                emailRel.SetToWhat(company);
+                emailRel.Name = email;
+            });
+        }
+
     }
 }

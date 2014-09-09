@@ -19,11 +19,6 @@ namespace Concepts.Ring5 {
         public String SessionIdString;
 
         /// <summary>
-        /// Signed in user
-        /// </summary>
-        public Concepts.Ring3.SystemUser User;
-
-        /// <summary>
         /// Time when user signed in
         /// </summary>
         public DateTime Created;
@@ -33,15 +28,5 @@ namespace Concepts.Ring5 {
         /// TODO:
         /// </summary>
         public DateTime Touched;
-
-        /// <summary>
-        /// IP Address of the signed in user
-        /// TODO:
-        /// </summary>
-        public string IP;
-
-        public static void Test() {
-        }
-
     }
 }

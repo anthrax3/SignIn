@@ -1,9 +1,13 @@
 ﻿using Starcounter;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Web;
 
 namespace SignInApp.Server {
     public class Handlers {
+
+        // TODO: How to remove items from this list
+        static Dictionary<string, SignIn> signInSessions = new Dictionary<string, SignIn>();
 
         internal static void RegisterHandlers() {
 
@@ -11,38 +15,44 @@ namespace SignInApp.Server {
 
             Starcounter.Handle.GET("/user", () => {
 
-                var signInPage = new SignIn() {
-                    Html = "/signin.html",
-                };
+                var signInPage = new SignIn() { Html = "/signin.html" };
 
-                Session.Current.Data = signInPage;
+                string sessionID = Session.Current.SessionIdString;
+                if (signInSessions.ContainsKey(sessionID)) {
+                    signInSessions.Remove(sessionID);
+                }
+
+                signInSessions.Add(sessionID, signInPage);
 
                 return signInPage;
             });
 
-            // TODO: maybe alias this (tomalec) 
-            // Starcounter.Handle.GET("/signinuser", (Request request) =>
             Starcounter.Handle.GET("/signinapp/signinuser", (Request request) => {
 
-                SignIn masterPage = Session.Current.Data as SignIn;
+                string sessionID = Session.Current.SessionIdString;
+                if (!signInSessions.ContainsKey(sessionID)) {
+                    // TODO
+                    return (ushort)System.Net.HttpStatusCode.InternalServerError;
+                }
+                SignIn masterPage = signInSessions[sessionID];
 
-                var signInUserPage = new SignInUser() {
-                    Html = "/signinuser.html",
-                };
+                var signInUserPage = new SignInUser() { Html = "/signinuser.html" };
 
                 masterPage.MyPage = signInUserPage;
 
                 return signInUserPage;
             }, opt);
 
-            // Starcounter.Handle.GET("/signinuser", (Request request) =>
             Starcounter.Handle.GET("/signinapp/signinuser?{?}", (string query, Request request) => {
 
-                SignIn masterPage = Session.Current.Data as SignIn;
+                string sessionID = Session.Current.SessionIdString;
+                if (!signInSessions.ContainsKey(sessionID)) {
+                    // TODO
+                    return (ushort)System.Net.HttpStatusCode.InternalServerError;
+                }
+                SignIn masterPage = signInSessions[sessionID];
 
-                var signInUserPage = new SignInUser() {
-                    Html = "/signinuser.html",
-                };
+                var signInUserPage = new SignInUser() { Html = "/signinuser.html" };
 
                 string decodedQuery = HttpUtility.UrlDecode(query);
 
@@ -55,45 +65,44 @@ namespace SignInApp.Server {
 
             }, opt);
 
-            #region Sign in/out event
+            #region Sign in/out commit hook
 
             // User signed in event
             Starcounter.Handle.POST("/__db/__default/societyobjects/systemusersession", (Request request) => {
 
-                Response response = new Response();
+                JSON.systemusersession systemUserSessionJson = new JSON.systemusersession();
+                systemUserSessionJson.PopulateFromJson(request.Body);
+                Concepts.Ring5.SystemUserSession userSession = Db.SQL<Concepts.Ring5.SystemUserSession>("SELECT o FROM Concepts.Ring5.SystemUserSession o WHERE o.ObjectID=?", systemUserSessionJson.ObjectID).First;
 
-                if (Session.Current.Data is SignIn) {
-                    SignIn page = (SignIn)Session.Current.Data;
-                    JSON.user user = new JSON.user();
-                    user.PopulateFromJson(request.Body);
+                if (userSession != null && signInSessions.ContainsKey(userSession.SessionIdString)) {
 
+                    SignIn page = signInSessions[userSession.SessionIdString];
 
-                    Concepts.Ring5.SystemUserSession userSession = Db.SQL<Concepts.Ring5.SystemUserSession>("SELECT o FROM Concepts.Ring5.SystemUserSession o WHERE o.SessionIdString=?", user.sessionid).First;
-                    if (userSession != null) {
-                        page.SetViewModelProperties(userSession);
-                        page.SignInEvent = !page.SignInEvent;
+                    page.SetViewModelProperties(userSession);
+                    page.SignInEvent = !page.SignInEvent;
 
-                        SignInUser signInUserPage = page.MyPage as SignInUser;
-                        if (signInUserPage != null) {
-                            signInUserPage.SetViewModelProperties(userSession);
-                            signInUserPage.SignInEvent = !signInUserPage.SignInEvent;
-                            signInUserPage.RedirectUrl = signInUserPage.OriginUrl;
-                        }
+                    SignInUser signInUserPage = page.MyPage as SignInUser;
+                    if (signInUserPage != null) {
+                        signInUserPage.SetViewModelProperties(userSession);
+                        signInUserPage.SignInEvent = !signInUserPage.SignInEvent;
+                        signInUserPage.RedirectUrl = signInUserPage.OriginUrl;
                     }
                 }
 
-
-                response.StatusCode = (ushort)System.Net.HttpStatusCode.OK;
-                return response;
+                return (ushort)System.Net.HttpStatusCode.OK;
             }, opt);
 
             // User signed out event
             Starcounter.Handle.DELETE("/__db/__default/societyobjects/systemusersession", (Request request) => {
 
-                Response response = new Response();
+                JSON.systemusersession systemUserSessionJson = new JSON.systemusersession();
+                systemUserSessionJson.PopulateFromJson(request.Body);
+                Concepts.Ring5.SystemUserSession userSession = Db.SQL<Concepts.Ring5.SystemUserSession>("SELECT o FROM Concepts.Ring5.SystemUserSession o WHERE o.ObjectID=?", systemUserSessionJson.ObjectID).First;
 
-                if (Session.Current.Data is SignIn) {
-                    SignIn page = (SignIn)Session.Current.Data;
+                if (userSession != null && signInSessions.ContainsKey(userSession.SessionIdString)) {
+
+                    SignIn page = signInSessions[userSession.SessionIdString];
+
                     page.ClearViewModelProperties();
                     page.SignInEvent = !page.SignInEvent;
 
@@ -105,9 +114,7 @@ namespace SignInApp.Server {
                     }
                 }
 
-                response.StatusCode = (ushort)System.Net.HttpStatusCode.OK;
-                return response;
-
+                return (ushort)System.Net.HttpStatusCode.OK;
             }, opt);
             #endregion
         }

@@ -18,7 +18,7 @@ namespace SignInApp.Server {
             message = null;
             // If there is an user id then use it.
             if (!string.IsNullOrEmpty(userId)) {
-                SystemUserSession userSession = SignInUser(userId, password);
+                SystemUserSession userSession = SignInSystemUser(userId, password);
                 if (userSession == null) {
                     message = "Invalid username or password";
                 }
@@ -27,7 +27,7 @@ namespace SignInApp.Server {
 
             // Use Auth token cookie if it exist
             if (signInAuthToken != null) {
-                return SignInUser(signInAuthToken);
+                return SignInSystemUser(signInAuthToken);
             }
 
             return null;
@@ -38,7 +38,7 @@ namespace SignInApp.Server {
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="password"></param>
-        static private SystemUserSession SignInUser(string userId, string password) {
+        static private SystemUserSession SignInSystemUser(string userId, string password) {
 
             // Verify username and password
             SystemUser systemUser = Db.SQL<SystemUser>("SELECT o FROM Concepts.Ring3.SystemUser o WHERE o.Username=? AND o.Password=?", userId, password).First;
@@ -52,7 +52,7 @@ namespace SignInApp.Server {
 
                 // Create system user token
                 SystemUserTokenKey token = new SystemUserTokenKey(systemUser);
-                userSession = CreateSystemUserSession(token);
+                userSession = AssureSystemUserSession(token);
 
             });
 
@@ -63,23 +63,43 @@ namespace SignInApp.Server {
         /// Sign-in user
         /// </summary>
         /// <param name="authToken"></param>
-        static private SystemUserSession SignInUser(string authToken) {
+        static private SystemUserSession SignInSystemUser(string authToken) {
 
-            SystemUserTokenKey token = Db.SQL<Concepts.Ring5.SystemUserTokenKey>("SELECT o FROM Concepts.Ring5.SystemUserTokenKey o WHERE o.Token=?", authToken).First;
-            if (token == null) {
+            SystemUserTokenKey oldToken = Db.SQL<Concepts.Ring5.SystemUserTokenKey>("SELECT o FROM Concepts.Ring5.SystemUserTokenKey o WHERE o.Token=?", authToken).First;
+            if (oldToken == null) {
                 // signed-out, Invalid or expired token key
                 return null;
             }
 
-            if (token.User == null) {
-                // System user deleted => remove token
+            if (oldToken.User == null) {
+                // System user deleted => delete invalid token
                 Db.Transaction(() => {
-                    token.Delete();
+                    oldToken.Delete();
                 });
                 return null;
             }
 
-            return CreateSystemUserSession(token);
+#if false   // NOTE: This can not be done until we can get the cookie when the Handle is called (Instead of using the authToken property we need to use the cookie value
+
+            // Create new token, For better sequrity.
+            SystemUserTokenKey newToken = null;
+
+            // Remove old token and update SystemUserSession instances with new token
+            Db.Transaction(() => {
+
+                // Create new token
+                newToken = new SystemUserTokenKey(oldToken.User);
+
+                // Update tokens
+                UpdateSystemUserSessionToken(oldToken, newToken);
+
+                // Delete old token
+                oldToken.Delete();
+            });
+            return AssureSystemUserSession(newToken);
+#else
+            return AssureSystemUserSession(oldToken);
+#endif
         }
 
         /// <summary>
@@ -87,7 +107,7 @@ namespace SignInApp.Server {
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
-        static private SystemUserSession CreateSystemUserSession(SystemUserTokenKey token) {
+        static private SystemUserSession AssureSystemUserSession(SystemUserTokenKey token) {
 
             SystemUserSession userSession = null;
 
@@ -101,16 +121,33 @@ namespace SignInApp.Server {
                 }
 
                 userSession.Token = token;
-                userSession.User = token.User;
-                userSession.IP = "127.0.0.0"; // TODO
                 userSession.Touched = DateTime.UtcNow;
             });
 
             // Simulate Commit-Hook handling
-            JSON.user user = Utils.SignedInUserToJson(userSession);
-            InvokeSignInCommitHook(user);
+            JSON.systemusersession userSessionJson = new JSON.systemusersession();
+            userSessionJson.ObjectID = userSession.GetObjectID();
+            InvokeSignInCommitHook(userSessionJson);
 
             return userSession;
+        }
+
+        /// <summary>
+        /// Update token on system user sessions
+        /// </summary>
+        /// <param name="oldToken"></param>
+        /// <param name="newToken"></param>
+        static private void UpdateSystemUserSessionToken(SystemUserTokenKey oldToken, SystemUserTokenKey newToken) {
+
+            // Remove old token and update SystemUserSession instances with new token
+            Db.Transaction(() => {
+
+                var result = Db.SQL<Concepts.Ring5.SystemUserSession>("SELECT o FROM Concepts.Ring5.SystemUserSession o WHERE o.Token=?", oldToken);
+
+                foreach (var userSession in result) {
+                    userSession.Token = newToken;
+                }
+            });
         }
 
         /// <summary>
@@ -127,28 +164,24 @@ namespace SignInApp.Server {
                 return;
             }
 
-            JSON.user userJson = null;
-
             Db.Transaction(() => {
 
                 var result = Db.SQL<Concepts.Ring5.SystemUserSession>("SELECT o FROM Concepts.Ring5.SystemUserSession o WHERE o.Token=?", token);
 
-                if (result.First != null) {
-                    userJson = Utils.SignedInUserToJson(result.First);
-                }
-
                 // Sign-out user with a specified auth token in all sessions
                 foreach (SystemUserSession userSession in result) {
+
+                    // Simulate Commit-Hook handling
+                    JSON.systemusersession userSessionJson = new JSON.systemusersession();
+                    userSessionJson.ObjectID = userSession.GetObjectID();
+                    InvokeSignOutCommitHook(userSessionJson);
+
                     userSession.Delete();
                 }
 
                 // Remove system user token
                 token.Delete();
             });
-
-            if (userJson != null) {
-                InvokeSignOutCommitHook(userJson);
-            }
         }
 
         #region Commit Hook replacement
@@ -157,18 +190,18 @@ namespace SignInApp.Server {
         /// Temporary code until starcounter implements commit hooks
         /// </summary>
         /// <param name="user"></param>
-        static void InvokeSignInCommitHook(JSON.user user) {
+        static void InvokeSignInCommitHook(JSON.systemusersession usersession) {
 
-            X.POST("/__db/__default/societyobjects/systemusersession", user.ToJsonUtf8(), null);
+            X.POST("/__db/__default/societyobjects/systemusersession", usersession.ToJsonUtf8(), null);
         }
 
         /// <summary>
         /// Temporary code until starcounter implements commit hooks
         /// </summary>
         /// <param name="user"></param>
-        static void InvokeSignOutCommitHook(JSON.user user) {
+        static void InvokeSignOutCommitHook(JSON.systemusersession usersession) {
 
-            X.DELETE("/__db/__default/societyobjects/systemusersession", user.ToJsonUtf8(), null);
+            X.DELETE("/__db/__default/societyobjects/systemusersession", usersession.ToJsonUtf8(), null);
         }
         #endregion
 
