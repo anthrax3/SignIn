@@ -4,6 +4,9 @@ using Concepts.Ring3;
 using SignInApp.Server;
 using Starcounter;
 using System;
+using System.Globalization;
+using System.Security.Cryptography;
+using System.Text;
 namespace SignInApp.Database {
     public class SampleData {
 
@@ -134,8 +137,10 @@ namespace SignInApp.Database {
 
                 Person person = new Person() { FirstName = firstName, Surname = surname };
                 Concepts.Ring3.SystemUser systemUser = new Concepts.Ring3.SystemUser(person);
-                systemUser.Password = password;
                 systemUser.Username = email;
+                string hashedPassword;
+                Concepts.Ring5.SystemUserPassword.GeneratePasswordHash(systemUser.Username, password, out hashedPassword);
+                systemUser.Password = hashedPassword;
 
                 //EMailAddress emailRel = new EMailAddress();
                 //emailRel.SetToWhat(systemUser);
@@ -175,9 +180,12 @@ namespace SignInApp.Database {
 
                 Concepts.Ring3.SystemUser systemUser = new Concepts.Ring3.SystemUser(company);
                 systemUser.Username = email;
-                systemUser.Password = password;
 
-                //EMailAddress emailRel = new EMailAddress();
+                string hashedPassword;
+                Concepts.Ring5.SystemUserPassword.GeneratePasswordHash(systemUser.Username, password, out hashedPassword);
+                systemUser.Password = hashedPassword;
+                
+                //EMailsystemUserAddress emailRel = new EMailAddress();
                 //emailRel.SetToWhat(systemUser);
                 //emailRel.Name = email;
 
@@ -186,6 +194,7 @@ namespace SignInApp.Database {
                 emailRel.Name = email;
             });
         }
+ 
 
     }
 }

@@ -40,8 +40,11 @@ namespace SignInApp.Server {
         /// <param name="password"></param>
         static private SystemUserSession SignInSystemUser(string userId, string password) {
 
+            string hashedPassword;
+            Concepts.Ring5.SystemUserPassword.GeneratePasswordHash(userId, password, out hashedPassword);
+
             // Verify username and password
-            SystemUser systemUser = Db.SQL<SystemUser>("SELECT o FROM Concepts.Ring3.SystemUser o WHERE o.Username=? AND o.Password=?", userId, password).First;
+            SystemUser systemUser = Db.SQL<SystemUser>("SELECT o FROM Concepts.Ring3.SystemUser o WHERE o.Username=? AND o.Password=?", userId, hashedPassword).First;
             if (systemUser == null) {
                 return null;
             }
