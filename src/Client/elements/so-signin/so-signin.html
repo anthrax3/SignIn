@@ -1,42 +1,63 @@
 <!-- Copyright (c) 2014 Society Objects. All rights reserved. -->
 
-<!--https://github.com/PuppetJs/PuppetJs/blob/issue-4/src/puppet.js-->
-
 <link rel="import" href="../../vendor/core-icon-button/core-icon-button.html">
 
-<polymer-element name="so-signin" attributes="popup">
+<polymer-element name="so-signin" >
 
     <template>
 
-
         <style>
             :host {
+                display: -webkit-flex;
                 display: flex;
             }
 
             #signin {
+                display: -webkit-flex;
+                display: flex;
+                -webkit-flex: 1 0 auto;
+                flex: 1 0 auto;
                 font-size: 14px;
                 color: white;
                 display: inline-block;
             }
 
-            #holder {
+            .tray {
+                display: -webkit-flex;
+                display: flex;
+                flex-direction: row;
+                -webkit-flex-direction: row;
                 position: relative;
-                display: block;
             }
 
-            .popup_content {
-                border: 1px #aaaaaa solid;
+                .tray > core-icon-button {
+                    -webkit-flex: 1 0 auto;
+                    flex: 1 0 auto;
+                }
+
+                .tray > span {
+                    -webkit-flex: 1 0 auto;
+                    flex: 1 0 auto;
+                    align-self: center;
+                    -webkit-align-self: center;
+                    white-space: nowrap;
+                }
+
+            .popup_account {
+                right: 0;
+                position: absolute;
+                z-index: 1;
+                box-shadow: 0 2px 10px rgba(0,0,0,.2);
+                border-color: rgba(0,0,0,.2);
+                border: 1px solid #ccc;
                 border-radius: 2px;
-                background-color: #fefefe;
-                box-shadow: 0px 0px 10px #aaaaaa;
-                right: -100%;
+                background: #fff;
+                overflow: hidden;
                 color: black;
                 display: none;
                 padding: 20px;
-                position: absolute;
-                z-index: 1;
-                min-width: 200px;
+                margin-right: 40px;
+                width: 200px;
             }
 
             input, button {
@@ -50,40 +71,33 @@
             <!-- User signed in -->
             <template if="{{templateInstance.model.IsSignedIn}}">
 
-                <core-icon-button id="accountbutton" on-click="{{togglePopup}}" icon="account-circle"></core-icon-button>
-         
-                <span id="holder"  >
-
-                    <div tabindex="-1" on-blur="{{test1}}"  on-focusout="{{test2}}" id="popupWindow" style="display:{{popupDisplay}}" class="popup_content">
-
-                        <img  src="http://www.gravatar.com/avatar/3b3be63a4c2a439b013787725dfce802?d=identicon" />
-
-                        <p style="margin-left:2px;">{{templateInstance.model.FullName}}</p>
-
-                         <button on-click="{{signOutClick}}">Sign out</button>
-                    </div>
+                <span class="tray">
+                    <span>{{templateInstance.model.FullName}}</span>
+                    <core-icon-button id="accountbutton" on-click="{{togglePopupWindow}}" icon="account-circle"></core-icon-button>
                 </span>
+
+                <div tabindex="-1" on-blur="{{test1}}" on-focusout="{{test2}}" id="popupWindow" style="display:{{accoountPopupDisplay}}" class="popup_account">
+                    <img  src="http://www.gravatar.com/avatar/3b3be63a4c2a439b013787725dfce802?d=identicon" />
+                    <p style="margin-left:2px;">{{templateInstance.model.FullName}}</p>
+                    <button on-click="{{signOutClick}}">Sign out</button>
+                </div>
             </template>
 
             <!-- User NOT signed in -->
             <template if="{{!templateInstance.model.IsSignedIn}}">
                 
-                <template if="{{popup}}">
-                    <button style="width:80px" on-click="{{signInClick}}">Sign in</button>
-                </template>
+                <span class="tray">
+                    <core-icon-button id="Core-icon-button1" on-click="{{togglePopupWindow}}" icon="account-circle"></core-icon-button>
+                </span>
 
-                <template if="{{!popup}}">
-
-                    <div style="display:flex">
-                        <input style="width:150px" placeholder="Username" type="text"  name="username" value="{{templateInstance.model.UserID$}}">
-                        <input style="width:150px"  placeholder="Password" type="password" name="password" value="{{templateInstance.model.Password$}}">
-                        <button style="width:100px" on-click="{{signInClick}}">Sign in</button>
-                    </div>
-
+                <div style="display:{{signInPopupDisplay}}" class="popup_account">
+                    <input style="width:150px" placeholder="Username" type="text"  name="username" value="{{templateInstance.model.UserID$}}">
+                    <input style="width:150px"  placeholder="Password" type="password" name="password" value="{{templateInstance.model.Password$}}">
                     <span>{{templateInstance.model.Message}}</span>
+                    <button style="width:100px" on-click="{{signInClick}}">Sign in</button>
+                </div>
 
-                </template>
-    </template>
+            </template>
         </div>
 
     </template>
@@ -94,9 +108,10 @@
 
 	    Polymer('so-signin', {
 	        isDomReady: false,
-	        popup: false,
-	        popupDisplay: "none",
-	        message: "",
+
+	        accoountPopupDisplay: "none",
+	        signInPopupDisplay: "none",
+
 	        cookieName: "soauthtoken",
 	        observe: {
 	            'templateInstance.model.SignInEvent': 'SignInEventChanged'
@@ -113,6 +128,8 @@
 	        SignInEventChanged: function (oldValue, newValue) {
 
 	            if (this.isDomReady == false) return;
+
+	            this.closePopupWindow();
 
 	            console.log("SignInEventChanged(" + oldValue + " => " + newValue + ")");
 
@@ -149,29 +166,31 @@
 	                }
 	            }
 	        },
-	        togglePopup: function () {
+	        togglePopupWindow: function () {
 
-	            if (this.popupDisplay == "block") {
-
-	                this.closePopup();
+	            if (this.accoountPopupDisplay == "block" || this.signInPopupDisplay == "block") {
+	                this.closePopupWindow();
 	            }
 	            else {
-	                this.openPopup();
+	                this.showPopupWindow();
+	            }
+	        },
+	        showPopupWindow: function () {
+
+	            if (this.templateInstance.model.IsSignedIn) {
+	                this.accoountPopupDisplay = "block";
+	                this.signInPopupDisplay = "none";
+	            }
+	            else {
+	                this.accoountPopupDisplay = "none";
+	                this.signInPopupDisplay = "block";
 	            }
 
 	        },
-	        openPopupClick: function () {
+	        closePopupWindow: function () {
 
-	            this.openPopup();
-	        },
-	        openPopup: function () {
-
-	            this.popupDisplay = "block";
-	        },
-	        closePopup: function () {
-
-	            this.popupDisplay = "none";
-	            this.message = null;
+	            this.accoountPopupDisplay = "none";
+	            this.signInPopupDisplay = "none";
 	        },
 	        signInClick: function () {
 
@@ -179,7 +198,7 @@
 	        },
 	        signOutClick: function () {
 
-	            this.closePopup();
+	            this.closePopupWindow();
 	            this.signOut();
 	        },
 	        signIn: function () {
@@ -207,7 +226,7 @@
 	            var cookie;
 
 	            if (value) {
-	                // Max-Age ( one week
+	                // Max-Age, one week
 	                cookie = this.cookieName + "=" + value + "; max-age=" + 60 * 60 * 24 * 7 * 1 + "; Path=/";
 	                //cookie = this.cookieName + "=" + value + "; expires=Thu, 18 Dec 2015 12:00:00 UTC" + "; Path=/";
 	            }
