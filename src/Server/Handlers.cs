@@ -40,6 +40,9 @@ namespace SignInApp.Server {
 
                 masterPage.MyPage = signInUserPage;
 
+                if (masterPage.IsSignedIn) {
+                    signInUserPage.RedirectUrl = signInUserPage.OriginUrl;
+                }
                 return signInUserPage;
             }, opt);
 
@@ -60,6 +63,10 @@ namespace SignInApp.Server {
                 signInUserPage.OriginUrl = queryCollection.Get("originurl");
 
                 masterPage.MyPage = signInUserPage;
+
+                if (masterPage.IsSignedIn) {
+                    signInUserPage.RedirectUrl = signInUserPage.OriginUrl;
+                }
 
                 return signInUserPage;
 
