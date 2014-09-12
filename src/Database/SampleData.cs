@@ -12,8 +12,6 @@ namespace SignInApp.Database {
 
         static internal void Init() {
 
-            // Clean database
-
             // ** BUGGWORKAROUND **
             // Assure that assemblies is loaded
 
@@ -28,11 +26,14 @@ namespace SignInApp.Database {
             transaction.Rollback();
 
 
-            ClearDatabase();
+            Starcounter.Handle.GET("/signinapp/reset", (Request request) => {
 
-            AddUsers();
+                // Clean database
+                ClearDatabase();
 
-
+                AddSampleSombodies();
+                return 200;
+            });
         }
 
         static void ClearDatabase() {
@@ -84,7 +85,7 @@ namespace SignInApp.Database {
         /// <summary>
         /// Add some sample users
         /// </summary>
-        static void AddUsers() {
+        static void AddSampleSombodies() {
 
             // Somebody
             //    Group
@@ -94,11 +95,11 @@ namespace SignInApp.Database {
             //        Organisation
             //            Company
 
-            AddPerson("demo", "demo", "demo", "demo");
-            AddPerson("Anders", "Wahlgren", "anders.wahlgren@mydomain.com", "demo");
-            AddPerson("Albert", "Einstein", "albert.einstein@mydomain.com", "demo");
+            AddPerson("demo", "demo", "demo", "demo@demo.com", "demo");
+            AddPerson("Anders", "Wahlgren", "andwah", "anders.wahlgren@mydomain.com", "demo");
+            AddPerson("Albert", "Einstein", "albein", "albert.einstein@mydomain.com", "demo");
 
-            AddCompany("Starcounter AB", "Starcounter@mydomain.com", "demo");
+            AddCompany("Starcounter AB", "starcounter", "Starcounter@mydomain.com", "demo");
 
         }
 
@@ -108,7 +109,7 @@ namespace SignInApp.Database {
         /// <param name="firstName"></param>
         /// <param name="surname"></param>
         /// <param name="email"></param>
-        static void AddPerson(string firstName, string surname, string email, string password) {
+        public static void AddPerson(string firstName, string surname, string username, string email, string password) {
 
             if (firstName == null) {
                 throw new ArgumentNullException("firstname");
@@ -116,6 +117,10 @@ namespace SignInApp.Database {
 
             if (surname == null) {
                 throw new ArgumentNullException("surname");
+            }
+
+            if (username == null) {
+                throw new ArgumentNullException("username");
             }
 
             if (email == null) {
@@ -129,26 +134,47 @@ namespace SignInApp.Database {
             if (string.IsNullOrEmpty(surname)) {
                 throw new ArgumentException("surname");
             }
+
             if (string.IsNullOrEmpty(email)) {
                 throw new ArgumentException("email");
+            }
+
+            // Validation
+
+            // Check for duplicated email
+            string emailLow = email.ToLowerInvariant();
+
+            if (!Utils.IsValidEmail(email)) {
+                throw new ArgumentException("email", "Invalid email address");
+            }
+            var dupEmail = Db.SQL<Concepts.Ring2.EMailAddress>("SELECT o FROM Concepts.Ring2.EMailAddress o WHERE o.EMail=?", emailLow).First;
+            if (dupEmail != null) {
+                throw new ArgumentException("username", "Duplicated email");
+            }
+
+            // Check for duplicated username
+            var dupUserName = Db.SQL<Concepts.Ring3.SystemUser>("SELECT o FROM Concepts.Ring3.SystemUser o WHERE o.Username=?", username).First;
+            if (dupUserName != null) {
+                throw new ArgumentException("username", "Duplicated username");
             }
 
             Db.Transaction(() => {
 
                 Person person = new Person() { FirstName = firstName, Surname = surname };
                 Concepts.Ring3.SystemUser systemUser = new Concepts.Ring3.SystemUser(person);
-                systemUser.Username = email;
+                systemUser.Username = username;
                 string hashedPassword;
                 Concepts.Ring5.SystemUserPassword.GeneratePasswordHash(systemUser.Username, password, out hashedPassword);
                 systemUser.Password = hashedPassword;
 
-                //EMailAddress emailRel = new EMailAddress();
-                //emailRel.SetToWhat(systemUser);
-                //emailRel.Name = email;
-
+                // Add ability to also sign in with email
                 EMailAddress emailRel = new EMailAddress();
+                emailRel.SetToWhat(systemUser);
+                emailRel.EMail = emailLow.ToLowerInvariant();
+
+                emailRel = new EMailAddress();
                 emailRel.SetToWhat(person);
-                emailRel.Name = email;
+                emailRel.EMail = emailLow.ToLowerInvariant();
             });
         }
 
@@ -157,10 +183,14 @@ namespace SignInApp.Database {
         /// </summary>
         /// <param name="name"></param>
         /// <param name="email"></param>
-        static void AddCompany(string name, string email, string password) {
+        public static void AddCompany(string name, string username, string email, string password) {
 
             if (name == null) {
                 throw new ArgumentNullException("name");
+            }
+
+            if (username == null) {
+                throw new ArgumentNullException("username");
             }
 
             if (email == null) {
@@ -175,26 +205,44 @@ namespace SignInApp.Database {
                 throw new ArgumentException("email");
             }
 
+            // Check for duplicated email
+            string emailLow = email.ToLowerInvariant();
+
+            if (!Utils.IsValidEmail(email)) {
+                throw new ArgumentException("email", "Invalid email address");
+            }
+            var dupEmail = Db.SQL<Concepts.Ring2.EMailAddress>("SELECT o FROM Concepts.Ring2.EMailAddress o WHERE o.EMail=?", emailLow).First;
+            if (dupEmail != null) {
+                throw new ArgumentException("username", "Duplicated email");
+            }
+
+            // Check for duplicated username
+            var dupUserName = Db.SQL<Concepts.Ring3.SystemUser>("SELECT o FROM Concepts.Ring3.SystemUser o WHERE o.Username=?", username).First;
+            if (dupUserName != null) {
+                throw new ArgumentException("username", "Duplicated username");
+            }
+
+
             Db.Transaction(() => {
                 Company company = new Company() { Name = name };
 
                 Concepts.Ring3.SystemUser systemUser = new Concepts.Ring3.SystemUser(company);
-                systemUser.Username = email;
-
+                systemUser.Username = username;
                 string hashedPassword;
                 Concepts.Ring5.SystemUserPassword.GeneratePasswordHash(systemUser.Username, password, out hashedPassword);
                 systemUser.Password = hashedPassword;
-                
-                //EMailsystemUserAddress emailRel = new EMailAddress();
-                //emailRel.SetToWhat(systemUser);
-                //emailRel.Name = email;
 
+                // Add ability to also sign in with email
                 EMailAddress emailRel = new EMailAddress();
+                emailRel.SetToWhat(systemUser);
+                emailRel.EMail = emailLow;
+
+                emailRel = new EMailAddress();
                 emailRel.SetToWhat(company);
-                emailRel.Name = email;
+                emailRel.EMail = emailLow;
             });
         }
- 
+
 
     }
 }

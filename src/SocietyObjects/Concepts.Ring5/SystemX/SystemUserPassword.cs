@@ -6,8 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Concepts.Ring5 {
+    // TODO: Rename this to SystemUserSecurity
     public class SystemUserPassword {
-
 
         public static void GeneratePasswordHash(string userId, string password, out string hashedPassword) {
 
@@ -17,18 +17,6 @@ namespace Concepts.Ring5 {
             hashedPassword = Convert.ToBase64String(GenerateSaltedHash(GetBytes(password), saltb));
             //salt = Convert.ToBase64String(saltb);
         }
-
-        //public static bool CheckPassword(string userId, string password, string hashedPassword) {
-
-        //    string newHashedPassword;
-
-        //    HashPassword(password, userId + ":" + password, out newHashedPassword);
-        //    return hashedPassword == newHashedPassword;
-        //}
-
-        //private static void HashPassword(string password, string salt, out string hashedPassword) {
-        //    hashedPassword = Convert.ToBase64String(GenerateSaltedHash(GetBytes(password), Convert.FromBase64String(salt)));
-        //}
 
         private static byte[] CreateSalt(int size) {
             //Generate a cryptographic random number.

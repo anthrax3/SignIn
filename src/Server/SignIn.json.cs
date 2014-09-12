@@ -1,5 +1,6 @@
 using Concepts.Ring5;
 using SignInApp.Database;
+using SignInApp.Server.Handlers;
 using Starcounter;
 
 namespace SignInApp.Server {
@@ -16,7 +17,10 @@ namespace SignInApp.Server {
             SampleData.Init();
 
             // Register handlers
-            Handlers.RegisterHandlers();
+            SignInHandlers.RegisterHandlers();
+            Database.CommitHooks.RegisterCommitHooks();
+
+            LauncherHooks.RegisterLauncherHooks();
         }
 
         #region Handler

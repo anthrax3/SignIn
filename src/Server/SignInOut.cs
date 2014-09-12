@@ -1,4 +1,5 @@
-﻿using Concepts.Ring3;
+﻿using Concepts.Ring1;
+using Concepts.Ring3;
 using Concepts.Ring5;
 using Starcounter;
 using System;
@@ -41,10 +42,28 @@ namespace SignInApp.Server {
         static private SystemUserSession SignInSystemUser(string userId, string password) {
 
             string hashedPassword;
-            Concepts.Ring5.SystemUserPassword.GeneratePasswordHash(userId, password, out hashedPassword);
+            SystemUser systemUser = null;
 
-            // Verify username and password
-            SystemUser systemUser = Db.SQL<SystemUser>("SELECT o FROM Concepts.Ring3.SystemUser o WHERE o.Username=? AND o.Password=?", userId, hashedPassword).First;
+            if (Utils.IsValidEmail(userId)) {
+                // Try signing in with email
+
+                // Get System username
+                systemUser = Db.SQL<Concepts.Ring3.SystemUser>("SELECT CAST(o.ToWhat AS Concepts.Ring3.SystemUser) FROM Concepts.Ring2.EMailAddress o WHERE o.ToWhat IS Concepts.Ring3.SystemUser AND o.EMail=?", userId).First;
+                if (systemUser != null) {
+                    Concepts.Ring5.SystemUserPassword.GeneratePasswordHash(systemUser.Username, password, out hashedPassword);
+                    if (systemUser.Password != hashedPassword) {
+                        systemUser = null;
+                    }
+                }
+                //                systemUser = Db.SQL<Concepts.Ring3.SystemUser>("SELECT CAST(o.ToWhat AS Concepts.Ring3.SystemUser) FROM Concepts.Ring2.EMailAddress o WHERE o.ToWhat IS Concepts.Ring3.SystemUser AND o.EMail=? AND CAST(o.ToWhat AS SystemUser).Password=?", userId, hashedPassword).First;
+
+            }
+            else {
+                Concepts.Ring5.SystemUserPassword.GeneratePasswordHash(userId, password, out hashedPassword);
+                // Verify username and password
+                systemUser = Db.SQL<SystemUser>("SELECT o FROM Concepts.Ring3.SystemUser o WHERE o.Username=? AND o.Password=?", userId, hashedPassword).First;
+            }
+
             if (systemUser == null) {
                 return null;
             }
@@ -177,9 +196,11 @@ namespace SignInApp.Server {
                     // Simulate Commit-Hook handling
                     JSON.systemusersession userSessionJson = new JSON.systemusersession();
                     userSessionJson.ObjectID = userSession.GetObjectID();
-                    InvokeSignOutCommitHook(userSessionJson);
+                    userSessionJson.SessionIdString = userSession.SessionIdString;
 
                     userSession.Delete();
+
+                    InvokeSignOutCommitHook(userSessionJson);
                 }
 
                 // Remove system user token
