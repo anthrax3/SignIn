@@ -65,13 +65,23 @@ namespace SignInApp.Server {
 
             if (userSession.Token.User.WhoIs != null) {
                 this.FullName = userSession.Token.User.WhoIs.FullName;
+                if (!string.IsNullOrEmpty(userSession.Token.User.WhoIs.ImageURL)) {
+                    this.ImageUrl = userSession.Token.User.WhoIs.ImageURL;
+                }
+                else {
+                    this.ImageUrl = Utils.GetGravatarUrl(string.Empty);
+                }
             }
             else {
                 this.FullName = userSession.Token.User.Username;
+                this.ImageUrl = Utils.GetGravatarUrl(string.Empty);
             }
+
 
             this.AuthToken = userSession.Token.Token;
             this.IsSignedIn = true;
+
+
         }
 
         /// <summary>
@@ -108,7 +118,7 @@ namespace SignInApp.Server {
         public override string GetHtmlPartialUrl() {
             return Html;
         }
- 
+
         #endregion
     }
 }

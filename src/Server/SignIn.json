@@ -10,6 +10,7 @@
 	"IsSignedIn" : false,
 	"Message" : "",
 	"FullName" : "",
+	"ImageUrl" : "",
 	"SignIn$" : null,
 	"SignOut$" : null
 }
