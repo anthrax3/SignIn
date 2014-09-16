@@ -8,6 +8,11 @@ using System.Threading.Tasks;
 namespace SignInApp.Server {
     public class Utils {
 
+        /// <summary>
+        /// Check if Email has the correct syntax
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         static public bool IsValidEmail(string email) {
             try {
                 var addr = new System.Net.Mail.MailAddress(email);
@@ -18,6 +23,11 @@ namespace SignInApp.Server {
             }
         }
 
+        /// <summary>
+        /// Build gravatar url
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         static public string GetGravatarUrl(string email) {
 
             using (MD5 md5Hash = MD5.Create()) {

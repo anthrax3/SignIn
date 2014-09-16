@@ -7,10 +7,6 @@ using System;
 namespace SignInApp.Server {
     public class SignInOut {
 
-        static public SystemUserSession Test() {
-            return null;
-        }
-
         /// <summary>
         /// Sign-in user
         /// </summary>

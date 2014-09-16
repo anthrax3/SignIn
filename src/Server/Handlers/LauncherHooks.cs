@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 namespace SignInApp.Server {
     public class LauncherHooks {
 
+        /// <summary>
+        /// Register Polyjuice Launcher Hooks
+        /// </summary>
         public static void RegisterLauncherHooks() {
 
             Starcounter.Handle.GET("/user", () => {
@@ -24,7 +27,6 @@ namespace SignInApp.Server {
 
                 return signInPage;
             });
-
         }
     }
 }

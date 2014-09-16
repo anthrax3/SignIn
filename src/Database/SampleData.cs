@@ -25,7 +25,6 @@ namespace SignInApp.Database {
             });
             transaction.Rollback();
 
-
             Starcounter.Handle.GET("/signinapp/reset", (Request request) => {
 
                 // Clean database
@@ -34,6 +33,9 @@ namespace SignInApp.Database {
             });
         }
 
+        /// <summary>
+        /// Clear all data from tables that this app uses
+        /// </summary>
         static void ClearDatabase() {
 
             Db.Transaction(() => {
@@ -79,8 +81,5 @@ namespace SignInApp.Database {
                 }
             });
         }
-
-
-
     }
 }

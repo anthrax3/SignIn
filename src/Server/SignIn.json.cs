@@ -10,7 +10,6 @@ namespace SignInApp.Server {
 
         public object MyPage;
 
-
         static void Main() {
 
             // Add some sample data
@@ -77,11 +76,8 @@ namespace SignInApp.Server {
                 this.ImageUrl = Utils.GetGravatarUrl(string.Empty);
             }
 
-
             this.AuthToken = userSession.Token.Token;
             this.IsSignedIn = true;
-
-
         }
 
         /// <summary>

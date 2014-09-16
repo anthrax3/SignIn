@@ -57,7 +57,6 @@ namespace SignInApp.Server.Handlers {
                 return signInUserPage;
 
             }, opt);
-
         }
     }
 }
