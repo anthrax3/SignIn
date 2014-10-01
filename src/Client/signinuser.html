@@ -1,4 +1,4 @@
-﻿<link rel="import" href="/vendor/juicy-redirect/src/juicy-redirect.html">
+﻿<link rel="import" href="/vendor/puppet-redirect/src/puppet-redirect.html">
 
 <template bind="{{SignInApp}}">
 
@@ -20,6 +20,5 @@
 
     <button class="launcher-button" onclick="getModel(this).SignIn$ = null">Sign in</button>
 
-    <link is="juicy-redirect" history url="{{ RedirectUrl }}">
-
+    <link is="puppet-redirect" history url="{{ RedirectUrl }}">
 </template>
