@@ -2,9 +2,6 @@
 staradmin kill all
 
 REM Start Launcher
-cd c:\github\Polyjuice\Launcher
-call run.bat
+call ..\..\Polyjuice\Launcher\run.bat
 
-REM Start Sign-In 
-cd c:\github\Polyjuice\SignInApp\src
-call run.bat
+call %~dp0run.bat
