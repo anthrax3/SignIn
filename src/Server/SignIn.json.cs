@@ -13,7 +13,7 @@ namespace SignInApp.Server {
         static void Main() {
 
             // Add some sample data
-            SampleData.Init();
+            //SampleData.Init();
 
             // Register handlers
             SignInHandlers.RegisterHandlers();
