@@ -2,6 +2,6 @@
 staradmin kill all
 
 REM Start Launcher
-call ..\..\Polyjuice\Launcher\run.bat
+call "%~dp0..\..\Launcher\run.bat"
 
-call %~dp0run.bat
+call "%~dp0run.bat"
