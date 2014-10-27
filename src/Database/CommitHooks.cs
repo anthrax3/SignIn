@@ -1,5 +1,6 @@
 ﻿using SignInApp.Server.Handlers;
 using Starcounter;
+using Starcounter.Internal;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Web;
@@ -11,8 +12,10 @@ namespace SignInApp.Server.Database {
 
             HandlerOptions opt = new HandlerOptions() { HandlerLevel = 0 };
 
+
+
             // User signed in event
-            Starcounter.Handle.POST("/__db/__default/societyobjects/systemusersession", (Request request) => {
+            Starcounter.Handle.POST("/__db/__" + StarcounterEnvironment.DatabaseNameLower + "/societyobjects/systemusersession", (Request request) => {
 
                 JSON.systemusersession systemUserSessionJson = new JSON.systemusersession();
                 systemUserSessionJson.PopulateFromJson(request.Body);
@@ -37,7 +40,7 @@ namespace SignInApp.Server.Database {
             }, opt);
 
             // User signed out event
-            Starcounter.Handle.DELETE("/__db/__default/societyobjects/systemusersession", (Request request) => {
+            Starcounter.Handle.DELETE("/__db/__" + StarcounterEnvironment.DatabaseNameLower + "/societyobjects/systemusersession", (Request request) => {
 
                 JSON.systemusersession systemUserSessionJson = new JSON.systemusersession();
                 systemUserSessionJson.PopulateFromJson(request.Body);

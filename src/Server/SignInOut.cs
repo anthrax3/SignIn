@@ -2,6 +2,7 @@
 using Concepts.Ring3;
 using Concepts.Ring5;
 using Starcounter;
+using Starcounter.Internal;
 using System;
 
 namespace SignInApp.Server {
@@ -212,7 +213,7 @@ namespace SignInApp.Server {
         /// <param name="user"></param>
         static void InvokeSignInCommitHook(JSON.systemusersession usersession) {
 
-            X.POST("/__db/__default/societyobjects/systemusersession", usersession.ToJsonUtf8(), null);
+            X.POST("/__db/__" + StarcounterEnvironment.DatabaseNameLower + "/societyobjects/systemusersession", usersession.ToJsonUtf8(), null);
         }
 
         /// <summary>
@@ -221,7 +222,7 @@ namespace SignInApp.Server {
         /// <param name="user"></param>
         static void InvokeSignOutCommitHook(JSON.systemusersession usersession) {
 
-            X.DELETE("/__db/__default/societyobjects/systemusersession", usersession.ToJsonUtf8(), null);
+            X.DELETE("/__db/__" + StarcounterEnvironment.DatabaseNameLower + "/societyobjects/systemusersession", usersession.ToJsonUtf8(), null);
         }
         #endregion
 
