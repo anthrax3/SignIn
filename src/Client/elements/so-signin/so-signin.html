@@ -1,8 +1,9 @@
-<!-- Copyright (c) 2014 Society Objects. All rights reserved. -->
+<!-- Copyright (c) 2014 Polyjuice. All rights reserved. -->
 
 <link rel="import" href="../../vendor/core-icon-button/core-icon-button.html">
+<link rel="import" href="../../vendor/juicy-popover/src/juicy-popover.html">
 
-<polymer-element name="so-signin" >
+<polymer-element name="so-signin">
 
     <template>
 
@@ -43,8 +44,15 @@
                 white-space: nowrap;
             }
 
-            .popup_account {
+            input, button {
+                margin-left: 2.5px;
+                margin-right: 2.5px;
+            }
+
+            .popup_window {
                 right: 0;
+                margin-right: -32px;
+                width: 200px;
                 position: absolute;
                 z-index: 1;
                 box-shadow: 0 2px 10px rgba(0,0,0,.2);
@@ -54,15 +62,8 @@
                 background: #fff;
                 overflow: hidden;
                 color: black;
-                display: none;
+                display: block;
                 padding: 20px;
-                margin-right: 40px;
-                width: 200px;
-            }
-
-            input, button {
-                margin-left: 2.5px;
-                margin-right: 2.5px;
             }
         </style>
 
@@ -70,34 +71,39 @@
 
             <!-- User signed in -->
             <template if="{{templateInstance.model.IsSignedIn}}">
-
                 <span class="tray" style="margin-right:20px">
+
                     <span>{{templateInstance.model.FullName}}</span>
-                    <core-icon-button id="accountbutton" on-click="{{togglePopupWindow}}" src="{{templateInstance.model.ImageUrl}}"></core-icon-button>
+
+                    <juicy-popover position="bottom left" handleSelector="core-icon-button.handle" expandableSelector=".expandable">
+                        <core-icon-button class="handle" src="{{templateInstance.model.ImageUrl}}"></core-icon-button>
+
+                        <div class="expandable popup_window">
+                            <img  src="{{templateInstance.model.ImageUrl}}" />
+                            <p style="margin-left:2px;">{{templateInstance.model.FullName}}</p>
+                            <button on-click="{{signOutClick}}">Sign out</button>
+                        </div>
+                    </juicy-popover>
                 </span>
 
-                <div tabindex="-1" on-blur="{{test1}}" on-focusout="{{test2}}" id="popupWindow" style="display:{{accoountPopupDisplay}}" class="popup_account">
-                    <!--<img  src="http://www.gravatar.com/avatar/3b3be63a4c2a439b013787725dfce802?d=identicon" />-->
-                    <img  src="{{templateInstance.model.ImageUrl}}" />
-                    <p style="margin-left:2px;">{{templateInstance.model.FullName}}</p>
-                    <button on-click="{{signOutClick}}">Sign out</button>
-                </div>
             </template>
 
             <!-- User NOT signed in -->
             <template if="{{!templateInstance.model.IsSignedIn}}">
-                
-                <span class="tray">
-                    <core-icon-button id="Core-icon-button1" on-click="{{togglePopupWindow}}" icon="account-circle"></core-icon-button>
+                <span class="tray" >
+
+                    <juicy-popover  position="bottom left" handleSelector="core-icon-button.handle" expandableSelector=".expandable">
+
+                        <core-icon-button class="handle"  icon="account-circle"></core-icon-button>
+
+                        <div class="expandable popup_window">
+                            <input style="width:150px" placeholder="Username" type="text"  name="username" value="{{templateInstance.model.UserID$}}">
+                            <input style="width:150px"  placeholder="Password" type="password" name="password" value="{{templateInstance.model.Password$}}">
+                            <span>{{templateInstance.model.Message}}</span>
+                            <button style="width:100px" on-click="{{signInClick}}">Sign in</button>
+                        </div>
+                    </juicy-popover>
                 </span>
-
-                <div style="display:{{signInPopupDisplay}}" class="popup_account">
-                    <input style="width:150px" placeholder="Username" type="text"  name="username" value="{{templateInstance.model.UserID$}}">
-                    <input style="width:150px"  placeholder="Password" type="password" name="password" value="{{templateInstance.model.Password$}}">
-                    <span>{{templateInstance.model.Message}}</span>
-                    <button style="width:100px" on-click="{{signInClick}}">Sign in</button>
-                </div>
-
             </template>
         </div>
 
@@ -109,30 +115,13 @@
 
 	    Polymer('so-signin', {
 	        isDomReady: false,
-
-	        accoountPopupDisplay: "none",
-	        signInPopupDisplay: "none",
-
 	        cookieName: "soauthtoken",
 	        observe: {
 	            'templateInstance.model.SignInEvent': 'SignInEventChanged'
 	        },
-	        onfocus: function () {
-	            //console.log("onfocus");
-	        },
-	        onfocusin: function () {
-	            //console.log("onfocusin");
-	        },
-	        onfocusout: function () {
-	            //console.log("onfocusout");
-	        },
 	        SignInEventChanged: function (oldValue, newValue) {
 
 	            if (this.isDomReady == false) return;
-
-	            this.closePopupWindow();
-
-	            //console.log("SignInEventChanged(" + oldValue + " => " + newValue + ")");
 
 	            var authTokenCookie = this.getCookie(this.cookieName);
 
@@ -149,12 +138,6 @@
 	                }
 	            }
 	        },
-	        attached: function () {
-
-	            //this.$.popupWindow.addEventListener('focusout', this.onDivlosefocus.bind(this), false);
-	            //this.$.accountbutton.addEventListener('focusout', this.onDivlosefocus.bind(this), false);
-
-	        },
 	        domReady: function () {
 
 	            this.isDomReady = true;
@@ -167,39 +150,12 @@
 	                }
 	            }
 	        },
-	        togglePopupWindow: function () {
-
-	            if (this.accoountPopupDisplay == "block" || this.signInPopupDisplay == "block") {
-	                this.closePopupWindow();
-	            }
-	            else {
-	                this.showPopupWindow();
-	            }
-	        },
-	        showPopupWindow: function () {
-
-	            if (this.templateInstance.model.IsSignedIn) {
-	                this.accoountPopupDisplay = "block";
-	                this.signInPopupDisplay = "none";
-	            }
-	            else {
-	                this.accoountPopupDisplay = "none";
-	                this.signInPopupDisplay = "block";
-	            }
-
-	        },
-	        closePopupWindow: function () {
-
-	            this.accoountPopupDisplay = "none";
-	            this.signInPopupDisplay = "none";
-	        },
 	        signInClick: function () {
 
 	            this.signIn();
 	        },
 	        signOutClick: function () {
 
-	            this.closePopupWindow();
 	            this.signOut();
 	        },
 	        signIn: function () {
@@ -229,14 +185,13 @@
 	            if (value) {
 	                // Max-Age, one week
 	                cookie = this.cookieName + "=" + value + "; max-age=" + 60 * 60 * 24 * 7 * 1 + "; Path=/";
-	                //cookie = this.cookieName + "=" + value + "; expires=Thu, 18 Dec 2015 12:00:00 UTC" + "; Path=/";
 	            }
 	            else {
 	                cookie = this.cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" + "; Path=/";
 	            }
 
 	            document.cookie = cookie;
-//	            console.log("setCookie:" + cookie);
+	            //console.log("setCookie:" + cookie);
 	        }
 	    });
 	</script>
