@@ -1,5 +1,4 @@
 using Concepts.Ring5;
-using SignInApp.Database;
 using SignInApp.Server.Handlers;
 using Starcounter;
 
@@ -8,17 +7,13 @@ namespace SignInApp.Server {
     [SignIn_json]
     partial class SignIn : Json {
 
-        public object MyPage;
+        public object SignInUserPage;
 
         static void Main() {
 
-            // Add some sample data
-            //SampleData.Init();
-
             // Register handlers
-            SignInHandlers.RegisterHandlers();
+            SignInHandlers.Register();
             Database.CommitHooks.RegisterCommitHooks();
-
             LauncherHooks.RegisterLauncherHooks();
         }
 
@@ -61,6 +56,7 @@ namespace SignInApp.Server {
         #endregion
 
         #region Update View Model
+
         /// <summary>
         /// Set properties
         /// </summary>

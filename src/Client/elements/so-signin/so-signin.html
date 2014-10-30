@@ -44,11 +44,6 @@
                 white-space: nowrap;
             }
 
-            input, button {
-                margin-left: 2.5px;
-                margin-right: 2.5px;
-            }
-
             .popup_window {
                 right: 0;
                 margin-right: -32px;
@@ -59,11 +54,43 @@
                 border-color: rgba(0,0,0,.2);
                 border: 1px solid #ccc;
                 border-radius: 2px;
-                background: #fff;
                 overflow: hidden;
                 color: black;
                 display: block;
                 padding: 20px;
+                background: #f0f0f0;
+            }
+
+            input[type="text"], input[type="password"] {
+                box-sizing: border-box;
+                width: 100%;
+                background: #ffffff;
+                margin-bottom: 10px;
+                border: 1px solid #ccc;
+                padding: 10px;
+                font-family: 'Open Sans',sans-serif;
+                font-size: 95%;
+                color: #555;
+            }
+
+            button {
+                box-sizing: border-box;
+                width: 100%;
+                background: #3399cc;
+                border: 0;
+                padding: 10px;
+                color: #ffffff;
+                cursor: pointer;
+            }
+
+            button:hover {
+                background: #2288bb;
+            }
+
+            .errorText {
+                width: 100%;
+                color: #cc3333;
+                margin-top: 10px;
             }
         </style>
 
@@ -97,10 +124,14 @@
                         <core-icon-button class="handle"  icon="account-circle"></core-icon-button>
 
                         <div class="expandable popup_window">
-                            <input style="width:150px" placeholder="Username" type="text"  name="username" value="{{templateInstance.model.UserID$}}">
-                            <input style="width:150px"  placeholder="Password" type="password" name="password" value="{{templateInstance.model.Password$}}">
-                            <span>{{templateInstance.model.Message}}</span>
-                            <button style="width:100px" on-click="{{signInClick}}">Sign in</button>
+              
+                            <input type="text" placeholder="Username / email"  value="{{templateInstance.model.UserID$}}" />
+                            <input type="password" placeholder="Password" value="{{templateInstance.model.Password$}}"/>
+                            <button on-click="{{signInClick}}">Sign in</button>
+                            <template if="{{templateInstance.model.Message}}">
+                                <div class="errorText">{{templateInstance.model.Message}}</div>
+                            </template>
+
                         </div>
                     </juicy-popover>
                 </span>
@@ -174,7 +205,6 @@
 	            var parts = value.split("; " + name + "=");
 	            if (parts.length == 2) {
 	                var cookie = parts.pop().split(";").shift();
-	                //console.log("gotCookie:" + cookie);
 	                return cookie;
 	            }
 	        },
@@ -191,7 +221,6 @@
 	            }
 
 	            document.cookie = cookie;
-	            //console.log("setCookie:" + cookie);
 	        }
 	    });
 	</script>

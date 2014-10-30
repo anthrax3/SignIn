@@ -9,22 +9,25 @@ namespace SignInApp.Server.Handlers {
         // TODO: How to remove items from this list
         internal static Dictionary<string, SignIn> signInSessions = new Dictionary<string, SignIn>();
 
-        internal static void RegisterHandlers() {
+        internal static void Register() {
 
             HandlerOptions opt = new HandlerOptions() { HandlerLevel = 0 };
 
             Starcounter.Handle.GET("/signinapp/signinuser", (Request request) => {
 
+                if (Session.Current == null) {
+                    return new Response() { StatusCode = (ushort)System.Net.HttpStatusCode.InternalServerError, Body = "No Current Session" };
+                }
+
                 string sessionID = Session.Current.SessionIdString;
                 if (!signInSessions.ContainsKey(sessionID)) {
-                    // TODO
-                    return (ushort)System.Net.HttpStatusCode.InternalServerError;
+                    return new Response() { StatusCode = (ushort)System.Net.HttpStatusCode.InternalServerError, Body = "Failed to get the signin app Session" };
                 }
                 SignIn masterPage = signInSessions[sessionID];
 
                 var signInUserPage = new SignInUser() { Html = "/signinuser.html" };
 
-                masterPage.MyPage = signInUserPage;
+                masterPage.SignInUserPage = signInUserPage;
 
                 if (masterPage.IsSignedIn) {
                     signInUserPage.RedirectUrl = signInUserPage.OriginUrl;
@@ -34,10 +37,13 @@ namespace SignInApp.Server.Handlers {
 
             Starcounter.Handle.GET("/signinapp/signinuser?{?}", (string query, Request request) => {
 
+                if (Session.Current == null) {
+                    return new Response() { StatusCode = (ushort)System.Net.HttpStatusCode.InternalServerError, Body = "No Current Session" };
+                }
+
                 string sessionID = Session.Current.SessionIdString;
                 if (!signInSessions.ContainsKey(sessionID)) {
-                    // TODO
-                    return (ushort)System.Net.HttpStatusCode.InternalServerError;
+                    return new Response() { StatusCode = (ushort)System.Net.HttpStatusCode.InternalServerError, Body = "Failed to get the signin app Session" };
                 }
                 SignIn masterPage = signInSessions[sessionID];
 
@@ -48,14 +54,13 @@ namespace SignInApp.Server.Handlers {
                 NameValueCollection queryCollection = HttpUtility.ParseQueryString(decodedQuery);
                 signInUserPage.OriginUrl = queryCollection.Get("originurl");
 
-                masterPage.MyPage = signInUserPage;
+                masterPage.SignInUserPage = signInUserPage;
 
                 if (masterPage.IsSignedIn) {
                     signInUserPage.RedirectUrl = signInUserPage.OriginUrl;
                 }
 
                 return signInUserPage;
-
             }, opt);
         }
     }

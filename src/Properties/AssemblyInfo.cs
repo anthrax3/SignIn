@@ -7,7 +7,7 @@ using Starcounter.Internal;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SignInApp")]
-[assembly: AssemblyDescription("Sign-In application for the Launcher powered by Starcounter")]
+[assembly: AssemblyDescription("Sign-In application for Polyjuice powered by Starcounter and Society Objects")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Polyjuice")]
 [assembly: AssemblyProduct("SignInApp")]
