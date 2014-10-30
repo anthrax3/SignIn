@@ -17,18 +17,22 @@ namespace SignInApp.Server {
             // If there is an user id then use it.
             if (!string.IsNullOrEmpty(userId)) {
                 SystemUserSession userSession = SignInSystemUser(userId, password);
-                if (userSession == null) {
-                    message = "Invalid username or password";
+                if (userSession != null) {
+                    return userSession;
                 }
-                return userSession;
+
+                message = "Invalid username or password";
+                return null;
+            }
+
+            if (string.IsNullOrEmpty(signInAuthToken)) {
+
+                message = "Invalid username or password";
+                return null;
             }
 
             // Use Auth token cookie if it exist
-            if (signInAuthToken != null) {
-                return SignInSystemUser(signInAuthToken);
-            }
-
-            return null;
+            return SignInSystemUser(signInAuthToken);
         }
 
         /// <summary>
@@ -169,24 +173,28 @@ namespace SignInApp.Server {
             });
         }
 
+  
         /// <summary>
         /// Sign out user on all sessions that uses the same auth token
         /// </summary>
-        static public void SignOutSystemUser(string authToken) {
+        /// <param name="authToken"></param>
+        /// <returns>True if a user was signed out, otherwice false is user is already signed out</returns>
+        static public bool SignOutSystemUser(string authToken) {
 
             if (authToken == null) {
-                return;
+                return false;
             }
 
             SystemUserTokenKey token = Db.SQL<Concepts.Ring5.SystemUserTokenKey>("SELECT o FROM Concepts.Ring5.SystemUserTokenKey o WHERE o.Token=?", authToken).First;
             if (token == null) {
-                return;
+                return false;
             }
+
+            bool bUserWasSignedOut = false;
 
             Db.Transaction(() => {
 
                 var result = Db.SQL<Concepts.Ring5.SystemUserSession>("SELECT o FROM Concepts.Ring5.SystemUserSession o WHERE o.Token=?", token);
-
                 // Sign-out user with a specified auth token in all sessions
                 foreach (SystemUserSession userSession in result) {
 
@@ -198,11 +206,15 @@ namespace SignInApp.Server {
                     userSession.Delete();
 
                     InvokeSignOutCommitHook(userSessionJson);
+                    bUserWasSignedOut = true;
                 }
 
                 // Remove system user token
                 token.Delete();
+
             });
+
+            return bUserWasSignedOut;
         }
 
         #region Commit Hook replacement
@@ -225,6 +237,5 @@ namespace SignInApp.Server {
             X.DELETE("/__db/__" + StarcounterEnvironment.DatabaseNameLower + "/societyobjects/systemusersession", usersession.ToJsonUtf8(), null);
         }
         #endregion
-
     }
 }

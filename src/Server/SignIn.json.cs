@@ -39,6 +39,7 @@ namespace SignInApp.Server {
                 else {
                     this.ClearViewModelProperties(true);
                 }
+                this.SignInEvent = !this.SignInEvent;
             }
         }
 
@@ -48,7 +49,13 @@ namespace SignInApp.Server {
         /// <param name="action"></param>
         void Handle(Input.SignOut action) {
 
-            SignInOut.SignOutSystemUser(this.AuthToken);
+            bool bUserWasSignedOut = SignInOut.SignOutSystemUser(this.AuthToken);
+
+            // Note: if user was signed out there will be a callback (commithooks) that clears the user properties.
+            if (bUserWasSignedOut == false) {
+                this.ClearViewModelProperties();
+                this.SignInEvent = !this.SignInEvent;
+            }
         }
 
         #endregion
