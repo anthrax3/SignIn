@@ -44,19 +44,19 @@
   <ItemGroup>
     <Reference Include="Concepts.Ring1, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>third_party\Concepts.Ring1.dll</HintPath>
+      <HintPath>..\..\Society-Objects\bin\Concepts.Ring1.dll</HintPath>
     </Reference>
     <Reference Include="Concepts.Ring2, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>third_party\Concepts.Ring2.dll</HintPath>
+      <HintPath>..\..\Society-Objects\bin\Concepts.Ring2.dll</HintPath>
     </Reference>
     <Reference Include="Concepts.Ring3, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>third_party\Concepts.Ring3.dll</HintPath>
+      <HintPath>..\..\Society-Objects\bin\Concepts.Ring3.dll</HintPath>
     </Reference>
     <Reference Include="Concepts.Ring4, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>third_party\Concepts.Ring4.dll</HintPath>
+      <HintPath>..\..\Society-Objects\bin\Concepts.Ring4.dll</HintPath>
     </Reference>
     <Reference Include="Starcounter, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d2df1e81d0ca3abf">
       <Private>False</Private>
