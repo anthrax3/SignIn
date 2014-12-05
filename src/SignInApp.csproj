@@ -103,10 +103,6 @@
     <Content Include="Client\signinuser.html" />
     <Content Include="Client\elements\so-signin\so-signin.html" />
     <Content Include="Client\signin.html" />
-    <Content Include="third_party\Concepts.Ring1.dll" />
-    <Content Include="third_party\Concepts.Ring2.dll" />
-    <Content Include="third_party\Concepts.Ring3.dll" />
-    <Content Include="third_party\Concepts.Ring4.dll" />
   </ItemGroup>
   <ItemGroup>
     <TypedJSON Include="Server\SignInUser.json">
