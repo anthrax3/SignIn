@@ -1,7 +1,7 @@
 ﻿using Starcounter;
 using System;
 
-namespace Concepts.Ring5 {
+namespace Concepts.Ring8.Polyjuice {
     /// <summary>
     /// Table with Signed in users sessions
     /// </summary>

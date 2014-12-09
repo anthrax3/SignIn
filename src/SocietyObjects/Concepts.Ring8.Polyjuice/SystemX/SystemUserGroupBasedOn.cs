@@ -8,7 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Concepts.Ring5 {
+namespace Concepts.Ring8.Polyjuice {
 
     [Database]
     public class SystemUserGroupBasedOn : Relation {

@@ -17,7 +17,7 @@ namespace SignInApp.Server.Database {
 
                 JSON.systemusersession systemUserSessionJson = new JSON.systemusersession();
                 systemUserSessionJson.PopulateFromJson(request.Body);
-                Concepts.Ring5.SystemUserSession userSession = Db.SQL<Concepts.Ring5.SystemUserSession>("SELECT o FROM Concepts.Ring5.SystemUserSession o WHERE o.ObjectID=?", systemUserSessionJson.ObjectID).First;
+                Concepts.Ring8.Polyjuice.SystemUserSession userSession = Db.SQL<Concepts.Ring8.Polyjuice.SystemUserSession>("SELECT o FROM Concepts.Ring8.Polyjuice.SystemUserSession o WHERE o.ObjectID=?", systemUserSessionJson.ObjectID).First;
 
                 if (userSession != null && SignInHandlers.signInSessions.ContainsKey(userSession.SessionIdString)) {
 

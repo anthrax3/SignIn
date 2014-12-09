@@ -6,12 +6,12 @@ using Starcounter.Internal;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Concepts.Ring5")]
+[assembly: AssemblyTitle("Concepts.Ring8.Polyjuice")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Starcounter")]
-[assembly: AssemblyProduct("Concepts.Ring5")]
-[assembly: AssemblyCopyright("Copyright © Starcounter 2013")]
+[assembly: AssemblyCompany("Polyjuice")]
+[assembly: AssemblyProduct("Concepts.Ring8.Polyjuice")]
+[assembly: AssemblyCopyright("Copyright © Polyjuice 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

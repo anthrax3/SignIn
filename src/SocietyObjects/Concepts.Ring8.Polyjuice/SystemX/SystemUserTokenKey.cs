@@ -3,7 +3,7 @@ using System;
 using System.Security.Cryptography;
 using System.Web;
 
-namespace Concepts.Ring5 {
+namespace Concepts.Ring8.Polyjuice {
     [Database]
     public class SystemUserTokenKey {
 

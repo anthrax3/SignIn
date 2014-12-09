@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Concepts.Ring5 {
+namespace Concepts.Ring8.Polyjuice {
     // TODO: Rename this to SystemUserSecurity
     public class SystemUserPassword {
 
