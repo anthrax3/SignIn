@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignInApp", "SignInApp.csproj", "{AD9637E2-BC66-48CF-AFEF-AAE2454413EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Concepts.Ring8.Polyjuice", "SocietyObjects\Concepts.Ring8.Polyjuice\Concepts.Ring8.Polyjuice.csproj", "{F6EC89A9-75B6-4F3D-BF31-6751705C0EE9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocietyObjects.Concepts.Ring8.Polyjuice", "SocietyObjects\SocietyObjects.Concepts.Ring8.Polyjuice\SocietyObjects.Concepts.Ring8.Polyjuice.csproj", "{F6EC89A9-75B6-4F3D-BF31-6751705C0EE9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

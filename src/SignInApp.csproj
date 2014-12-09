@@ -115,9 +115,9 @@
     </TypedJSON>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="SocietyObjects\Concepts.Ring8.Polyjuice\Concepts.Ring8.Polyjuice.csproj">
+    <ProjectReference Include="SocietyObjects\SocietyObjects.Concepts.Ring8.Polyjuice\SocietyObjects.Concepts.Ring8.Polyjuice.csproj">
       <Project>{f6ec89a9-75b6-4f3d-bf31-6751705c0ee9}</Project>
-      <Name>Concepts.Ring8.Polyjuice</Name>
+      <Name>SocietyObjects.Concepts.Ring8.Polyjuice</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

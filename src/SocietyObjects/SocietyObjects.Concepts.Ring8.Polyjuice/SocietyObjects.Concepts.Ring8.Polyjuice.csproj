@@ -9,8 +9,8 @@
     <ProjectGuid>{F6EC89A9-75B6-4F3D-BF31-6751705C0EE9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Concepts.Ring8.Polyjuice</RootNamespace>
-    <AssemblyName>Concepts.Ring8.Polyjuice</AssemblyName>
+    <RootNamespace>SocietyObjects.Concepts.Ring8.Polyjuice</RootNamespace>
+    <AssemblyName>SocietyObjects.Concepts.Ring8.Polyjuice</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <UseVSHostingProcess>false</UseVSHostingProcess>
