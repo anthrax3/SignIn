@@ -45,18 +45,25 @@
     <Reference Include="SocietyObjects.Concepts.Ring1, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Society-Objects\src\bin\Debug\SocietyObjects.Concepts.Ring1.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="SocietyObjects.Concepts.Ring2, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Society-Objects\src\bin\Debug\SocietyObjects.Concepts.Ring2.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="SocietyObjects.Concepts.Ring3, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Society-Objects\src\bin\Debug\SocietyObjects.Concepts.Ring3.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="SocietyObjects.Concepts.Ring4, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Society-Objects\src\bin\Debug\SocietyObjects.Concepts.Ring4.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SocietyObjects.Concepts.Ring8.Polyjuice">
+      <HintPath>..\..\Society-Objects\src\bin\Debug\SocietyObjects.Concepts.Ring8.Polyjuice.dll</HintPath>
     </Reference>
     <Reference Include="Starcounter, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d2df1e81d0ca3abf">
       <Private>False</Private>
@@ -113,12 +120,6 @@
     <TypedJSON Include="Server\JSON\systemusersession.json">
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="SocietyObjects\SocietyObjects.Concepts.Ring8.Polyjuice\SocietyObjects.Concepts.Ring8.Polyjuice.csproj">
-      <Project>{f6ec89a9-75b6-4f3d-bf31-6751705c0ee9}</Project>
-      <Name>SocietyObjects.Concepts.Ring8.Polyjuice</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(StarcounterBin)\Starcounter.MsBuild.targets" />
