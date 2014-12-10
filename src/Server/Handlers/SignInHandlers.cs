@@ -11,8 +11,6 @@ namespace SignInApp.Server.Handlers {
 
         internal static void Register() {
 
-            HandlerOptions opt = new HandlerOptions() { HandlerLevel = 0 };
-
             Starcounter.Handle.GET("/signinapp/signinuser", (Request request) => {
 
                 if (Session.Current == null) {
@@ -33,7 +31,7 @@ namespace SignInApp.Server.Handlers {
                     signInUserPage.RedirectUrl = signInUserPage.OriginUrl;
                 }
                 return signInUserPage;
-            }, opt);
+            });
 
             Starcounter.Handle.GET("/signinapp/signinuser?{?}", (string query, Request request) => {
 
@@ -61,7 +59,7 @@ namespace SignInApp.Server.Handlers {
                 }
 
                 return signInUserPage;
-            }, opt);
+            });
         }
     }
 }

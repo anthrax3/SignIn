@@ -10,8 +10,6 @@ namespace SignInApp.Server.Database {
 
         internal static void RegisterCommitHooks() {
 
-            HandlerOptions opt = new HandlerOptions() { HandlerLevel = 0 };
-
             // User signed in event
             Starcounter.Handle.POST("/__db/__" + StarcounterEnvironment.DatabaseNameLower + "/societyobjects/systemusersession", (Request request) => {
 
@@ -35,7 +33,7 @@ namespace SignInApp.Server.Database {
                 }
 
                 return (ushort)System.Net.HttpStatusCode.OK;
-            }, opt);
+            });
 
             // User signed out event
             Starcounter.Handle.DELETE("/__db/__" + StarcounterEnvironment.DatabaseNameLower + "/societyobjects/systemusersession", (Request request) => {
@@ -59,7 +57,7 @@ namespace SignInApp.Server.Database {
                 }
 
                 return (ushort)System.Net.HttpStatusCode.OK;
-            }, opt);
+            });
         }
     }
 }

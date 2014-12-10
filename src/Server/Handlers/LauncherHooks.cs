@@ -14,7 +14,7 @@ namespace SignInApp.Server {
         /// </summary>
         public static void RegisterLauncherHooks() {
 
-            Starcounter.Handle.GET("/user", () => {
+            Starcounter.Handle.GET("/launcher/user", () => {
 
                 var signInPage = new SignIn() { Html = "/signin.html" };
 
@@ -26,7 +26,7 @@ namespace SignInApp.Server {
                 SignInHandlers.signInSessions.Add(sessionID, signInPage);
 
                 return signInPage;
-            });
+            }, HandlerOptions.ApplicationLevel);
         }
     }
 }
