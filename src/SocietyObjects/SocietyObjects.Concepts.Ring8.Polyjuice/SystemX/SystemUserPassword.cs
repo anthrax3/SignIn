@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Concepts.Ring8.Polyjuice {
-    // TODO: Rename this to SystemUserSecurity
+
     public class SystemUserPassword {
 
         public static void GeneratePasswordHash(string userId, string password, out string hashedPassword) {

@@ -60,14 +60,14 @@ namespace SignInApp.Server {
                 // Get System username
                 systemUser = Db.SQL<Concepts.Ring3.SystemUser>("SELECT CAST(o.ToWhat AS Concepts.Ring3.SystemUser) FROM Concepts.Ring2.EMailAddress o WHERE o.ToWhat IS Concepts.Ring3.SystemUser AND o.EMail=?", userId).First;
                 if (systemUser != null) {
-                    Concepts.Ring8.Polyjuice.SystemUserPassword.GeneratePasswordHash(systemUser.Username, password, out hashedPassword);
+                    Concepts.Ring8.Polyjuice.SystemUserPassword.GeneratePasswordHash(systemUser.Username.ToLower(), password, out hashedPassword);
                     if (systemUser.Password != hashedPassword) {
                         systemUser = null;
                     }
                 }
             }
             else {
-                Concepts.Ring8.Polyjuice.SystemUserPassword.GeneratePasswordHash(userId, password, out hashedPassword);
+                Concepts.Ring8.Polyjuice.SystemUserPassword.GeneratePasswordHash(userId.ToLower(), password, out hashedPassword);
                 // Verify username and password
                 systemUser = Db.SQL<SystemUser>("SELECT o FROM Concepts.Ring3.SystemUser o WHERE o.Username=? AND o.Password=?", userId, hashedPassword).First;
             }
