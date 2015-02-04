@@ -22,8 +22,10 @@ namespace SignInApp.Server {
         /// Sign-In handler
         /// </summary>
         /// <param name="action"></param>
-        void Handle(Input.SignIn action) {
+        void Handle(Input.SignInClicked action)
+        {
 
+            action.Value = false;
             string message;
             SystemUserSession userSession = SignInOut.SignInSystemUser(this.UserID, this.Password, this.SignInAuthToken, out message);
             if (userSession == null) {
@@ -42,8 +44,10 @@ namespace SignInApp.Server {
         /// Sign-Out handler
         /// </summary>
         /// <param name="action"></param>
-        void Handle(Input.SignOut action) {
+        void Handle(Input.SignOutClicked action)
+        {
 
+            action.Value = false;
             bool bUserWasSignedOut = SignInOut.SignOutSystemUser(this.AuthToken);
 
             // Note: if user was signed out there will be a callback (commithooks) that clears the user properties.

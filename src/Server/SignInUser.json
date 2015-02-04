@@ -9,7 +9,7 @@
 	"AuthToken" : "",
 	"IsSignedIn" : false,
 	"Message" : "",
-	"SignIn$" : null,
+	"SignInClicked$" : false,
 	"OriginUrl": "",
 	"RedirectUrl" : "",
 	"SetCookie" : ""

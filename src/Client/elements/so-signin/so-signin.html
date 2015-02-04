@@ -192,12 +192,12 @@
 	        signIn: function () {
 
 	            // Trigger sign-in event
-	            this.templateInstance.model.SignIn$ = null;
+	            this.templateInstance.model.SignInClicked$ = true;
 	        },
 	        signOut: function () {
 
 	            // Trigger sign-in event
-	            this.templateInstance.model.SignOut$ = null;
+	            this.templateInstance.model.SignOutClicked$ = true;
 	        },
 	        getCookie: function (name) {
 

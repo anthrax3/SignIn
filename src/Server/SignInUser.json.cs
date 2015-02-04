@@ -10,8 +10,10 @@ namespace SignInApp.Server {
         /// Sign-in operation
         /// </summary>
         /// <param name="action"></param>
-        void Handle(Input.SignIn action) {
+        void Handle(Input.SignInClicked action)
+        {
 
+            action.Value = false;
             string message;
             SystemUserSession userSession = SignInOut.SignInSystemUser(this.UserID, this.Password, this.SignInAuthToken, out message);
             if (userSession == null) {

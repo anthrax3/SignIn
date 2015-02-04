@@ -11,6 +11,6 @@
 	"Message" : "",
 	"FullName" : "",
 	"ImageUrl" : "",
-	"SignIn$" : null,
-	"SignOut$" : null
+	"SignInClicked$" : false,
+	"SignOutClicked$" : false
 }

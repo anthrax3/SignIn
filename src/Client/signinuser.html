@@ -18,7 +18,7 @@
         <p  style="margin:0px;background:red;color:white">{{Message}}</p>
     </template>
 
-    <button class="launcher-button" onclick="getModel(this).SignIn$ = null">Sign in</button>
+    <button class="launcher-button" onclick="getModel(this).SignInClicked$ = true">Sign in</button>
 
     <link is="puppet-redirect" history url="{{ RedirectUrl }}">
 </template>
