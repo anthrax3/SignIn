@@ -124,7 +124,7 @@ namespace Concepts.Ring8.Polyjuice.Permissions {
 
             if (permission == null) {
 
-                Db.Transaction(() => {
+                Db.Transact(() => {
                     UriPermission p1 = new UriPermission() { Uri = uri, CanGet = true };
                     new SystemUserGroupUriPermission() { ToWhat = p1, WhatIs = group };
                 });
@@ -150,7 +150,7 @@ namespace Concepts.Ring8.Polyjuice.Permissions {
 
             // There is no system user beloning to the admin group
 
-            Db.Transaction(() => {
+            Db.Transact(() => {
 
                 // Assure that there is a Admin group
 

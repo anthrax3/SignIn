@@ -78,7 +78,7 @@ namespace SignInApp.Server {
 
             // SignIn SystemUser, Username and password OK
             SystemUserSession userSession = null;
-            Db.Transaction(() => {
+            Db.Transact(() => {
 
                 // Create system user token
                 SystemUserTokenKey token = new SystemUserTokenKey(systemUser);
@@ -103,7 +103,7 @@ namespace SignInApp.Server {
 
             if (oldToken.User == null) {
                 // System user deleted => delete invalid token
-                Db.Transaction(() => {
+                Db.Transact(() => {
 
                     // Remove token and it's assigned sessions
                     DeleteToken(oldToken);
@@ -116,7 +116,7 @@ namespace SignInApp.Server {
             TimeSpan ts = new TimeSpan( DateTime.UtcNow.Ticks - oldToken.LastUsed.Ticks );
             if (ts.TotalDays > 7) {  // TODO: Make expire time configurable
 
-                Db.Transaction(() => {
+                Db.Transact(() => {
                     // Remove token and it's assigned sessions
                     DeleteToken(oldToken);
                 });
@@ -144,7 +144,7 @@ namespace SignInApp.Server {
             return AssureSystemUserSession(newToken);
 #else
             SystemUserSession userSession = null;
-            Db.Transaction(() => {
+            Db.Transact(() => {
                 userSession = AssureSystemUserSession(oldToken);
             });
 
@@ -239,7 +239,7 @@ namespace SignInApp.Server {
 
             bool bUserWasSignedOut = false;
 
-            Db.Transaction(() => {
+            Db.Transact(() => {
 
                 var result = Db.SQL<Concepts.Ring8.Polyjuice.SystemUserSession>("SELECT o FROM Concepts.Ring8.Polyjuice.SystemUserSession o WHERE o.Token=?", token);
                 // Sign-out user with a specified auth token in all sessions
