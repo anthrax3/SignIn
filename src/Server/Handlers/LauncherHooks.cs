@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PolyjuiceNamespace;
 
 namespace SignInApp.Server {
     public class LauncherHooks {
@@ -14,7 +15,7 @@ namespace SignInApp.Server {
         /// </summary>
         public static void RegisterLauncherHooks() {
 
-            Starcounter.Handle.GET("/launcher/user", () => {
+            Starcounter.Handle.GET("/SignInApp/user", () => {
 
                 var signInPage = new SignIn() { Html = "/signin.html" };
 
@@ -26,7 +27,9 @@ namespace SignInApp.Server {
                 SignInHandlers.signInSessions.Add(sessionID, signInPage);
 
                 return signInPage;
-            }, HandlerOptions.ApplicationLevel);
+            });
+
+            Polyjuice.Map("/SignInApp/user", "/polyjuice/user");
         }
     }
 }
