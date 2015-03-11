@@ -3,6 +3,7 @@
 using Concepts.Ring1;
 using Concepts.Ring3;
 using Concepts.Ring8.Polyjuice;
+using SignInApp.Server.Database;
 using Starcounter;
 using Starcounter.Internal;
 using System;
@@ -272,7 +273,7 @@ namespace SignInApp.Server {
         /// <param name="user"></param>
         static void InvokeSignInCommitHook(JSON.systemusersession usersession) {
 
-            Response r = X.POST("/__db/__" + StarcounterEnvironment.DatabaseNameLower + "/societyobjects/systemusersession", usersession.ToJsonUtf8(), null);
+            Response r = X.POST(CommitHooks.MappedTo, usersession.ToJsonUtf8(), null);
             if (r.StatusCode < 200 || r.StatusCode >= 300) {
             }
         }
@@ -283,7 +284,7 @@ namespace SignInApp.Server {
         /// <param name="user"></param>
         static void InvokeSignOutCommitHook(JSON.systemusersession usersession) {
 
-            Response r = X.DELETE("/__db/__" + StarcounterEnvironment.DatabaseNameLower + "/societyobjects/systemusersession", usersession.ToJsonUtf8(), null);
+            Response r = X.DELETE(CommitHooks.MappedTo, usersession.ToJsonUtf8(), null);
             if (r.StatusCode < 200 || r.StatusCode >= 300) {
             }
         }

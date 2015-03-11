@@ -1,4 +1,5 @@
-﻿using SignInApp.Server.Handlers;
+﻿using PolyjuiceNamespace;
+using SignInApp.Server.Handlers;
 using Starcounter;
 using Starcounter.Internal;
 using System.Collections.Generic;
@@ -8,10 +9,23 @@ using System.Web;
 namespace SignInApp.Server.Database {
     public class CommitHooks {
 
+        internal static string LocalAppUrl;
+        internal static string MappedTo;
+
+
         internal static void RegisterCommitHooks() {
 
+            CommitHooks.LocalAppUrl = "/SignInApp/__db/__" + StarcounterEnvironment.DatabaseNameLower + "/societyobjects/systemusersession";
+            CommitHooks.MappedTo = "/polyjuice/signin";
+
+
+            //Starcounter.Handle.GET(CommitHooks.LocalAppUrl, (Request request) => {
+            //    return (ushort)System.Net.HttpStatusCode.OK;
+            //});
+
+
             // User signed in event
-            Starcounter.Handle.POST("/__db/__" + StarcounterEnvironment.DatabaseNameLower + "/societyobjects/systemusersession", (Request request) => {
+            Starcounter.Handle.POST(CommitHooks.LocalAppUrl, (Request request) => {
 
                 JSON.systemusersession systemUserSessionJson = new JSON.systemusersession();
                 systemUserSessionJson.PopulateFromJson(request.Body);
@@ -36,7 +50,7 @@ namespace SignInApp.Server.Database {
             });
 
             // User signed out event
-            Starcounter.Handle.DELETE("/__db/__" + StarcounterEnvironment.DatabaseNameLower + "/societyobjects/systemusersession", (Request request) => {
+            Starcounter.Handle.DELETE(CommitHooks.LocalAppUrl, (Request request) => {
 
                 JSON.systemusersession systemUserSessionJson = new JSON.systemusersession();
                 systemUserSessionJson.PopulateFromJson(request.Body);
@@ -58,6 +72,10 @@ namespace SignInApp.Server.Database {
 
                 return (ushort)System.Net.HttpStatusCode.OK;
             });
+
+            Polyjuice.Map(CommitHooks.LocalAppUrl, CommitHooks.MappedTo, "POST");
+            Polyjuice.Map(CommitHooks.LocalAppUrl, CommitHooks.MappedTo, "DELETE");
+
         }
     }
 }
