@@ -1,12 +1,13 @@
 ﻿//#define NEW_TOKEN_ON_EACH_REQUEST // NOTE: This can not be done until we can get the cookie when the Handle is called (Instead of using the authToken property we need to use the cookie value
 
-using Concepts.Ring1;
-using Concepts.Ring3;
-using Concepts.Ring8.Polyjuice;
 using SignInApp.Server.Database;
+using Simplified.Ring3;
+using Simplified.Ring5;
 using Starcounter;
 using Starcounter.Internal;
 using System;
+using System.Security.Cryptography;
+using System.Web;
 
 namespace SignInApp.Server {
     public class SignInOut {
@@ -59,7 +60,7 @@ namespace SignInApp.Server {
                 // Try signing in with email
 
                 // Get System username
-                systemUser = Db.SQL<Concepts.Ring3.SystemUser>("SELECT CAST(o.ToWhat AS Concepts.Ring3.SystemUser) FROM Concepts.Ring2.EMailAddress o WHERE o.ToWhat IS Concepts.Ring3.SystemUser AND o.EMail=?", userId).First;
+                systemUser = Db.SQL<Simplified.Ring3.SystemUser>("SELECT CAST(o.ToWhat AS Simplified.Ring3.SystemUser) FROM Concepts.Ring2.EMailAddress o WHERE o.ToWhat IS Simplified.Ring3.SystemUser AND o.EMail=?", userId).First;
                 if (systemUser != null) {
                     Concepts.Ring8.Polyjuice.SystemUserPassword.GeneratePasswordHash(systemUser.Username.ToLower(), password, out hashedPassword);
                     if (systemUser.Password != hashedPassword) {
@@ -70,7 +71,7 @@ namespace SignInApp.Server {
             else {
                 Concepts.Ring8.Polyjuice.SystemUserPassword.GeneratePasswordHash(userId.ToLower(), password, out hashedPassword);
                 // Verify username and password
-                systemUser = Db.SQL<SystemUser>("SELECT o FROM Concepts.Ring3.SystemUser o WHERE o.Username=? AND o.Password=?", userId, hashedPassword).First;
+                systemUser = Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.Username=? AND o.Password=?", userId, hashedPassword).First;
             }
 
             if (systemUser == null) {
@@ -82,7 +83,12 @@ namespace SignInApp.Server {
             Db.Transact(() => {
 
                 // Create system user token
-                SystemUserTokenKey token = new SystemUserTokenKey(systemUser);
+                SystemUserTokenKey token = new SystemUserTokenKey();
+
+                token.Created = token.LastUsed = DateTime.UtcNow;
+                token.Token = CreateAuthToken(systemUser.Username);
+                token.User = systemUser;
+
                 userSession = AssureSystemUserSession(token);
 
             });
@@ -91,12 +97,35 @@ namespace SignInApp.Server {
         }
 
         /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        static public String CreateAuthToken(string userid) {
+
+            // Server has a secret key K (a sequence of, say, 128 bits, produced by a cryptographically secure PRNG).
+            // A token contains the user name (U), the time of issuance (T), and a keyed integrity check computed over U and T (together),
+            // keyed with K (by default, use HMAC with SHA-256 or SHA-1).
+            // Auth token    Username+tokendate
+            byte[] randomNumber = new byte[16];
+
+            RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider();
+            rngCsp.GetBytes(randomNumber);
+
+            return HttpServerUtility.UrlTokenEncode(randomNumber);
+
+            //SHA256 mySHA256 = SHA256Managed.Create();
+            //byte[] hashValue = mySHA256.ComputeHash(Encoding.UTF8.GetBytes(userid));
+
+        }
+
+        /// <summary>
         /// Sign-in user
         /// </summary>
         /// <param name="authToken"></param>
         static private SystemUserSession SignInSystemUser(string authToken) {
 
-            SystemUserTokenKey oldToken = Db.SQL<Concepts.Ring8.Polyjuice.SystemUserTokenKey>("SELECT o FROM Concepts.Ring8.Polyjuice.SystemUserTokenKey o WHERE o.Token=?", authToken).First;
+            SystemUserTokenKey oldToken = Db.SQL<Simplified.Ring5.SystemUserTokenKey>("SELECT o FROM Simplified.Ring5.SystemUserTokenKey o WHERE o.Token=?", authToken).First;
             if (oldToken == null) {
                 // signed-out, Invalid or expired token key
                 return null;
@@ -165,7 +194,7 @@ namespace SignInApp.Server {
             //Db.Transaction(() => {
             bool bSessionCreated = false;
 
-            userSession = Db.SQL<Concepts.Ring8.Polyjuice.SystemUserSession>("SELECT o FROM Concepts.Ring8.Polyjuice.SystemUserSession o WHERE o.SessionIdString=?", Session.Current.SessionIdString).First;
+            userSession = Db.SQL<Simplified.Ring5.SystemUserSession>("SELECT o FROM Simplified.Ring5.SystemUserSession o WHERE o.SessionIdString=?", Session.Current.SessionIdString).First;
             if (userSession == null) {
                 userSession = new SystemUserSession();
                 userSession.Created = DateTime.UtcNow;
@@ -193,7 +222,7 @@ namespace SignInApp.Server {
         static private void DeleteToken(SystemUserTokenKey token) {
 
             // Remove the user sessions
-            var sessions = Db.SQL<Concepts.Ring8.Polyjuice.SystemUserSession>("SELECT o FROM Concepts.Ring8.Polyjuice.SystemUserSession o WHERE o.Token=?", token);
+            var sessions = Db.SQL<Simplified.Ring5.SystemUserSession>("SELECT o FROM Simplified.Ring5.SystemUserSession o WHERE o.Token=?", token);
             foreach (var session in sessions) {
                 session.Delete();
             }
@@ -213,7 +242,7 @@ namespace SignInApp.Server {
             // Remove old token and update SystemUserSession instances with new token
             Db.Transaction(() => {
 
-                var result = Db.SQL<Concepts.Ring8.Polyjuice.SystemUserSession>("SELECT o FROM Concepts.Ring8.Polyjuice.SystemUserSession o WHERE o.Token=?", oldToken);
+                var result = Db.SQL<Simplified.Ring5.SystemUserSession>("SELECT o FROM Simplified.Ring5.SystemUserSession o WHERE o.Token=?", oldToken);
 
                 foreach (var userSession in result) {
                     userSession.Token = newToken;
@@ -233,7 +262,7 @@ namespace SignInApp.Server {
                 return false;
             }
 
-            SystemUserTokenKey token = Db.SQL<Concepts.Ring8.Polyjuice.SystemUserTokenKey>("SELECT o FROM Concepts.Ring8.Polyjuice.SystemUserTokenKey o WHERE o.Token=?", authToken).First;
+            SystemUserTokenKey token = Db.SQL<Simplified.Ring5.SystemUserTokenKey>("SELECT o FROM Simplified.Ring5.SystemUserTokenKey o WHERE o.Token=?", authToken).First;
             if (token == null) {
                 return false;
             }
@@ -242,7 +271,7 @@ namespace SignInApp.Server {
 
             Db.Transact(() => {
 
-                var result = Db.SQL<Concepts.Ring8.Polyjuice.SystemUserSession>("SELECT o FROM Concepts.Ring8.Polyjuice.SystemUserSession o WHERE o.Token=?", token);
+                var result = Db.SQL<Simplified.Ring5.SystemUserSession>("SELECT o FROM Simplified.Ring5.SystemUserSession o WHERE o.Token=?", token);
                 // Sign-out user with a specified auth token in all sessions
                 foreach (SystemUserSession userSession in result) {
 

@@ -42,18 +42,6 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SocietyObjects.Concepts.Ring1, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="SocietyObjects.Concepts.Ring2, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="SocietyObjects.Concepts.Ring3, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="SocietyObjects.Concepts.Ring4, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Starcounter, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d2df1e81d0ca3abf">
       <Private>False</Private>
     </Reference>
@@ -88,6 +76,7 @@
     <Compile Include="Server\SignInUser.json.cs">
       <DependentUpon>SignInUser.json</DependentUpon>
     </Compile>
+    <Compile Include="Server\SystemUserPassword.cs" />
     <Compile Include="Server\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -111,9 +100,9 @@
     </TypedJSON>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="SocietyObjects\SocietyObjects.Concepts.Ring8.Polyjuice\SocietyObjects.Concepts.Ring8.Polyjuice.csproj">
-      <Project>{f6ec89a9-75b6-4f3d-bf31-6751705c0ee9}</Project>
-      <Name>SocietyObjects.Concepts.Ring8.Polyjuice</Name>
+    <ProjectReference Include="..\..\Simplified\Simplified.csproj">
+      <Project>{26df60ea-3a8c-455c-8a0c-2fd39703fc89}</Project>
+      <Name>Simplified</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
