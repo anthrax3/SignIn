@@ -56,23 +56,23 @@ namespace SignInApp.Server {
             string hashedPassword;
             SystemUser systemUser = null;
 
-            if (Utils.IsValidEmail(userId)) {
-                // Try signing in with email
+            //if (Utils.IsValidEmail(userId)) {
+            //    // Try signing in with email
 
-                // Get System username
-                systemUser = Db.SQL<Simplified.Ring3.SystemUser>("SELECT CAST(o.ToWhat AS Simplified.Ring3.SystemUser) FROM Concepts.Ring2.EMailAddress o WHERE o.ToWhat IS Simplified.Ring3.SystemUser AND o.EMail=?", userId).First;
-                if (systemUser != null) {
-                    Concepts.Ring8.Polyjuice.SystemUserPassword.GeneratePasswordHash(systemUser.Username.ToLower(), password, out hashedPassword);
-                    if (systemUser.Password != hashedPassword) {
-                        systemUser = null;
-                    }
-                }
-            }
-            else {
+            //    // Get System username
+            //    systemUser = Db.SQL<Simplified.Ring3.SystemUser>("SELECT CAST(o.ToWhat AS Simplified.Ring3.SystemUser) FROM Concepts.Ring2.EMailAddress o WHERE o.ToWhat IS Simplified.Ring3.SystemUser AND o.EMail=?", userId).First;
+            //    if (systemUser != null) {
+            //        Concepts.Ring8.Polyjuice.SystemUserPassword.GeneratePasswordHash(systemUser.Username.ToLower(), password, out hashedPassword);
+            //        if (systemUser.Password != hashedPassword) {
+            //            systemUser = null;
+            //        }
+            //    }
+            //}
+            //else {
                 Concepts.Ring8.Polyjuice.SystemUserPassword.GeneratePasswordHash(userId.ToLower(), password, out hashedPassword);
                 // Verify username and password
                 systemUser = Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.Username=? AND o.Password=?", userId, hashedPassword).First;
-            }
+            //}
 
             if (systemUser == null) {
                 return null;
