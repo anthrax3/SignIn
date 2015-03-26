@@ -211,9 +211,9 @@ namespace SignInApp.Server {
 
             // Simulate Commit-Hook handling
             if (bSessionCreated) {
-                JSON.systemusersession userSessionJson = new JSON.systemusersession();
-                userSessionJson.ObjectID = userSession.GetObjectID();
-                InvokeSignInCommitHook(userSessionJson);
+                //JSON.systemusersession userSessionJson = new JSON.systemusersession();
+                //userSessionJson.ObjectID = userSession.GetObjectID();
+                InvokeSignInCommitHook(userSession.SessionIdString);
             }
 
             return userSession;
@@ -276,13 +276,14 @@ namespace SignInApp.Server {
                 foreach (SystemUserSession userSession in result) {
 
                     // Simulate Commit-Hook handling
-                    JSON.systemusersession userSessionJson = new JSON.systemusersession();
-                    userSessionJson.ObjectID = userSession.GetObjectID();
-                    userSessionJson.SessionIdString = userSession.SessionIdString;
+                    string sessoinId = userSession.SessionIdString;
+                    //JSON.systemusersession userSessionJson = new JSON.systemusersession();
+                    //userSessionJson.ObjectID = userSession.GetObjectID();
+                    //userSessionJson.SessionIdString = userSession.SessionIdString;
 
                     userSession.Delete();
 
-                    InvokeSignOutCommitHook(userSessionJson);
+                    InvokeSignOutCommitHook(sessoinId);
                     bUserWasSignedOut = true;
                 }
 
@@ -300,9 +301,9 @@ namespace SignInApp.Server {
         /// Temporary code until starcounter implements commit hooks
         /// </summary>
         /// <param name="user"></param>
-        static void InvokeSignInCommitHook(JSON.systemusersession usersession) {
+        static void InvokeSignInCommitHook(string SessionIdString) {
 
-            Response r = X.POST(CommitHooks.MappedTo, usersession.ToJsonUtf8(), null);
+            Response r = X.POST(CommitHooks.MappedTo, SessionIdString, null);
             if (r.StatusCode < 200 || r.StatusCode >= 300) {
             }
         }
@@ -311,9 +312,9 @@ namespace SignInApp.Server {
         /// Temporary code until starcounter implements commit hooks
         /// </summary>
         /// <param name="user"></param>
-        static void InvokeSignOutCommitHook(JSON.systemusersession usersession) {
+        static void InvokeSignOutCommitHook(string SessionIdString) {
 
-            Response r = X.DELETE(CommitHooks.MappedTo, usersession.ToJsonUtf8(), null);
+            Response r = X.DELETE(CommitHooks.MappedTo, SessionIdString, null);
             if (r.StatusCode < 200 || r.StatusCode >= 300) {
             }
         }

@@ -27,9 +27,10 @@ namespace SignInApp.Server.Database {
             // User signed in event
             Starcounter.Handle.POST(CommitHooks.LocalAppUrl, (Request request) => {
 
-                JSON.systemusersession systemUserSessionJson = new JSON.systemusersession();
-                systemUserSessionJson.PopulateFromJson(request.Body);
-                Simplified.Ring5.SystemUserSession userSession = Db.SQL<Simplified.Ring5.SystemUserSession>("SELECT o FROM Simplified.Ring5.SystemUserSession o WHERE o.ObjectID=?", systemUserSessionJson.ObjectID).First;
+                //JSON.systemusersession systemUserSessionJson = new JSON.systemusersession();
+                //systemUserSessionJson.PopulateFromJson(request.Body);
+                string sessionId = request.Body;
+                Simplified.Ring5.SystemUserSession userSession = Db.SQL<Simplified.Ring5.SystemUserSession>("SELECT o FROM Simplified.Ring5.SystemUserSession o WHERE o.SessionIdString = ?", sessionId).First;
 
                 if (userSession != null && SignInHandlers.signInSessions.ContainsKey(userSession.SessionIdString)) {
 
@@ -52,12 +53,13 @@ namespace SignInApp.Server.Database {
             // User signed out event
             Starcounter.Handle.DELETE(CommitHooks.LocalAppUrl, (Request request) => {
 
-                JSON.systemusersession systemUserSessionJson = new JSON.systemusersession();
-                systemUserSessionJson.PopulateFromJson(request.Body);
+                /*JSON.systemusersession systemUserSessionJson = new JSON.systemusersession();
+                systemUserSessionJson.PopulateFromJson(request.Body);*/
+                string sessionId = request.Body;
 
-                if (SignInHandlers.signInSessions.ContainsKey(systemUserSessionJson.SessionIdString)) {
+                if (SignInHandlers.signInSessions.ContainsKey(sessionId)) {
 
-                    SignIn page = SignInHandlers.signInSessions[systemUserSessionJson.SessionIdString];
+                    SignIn page = SignInHandlers.signInSessions[sessionId];
 
                     page.ClearViewModelProperties();
                     page.SignInEvent = !page.SignInEvent;
