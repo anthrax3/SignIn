@@ -29,15 +29,17 @@ namespace SignInApp.Server {
             action.Value = false;
             string message;
             SystemUserSession userSession = SignInOut.SignInSystemUser(this.UserID, this.Password, this.SignInAuthToken, out message);
+            
             if (userSession == null) {
                 if (!string.IsNullOrEmpty(message)) {
                     this.ClearViewModelProperties(true);
                     this.Message = message;
-                }
-                else {
+                } else {
                     this.ClearViewModelProperties(true);
                 }
                 this.SignInEvent = !this.SignInEvent;
+            } else {
+                this.SetViewModelProperties(userSession);
             }
         }
 
