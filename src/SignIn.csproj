@@ -9,8 +9,8 @@
     <ProjectGuid>{AD9637E2-BC66-48CF-AFEF-AAE2454413EF}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SignInApp</RootNamespace>
-    <AssemblyName>SignInApp</AssemblyName>
+    <RootNamespace>SignIn</RootNamespace>
+    <AssemblyName>SignIn</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <UseVSHostingProcess>false</UseVSHostingProcess>
@@ -42,6 +42,9 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Simplified.Data.Model, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Starcounter, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d2df1e81d0ca3abf">
       <Private>False</Private>
     </Reference>
@@ -85,21 +88,14 @@
     </TypedJSON>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="wwwroot\SignInApp\html\SignInFormPage.html" />
-    <Content Include="wwwroot\SignInApp\elements\so-signin\so-signin.html" />
-    <Content Include="wwwroot\SignInApp\html\SignInPage.html" />
+    <Content Include="wwwroot\SignIn\html\SignInFormPage.html" />
+    <Content Include="wwwroot\SignIn\elements\so-signin\so-signin.html" />
+    <Content Include="wwwroot\SignIn\html\SignInPage.html" />
   </ItemGroup>
   <ItemGroup>
     <TypedJSON Include="Server\SignInFormPage.json">
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Simplified\Simplified.csproj">
-      <Project>{26df60ea-3a8c-455c-8a0c-2fd39703fc89}</Project>
-      <Name>Simplified</Name>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

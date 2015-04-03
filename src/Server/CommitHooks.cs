@@ -1,5 +1,4 @@
 ﻿using PolyjuiceNamespace;
-//using SignInApp.Server.Handlers;
 using Starcounter;
 using Starcounter.Internal;
 using System.Collections.Generic;
@@ -7,9 +6,9 @@ using System.Collections.Specialized;
 using System.Web;
 using Simplified.Ring5;
 
-namespace SignInApp {
+namespace SignIn {
     public class CommitHooks {
-        internal static string LocalAppUrl = "/SignInApp/__db/__" + StarcounterEnvironment.DatabaseNameLower + "/societyobjects/systemusersession";
+        internal static string LocalAppUrl = "/SignIn/__db/__" + StarcounterEnvironment.DatabaseNameLower + "/societyobjects/systemusersession";
         internal static string MappedTo = "/polyjuice/signin";
 
         internal static void Register() {

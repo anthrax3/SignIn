@@ -7,14 +7,14 @@ using Starcounter;
 using PolyjuiceNamespace;
 using Simplified.Ring3;
 
-namespace SignInApp {
+namespace SignIn {
     class Program {
          private static string AuthCookieName = "soauthtoken";
 
          static void Main() {
              CommitHooks.Register();
 
-             Starcounter.Handle.GET("/signinapp/user", () => {
+             Starcounter.Handle.GET("/signin/user", () => {
                  Session session = Session.Current;
 
                  if (session != null && session.Data != null) {
@@ -36,17 +36,16 @@ namespace SignInApp {
                  return page;
              });
 
-             Handle.GET("/signinapp/signin/{?}/{?}", (string Username, string Password) => {
+             Handle.GET("/signin/signin/{?}/{?}", (string Username, string Password) => {
                  SignInPage page = Session.Current.Data as SignInPage;
 
                  page.SignIn(Username, Password);
                  SetAuthCookie(page);
 
-                 //return new Json();
                  return page.SignInForm;
              });
 
-             Handle.GET("/signinapp/signout", () => {
+             Handle.GET("/signin/signout", () => {
                  SignInPage page = Session.Current.Data as SignInPage;
 
                  page.SignOut();
@@ -54,9 +53,9 @@ namespace SignInApp {
 
                  return page.SignInForm;
              });
-             
-             Starcounter.Handle.GET("/signinapp/signinuser", () => {
-                 SignInPage master = X.GET<Page>("/signinapp/user") as SignInPage;
+
+             Starcounter.Handle.GET("/signin/signinuser", () => {
+                 SignInPage master = X.GET<Page>("/signin/user") as SignInPage;
                  SignInFormPage page = new SignInFormPage();
 
                  master.SignInForm = page;
@@ -65,8 +64,8 @@ namespace SignInApp {
                  return page;
              });
 
-             Starcounter.Handle.GET("/signinapp/signinuser?{?}", (string query) => {
-                 SignInPage master = X.GET<Page>("/signinapp/user") as SignInPage;
+             Starcounter.Handle.GET("/signin/signinuser?{?}", (string query) => {
+                 SignInPage master = X.GET<Page>("/signin/user") as SignInPage;
                  SignInFormPage page = new SignInFormPage();
                  string decodedQuery = HttpUtility.UrlDecode(query);
                  NameValueCollection queryCollection = HttpUtility.ParseQueryString(decodedQuery);
@@ -78,7 +77,7 @@ namespace SignInApp {
                  return page;
              });
 
-             Polyjuice.Map("/SignInApp/user", "/polyjuice/user");
+             Polyjuice.Map("/signin/user", "/polyjuice/user");
          }
 
          static Response GetNoSessionResult() {

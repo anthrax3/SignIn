@@ -19,13 +19,13 @@
             <input id="Password$" type="password" value="{{ Password$ }}" placeholder="Password" class="form-control" />
         </div>
         <div>
-            <button class="btn btn-primary" onclick="document.querySelector('puppet-client').network.changeState('/signinapp/signin/' + getModel(this).Username$ + '/' + getModel(this).Password$)">Sign in</button>
+            <button class="btn btn-primary" onclick="document.querySelector('puppet-client').network.changeState('/signin/signin/' + getModel(this).Username$ + '/' + getModel(this).Password$)">Sign in</button>
         </div>
     </template>
     <template if="{{IsSignedIn == true}}">
         <p class="alert alert-success">You are already signed in!</p>
         <div>
-            <button class="btn btn-primary" onclick="document.querySelector('puppet-client').network.changeState('/signinapp/signout')">Sign out</button>
+            <button class="btn btn-primary" onclick="document.querySelector('puppet-client').network.changeState('/signin/signout')">Sign out</button>
         </div>
     </template>
     <link is="puppet-redirect" history url="{{ RedirectUrl }}" />

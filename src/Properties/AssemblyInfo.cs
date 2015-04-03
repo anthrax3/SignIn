@@ -6,12 +6,12 @@ using Starcounter.Internal;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SignInApp")]
+[assembly: AssemblyTitle("SignIn")]
 [assembly: AssemblyDescription("Sign-In application for Polyjuice powered by Starcounter and Society Objects")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Polyjuice")]
-[assembly: AssemblyProduct("SignInApp")]
-[assembly: AssemblyCopyright("Copyright 2014 Polyjuice")]
+[assembly: AssemblyProduct("SignIn")]
+[assembly: AssemblyCopyright("Copyright 2015 Polyjuice")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

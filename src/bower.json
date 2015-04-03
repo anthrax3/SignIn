@@ -2,7 +2,8 @@
   "name": "SignIn",
   "version": "0.0.0",
   "authors": [
-    "andwah <anders.wahlgren@societyobjects.com>"
+    "andwah <anders.wahlgren@societyobjects.com>",
+    "miyconst <const.miyang@gmail.com>"
   ],
   "description": "SignIn App Powered by Starcounter",
   "license": "MIT",

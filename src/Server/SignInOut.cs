@@ -7,7 +7,7 @@ using Simplified.Ring3;
 using Simplified.Ring5;
 using Concepts.Ring8.Polyjuice;
 
-namespace SignInApp {
+namespace SignIn {
     public class SignInOut {
         static public SystemUserSession GetCurrentSystemUserSession() {
             return Db.SQL<SystemUserSession>("SELECT o FROM Simplified.Ring5.SystemUserSession o WHERE o.SessionIdString = ?", Session.Current.SessionIdString).First;

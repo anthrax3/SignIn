@@ -1,7 +1,7 @@
 {
-    "$": { "Namespace": "SignInApp" },
+    "$": { "Namespace": "SignIn" },
     "Uri": "",
-    "Html": "/SignInApp/html/SignInFormPage.html",
+    "Html": "/SignIn/html/SignInFormPage.html",
     "Username$": "",
     "Password$": "",
     "IsSignedIn": false,

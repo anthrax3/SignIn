@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web;
 
-namespace SignInApp {
+namespace SignIn {
     public class Cookie {
         public string Name { get; set; }
         public string Value { get; set; }
