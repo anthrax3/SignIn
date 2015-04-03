@@ -7,6 +7,11 @@ namespace SignInApp {
         public string SignInAuthToken { get; set; }
 
         public void SignIn(string Username, string Password) {
+            if (string.IsNullOrEmpty(Username)) {
+                this.SetAnonymousState(false, "Please input your username!");
+                return;
+            }
+
             string message;
             SystemUserSession session = SignInOut.SignInSystemUser(Username, Password, null, out message);
 
