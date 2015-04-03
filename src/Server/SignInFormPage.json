@@ -1,0 +1,11 @@
+{
+    "$": { "Namespace": "SignInApp" },
+    "Uri": "",
+    "Html": "/SignInApp/html/SignInFormPage.html",
+    "Username$": "",
+    "Password$": "",
+    "IsSignedIn": false,
+    "Message": "",
+    "OriginUrl": "",
+    "RedirectUrl": ""
+}

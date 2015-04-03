@@ -1,88 +1,70 @@
-﻿//#define NEW_TOKEN_ON_EACH_REQUEST // NOTE: This can not be done until we can get the cookie when the Handle is called (Instead of using the authToken property we need to use the cookie value
-
-using SignInApp.Server.Database;
-using Simplified.Ring3;
-using Simplified.Ring5;
-using Starcounter;
-using Starcounter.Internal;
-using System;
+﻿using System;
 using System.Security.Cryptography;
 using System.Web;
+using Starcounter;
+using Starcounter.Internal;
+using Simplified.Ring3;
+using Simplified.Ring5;
+using Concepts.Ring8.Polyjuice;
 
-namespace SignInApp.Server {
+namespace SignInApp {
     public class SignInOut {
-
-
-        /// <summary>
-        /// Sign-in user
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="password"></param>
-        /// <param name="signInAuthToken"></param>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        static public SystemUserSession SignInSystemUser(string userId, string password, string signInAuthToken, out string message) {
-
-            message = null;
-
-            // If there is an user id then use it.
-            if (!string.IsNullOrEmpty(userId)) {
-                SystemUserSession userSession = SignInSystemUser(userId, password);
-                if (userSession != null) {
-                    return userSession;
-                }
-
-                message = "Invalid username or password";
-                return null;
-            }
-
-            if (string.IsNullOrEmpty(signInAuthToken)) {
-
-                message = "Invalid username or password";
-                return null;
-            }
-
-            // Use Auth token cookie if it exist
-            return SignInSystemUser(signInAuthToken);
+        static public SystemUserSession GetCurrentSystemUserSession() {
+            return Db.SQL<SystemUserSession>("SELECT o FROM Simplified.Ring5.SystemUserSession o WHERE o.SessionIdString = ?", Session.Current.SessionIdString).First;
         }
 
         /// <summary>
         /// Sign-in user
         /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="password"></param>
-        static private SystemUserSession SignInSystemUser(string userId, string password) {
+        /// <param name="UserId"></param>
+        /// <param name="Password"></param>
+        /// <param name="SignInAuthToken"></param>
+        /// <param name="Message"></param>
+        /// <returns></returns>
+        static public SystemUserSession SignInSystemUser(string UserId, string Password, string SignInAuthToken, out string Message) {
+            Message = null;
+
+            if (!string.IsNullOrEmpty(UserId)) {
+                SystemUserSession userSession = SignInSystemUser(UserId, Password);
+                
+                if (userSession != null) {
+                    return userSession;
+                }
+
+                Message = "Invalid username or password";
+                return null;
+            }
+
+            if (string.IsNullOrEmpty(SignInAuthToken)) {
+
+                Message = "Invalid username or password";
+                return null;
+            }
+
+            // Use Auth token cookie if it exist
+            return SignInSystemUser(SignInAuthToken);
+        }
+
+        /// <summary>
+        /// Sign-in user
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <param name="Password"></param>
+        static private SystemUserSession SignInSystemUser(string UserId, string Password) {
 
             string hashedPassword;
             SystemUser systemUser = null;
 
-            //if (Utils.IsValidEmail(userId)) {
-            //    // Try signing in with email
-
-            //    // Get System username
-            //    systemUser = Db.SQL<Simplified.Ring3.SystemUser>("SELECT CAST(o.ToWhat AS Simplified.Ring3.SystemUser) FROM Concepts.Ring2.EMailAddress o WHERE o.ToWhat IS Simplified.Ring3.SystemUser AND o.EMail=?", userId).First;
-            //    if (systemUser != null) {
-            //        Concepts.Ring8.Polyjuice.SystemUserPassword.GeneratePasswordHash(systemUser.Username.ToLower(), password, out hashedPassword);
-            //        if (systemUser.Password != hashedPassword) {
-            //            systemUser = null;
-            //        }
-            //    }
-            //}
-            //else {
-                Concepts.Ring8.Polyjuice.SystemUserPassword.GeneratePasswordHash(userId.ToLower(), password, out hashedPassword);
-                // Verify username and password
-                systemUser = Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.Username=? AND o.Password=?", userId, hashedPassword).First;
-            //}
+            SystemUserPassword.GeneratePasswordHash(UserId.ToLower(), Password, out hashedPassword);
+            systemUser = Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.Username=? AND o.Password=?", UserId, hashedPassword).First;
 
             if (systemUser == null) {
                 return null;
             }
 
-            // SignIn SystemUser, Username and password OK
             SystemUserSession userSession = null;
+            
             Db.Transact(() => {
-
-                // Create system user token
                 SystemUserTokenKey token = new SystemUserTokenKey();
 
                 token.Created = token.LastUsed = DateTime.UtcNow;
@@ -90,7 +72,6 @@ namespace SignInApp.Server {
                 token.User = systemUser;
 
                 userSession = AssureSystemUserSession(token);
-
             });
 
             return userSession;
@@ -99,10 +80,9 @@ namespace SignInApp.Server {
         /// <summary>
         /// TODO
         /// </summary>
-        /// <param name="userid"></param>
+        /// <param name="UserId"></param>
         /// <returns></returns>
-        static public String CreateAuthToken(string userid) {
-
+        static public String CreateAuthToken(string UserId) {
             // Server has a secret key K (a sequence of, say, 128 bits, produced by a cryptographically secure PRNG).
             // A token contains the user name (U), the time of issuance (T), and a keyed integrity check computed over U and T (together),
             // keyed with K (by default, use HMAC with SHA-256 or SHA-1).
@@ -113,156 +93,111 @@ namespace SignInApp.Server {
             rngCsp.GetBytes(randomNumber);
 
             return HttpServerUtility.UrlTokenEncode(randomNumber);
-
-            //SHA256 mySHA256 = SHA256Managed.Create();
-            //byte[] hashValue = mySHA256.ComputeHash(Encoding.UTF8.GetBytes(userid));
-
         }
 
         /// <summary>
         /// Sign-in user
         /// </summary>
-        /// <param name="authToken"></param>
-        static private SystemUserSession SignInSystemUser(string authToken) {
-
-            SystemUserTokenKey oldToken = Db.SQL<Simplified.Ring5.SystemUserTokenKey>("SELECT o FROM Simplified.Ring5.SystemUserTokenKey o WHERE o.Token=?", authToken).First;
+        /// <param name="AuthToken"></param>
+        static public SystemUserSession SignInSystemUser(string AuthToken) {
+            SystemUserTokenKey oldToken = Db.SQL<SystemUserTokenKey>("SELECT o FROM Simplified.Ring5.SystemUserTokenKey o WHERE o.Token=?", AuthToken).First;
+            
             if (oldToken == null) {
-                // signed-out, Invalid or expired token key
                 return null;
             }
 
             if (oldToken.User == null) {
-                // System user deleted => delete invalid token
                 Db.Transact(() => {
-
-                    // Remove token and it's assigned sessions
                     DeleteToken(oldToken);
-
                 });
+
                 return null;
             }
 
             // TODO: Check if token should expire (to old for reuse)?
-            TimeSpan ts = new TimeSpan( DateTime.UtcNow.Ticks - oldToken.LastUsed.Ticks );
-            if (ts.TotalDays > 7) {  // TODO: Make expire time configurable
+            TimeSpan ts = new TimeSpan(DateTime.UtcNow.Ticks - oldToken.LastUsed.Ticks);
+            
+            if (ts.TotalDays > 7) {
 
                 Db.Transact(() => {
-                    // Remove token and it's assigned sessions
                     DeleteToken(oldToken);
                 });
 
-                // Session has expired
                 return null;
             }
-#if NEW_TOKEN_ON_EACH_REQUEST   
 
-            // Create new token, For better security.
-            SystemUserTokenKey newToken = null;
+            SystemUserSession session = null;
 
-            // Remove old token and update SystemUserSession instances with new token
-            Db.Transaction(() => {
-
-                // Create new token
-                newToken = new SystemUserTokenKey(oldToken.User);
-
-                // Update tokens
-                UpdateSystemUserSessionToken(oldToken, newToken);
-
-                // Delete old token
-                oldToken.Delete();
-            });
-            return AssureSystemUserSession(newToken);
-#else
-            SystemUserSession userSession = null;
             Db.Transact(() => {
-                userSession = AssureSystemUserSession(oldToken);
+                session = AssureSystemUserSession(oldToken);
             });
 
-            return userSession;
-#endif
+            return session;
         }
 
         /// <summary>
         /// Create system user session
         /// </summary>
-        /// <param name="token"></param>
+        /// <param name="Token"></param>
         /// <returns></returns>
-        static private SystemUserSession AssureSystemUserSession(SystemUserTokenKey token) {
-
+        static private SystemUserSession AssureSystemUserSession(SystemUserTokenKey Token) {
             SystemUserSession userSession = null;
 
-            //Db.Transaction(() => {
             bool bSessionCreated = false;
 
-            userSession = Db.SQL<Simplified.Ring5.SystemUserSession>("SELECT o FROM Simplified.Ring5.SystemUserSession o WHERE o.SessionIdString=?", Session.Current.SessionIdString).First;
-            if (userSession == null) {
-                userSession = new SystemUserSession();
-                userSession.Created = DateTime.UtcNow;
-                userSession.SessionIdString = Session.Current.SessionIdString;
-                bSessionCreated = true;
-            }
-            else {
+            Db.Transact(() => {
+                userSession = Db.SQL<SystemUserSession>("SELECT o FROM Simplified.Ring5.SystemUserSession o WHERE o.SessionIdString=?", Session.Current.SessionIdString).First;
 
-            }
+                if (userSession == null) {
+                    userSession = new SystemUserSession();
+                    userSession.Created = DateTime.UtcNow;
+                    userSession.SessionIdString = Session.Current.SessionIdString;
+                    bSessionCreated = true;
+                }
 
-            userSession.Token = token;
-            userSession.Touched = DateTime.UtcNow;
-            //});
+                userSession.Token = Token;
+                userSession.Touched = DateTime.UtcNow;
+            });
 
-            // Simulate Commit-Hook handling
             if (bSessionCreated) {
-                //JSON.systemusersession userSessionJson = new JSON.systemusersession();
-                //userSessionJson.ObjectID = userSession.GetObjectID();
                 InvokeSignInCommitHook(userSession.SessionIdString);
             }
 
             return userSession;
         }
 
-        static private void DeleteToken(SystemUserTokenKey token) {
+        static private void DeleteToken(SystemUserTokenKey Token) {
+            QueryResultRows<SystemUserSession> sessions = Db.SQL<SystemUserSession>("SELECT o FROM Simplified.Ring5.SystemUserSession o WHERE o.Token=?", Token);
 
-            // Remove the user sessions
-            var sessions = Db.SQL<Simplified.Ring5.SystemUserSession>("SELECT o FROM Simplified.Ring5.SystemUserSession o WHERE o.Token=?", token);
             foreach (var session in sessions) {
                 session.Delete();
             }
 
-            token.Delete();
+            Token.Delete();
         }
 
-#if NEW_TOKEN_ON_EACH_REQUEST   
+        static public bool SignOutSystemUser() {
+            SystemUserSession session = GetCurrentSystemUserSession();
 
-        /// <summary>
-        /// Update token on system user sessions
-        /// </summary>
-        /// <param name="oldToken"></param>
-        /// <param name="newToken"></param>
-        static private void UpdateSystemUserSessionToken(SystemUserTokenKey oldToken, SystemUserTokenKey newToken) {
+            if (session != null) {
+                return SignOutSystemUser(session.Token.Token);
+            }
 
-            // Remove old token and update SystemUserSession instances with new token
-            Db.Transaction(() => {
-
-                var result = Db.SQL<Simplified.Ring5.SystemUserSession>("SELECT o FROM Simplified.Ring5.SystemUserSession o WHERE o.Token=?", oldToken);
-
-                foreach (var userSession in result) {
-                    userSession.Token = newToken;
-                }
-            });
+            return false;
         }
-#endif
 
         /// <summary>
         /// Sign out user on all sessions that uses the same auth token
         /// </summary>
-        /// <param name="authToken"></param>
+        /// <param name="AuthToken"></param>
         /// <returns>True if a user was signed out, otherwice false is user is already signed out</returns>
-        static public bool SignOutSystemUser(string authToken) {
-
-            if (authToken == null) {
+        static public bool SignOutSystemUser(string AuthToken) {
+            if (AuthToken == null) {
                 return false;
             }
 
-            SystemUserTokenKey token = Db.SQL<Simplified.Ring5.SystemUserTokenKey>("SELECT o FROM Simplified.Ring5.SystemUserTokenKey o WHERE o.Token=?", authToken).First;
+            SystemUserTokenKey token = Db.SQL<Simplified.Ring5.SystemUserTokenKey>("SELECT o FROM Simplified.Ring5.SystemUserTokenKey o WHERE o.Token=?", AuthToken).First;
+
             if (token == null) {
                 return false;
             }
@@ -270,26 +205,17 @@ namespace SignInApp.Server {
             bool bUserWasSignedOut = false;
 
             Db.Transact(() => {
+                QueryResultRows<SystemUserSession> result = Db.SQL<SystemUserSession>("SELECT o FROM Simplified.Ring5.SystemUserSession o WHERE o.Token=?", token);
 
-                var result = Db.SQL<Simplified.Ring5.SystemUserSession>("SELECT o FROM Simplified.Ring5.SystemUserSession o WHERE o.Token=?", token);
-                // Sign-out user with a specified auth token in all sessions
                 foreach (SystemUserSession userSession in result) {
-
-                    // Simulate Commit-Hook handling
                     string sessoinId = userSession.SessionIdString;
-                    //JSON.systemusersession userSessionJson = new JSON.systemusersession();
-                    //userSessionJson.ObjectID = userSession.GetObjectID();
-                    //userSessionJson.SessionIdString = userSession.SessionIdString;
 
                     userSession.Delete();
-
                     InvokeSignOutCommitHook(sessoinId);
                     bUserWasSignedOut = true;
                 }
 
-                // Remove system user token
                 token.Delete();
-
             });
 
             return bUserWasSignedOut;
@@ -302,8 +228,8 @@ namespace SignInApp.Server {
         /// </summary>
         /// <param name="user"></param>
         static void InvokeSignInCommitHook(string SessionIdString) {
-
             Response r = X.POST(CommitHooks.MappedTo, SessionIdString, null);
+
             if (r.StatusCode < 200 || r.StatusCode >= 300) {
             }
         }
@@ -313,8 +239,8 @@ namespace SignInApp.Server {
         /// </summary>
         /// <param name="user"></param>
         static void InvokeSignOutCommitHook(string SessionIdString) {
-
             Response r = X.DELETE(CommitHooks.MappedTo, SessionIdString, null);
+
             if (r.StatusCode < 200 || r.StatusCode >= 300) {
             }
         }

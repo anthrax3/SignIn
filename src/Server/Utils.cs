@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SignInApp.Server {
+namespace SignInApp {
     public class Utils {
 
         /// <summary>
