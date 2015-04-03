@@ -137,7 +137,7 @@
                 this.isDomReady = true;
             },
             signIn: function () {
-                this.puppet.network.changeState("/signIn/signin/" + this.Username + "/" + this.Password);
+                this.puppet.network.changeState("/signin/signin/" + this.Username + "/" + this.Password);
             },
             signOut: function () {
                 this.puppet.network.changeState("/signin/signout");
