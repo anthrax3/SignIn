@@ -74,7 +74,8 @@ namespace SignIn {
             this.Value = string.Empty;
         }
 
-        public override string ToString() {
+        public string GetFullValueString() {
+
             string path = this.Path ?? "/";
             string expires = string.Empty;
             string value = HttpUtility.UrlEncode(this.Value);
@@ -83,7 +84,12 @@ namespace SignIn {
                 expires = "; expires=" + this.Expires.Value.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'");
             }
 
-            return string.Format("{0}={1}{2}; path={3}", this.Name, value, expires, path);
+            return string.Format("{0}{1}; path={2}", value, expires, path);
+        }
+
+        public override string ToString() {
+
+            return string.Format("{0}={1}", this.Name, this.GetFullValueString());
         }
     }
 }

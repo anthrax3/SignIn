@@ -90,7 +90,7 @@ namespace SignIn {
          static void SetAuthCookie(SignInPage Page) {
              Cookie cookie = new Cookie(AuthCookieName, Page.SignInAuthToken);
 
-             Handle.AddOutgoingCookie(cookie.ToString());
+             Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
          }
     }
 }
