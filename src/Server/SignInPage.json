@@ -1,5 +1,4 @@
 {
-    "$": { "Namespace": "SignIn" },
     "Uri": "",
     "Html": "/SignIn/html/SignInPage.html",
     "Username$": "",
