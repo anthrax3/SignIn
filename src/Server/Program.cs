@@ -13,6 +13,7 @@ namespace SignIn {
 
          static void Main() {
              CommitHooks.Register();
+             SignInOut.AssureAdminSystemUser();
 
              Starcounter.Handle.GET("/signin/user", () => {
                  Session session = Session.Current;
@@ -54,7 +55,7 @@ namespace SignIn {
                  return page.SignInForm;
              });
 
-             Starcounter.Handle.GET("/signin/signinuser", () => {
+             Handle.GET("/signin/signinuser", () => {
                  SignInPage master = X.GET<Page>("/signin/user") as SignInPage;
                  SignInFormPage page = new SignInFormPage();
 
@@ -64,7 +65,7 @@ namespace SignIn {
                  return page;
              });
 
-             Starcounter.Handle.GET("/signin/signinuser?{?}", (string query) => {
+             Handle.GET("/signin/signinuser?{?}", (string query) => {
                  SignInPage master = X.GET<Page>("/signin/user") as SignInPage;
                  SignInFormPage page = new SignInFormPage();
                  string decodedQuery = HttpUtility.UrlDecode(query);
@@ -75,6 +76,16 @@ namespace SignIn {
                  master.UpdateSignInForm();
 
                  return page;
+             });
+
+             //Test handler
+             Handle.GET("/signin/deleteadminuser", () => {
+                 Db.Transact(() => {
+                     Db.SlowSQL("DELETE FROM Simplified.Ring3.SystemUserGroupMember WHERE SystemUser.Username = ?", SignInOut.AdminUsername);
+                     Db.SlowSQL("DELETE FROM Simplified.Ring3.SystemUser WHERE Username = ?", SignInOut.AdminUsername);
+                 });
+
+                 return 200;
              });
 
              Polyjuice.Map("/signin/user", "/polyjuice/user");

@@ -3,8 +3,8 @@
     cheerio = require('cheerio'),
     app = 'http://localhost:8080/';
 
-var username = "106669544181213700915"; //Test user.
-var password = ""; //Test usr has no password.
+var username = "admin"; //Test user.
+var password = "admin"; //Test user.
 var location = ""; //X-Referer
 
 describe('SignIn app', function () {

@@ -3,12 +3,18 @@ using System.Security.Cryptography;
 using System.Web;
 using Starcounter;
 using Starcounter.Internal;
+using Simplified.Ring2;
 using Simplified.Ring3;
 using Simplified.Ring5;
 using Concepts.Ring8.Polyjuice;
 
 namespace SignIn {
     public class SignInOut {
+        internal static string AdminGroupName = "Admin (System Users)";
+        internal static string AdminGroupDescription = "System User Administrator Group";
+        internal static string AdminUsername = "admin";
+        internal static string AdminPassword = "admin";
+
         static public SystemUserSession GetCurrentSystemUserSession() {
             return Db.SQL<SystemUserSession>("SELECT o FROM Simplified.Ring5.SystemUserSession o WHERE o.SessionIdString = ?", Session.Current.SessionIdString).First;
         }
@@ -220,6 +226,72 @@ namespace SignIn {
 
             return bUserWasSignedOut;
         }
+
+        #region Default admin user
+        /// <summary>
+        /// Assure that there is at least one system user beloning to the admin group 
+        /// </summary>
+        internal static void AssureAdminSystemUser() {
+            SystemUserGroup group = Db.SQL<SystemUserGroup>("SELECT o FROM Simplified.Ring3.SystemUserGroup o WHERE o.Name = ?", AdminGroupName).First;
+            SystemUser user = Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.Username = ?", AdminUsername).First;
+
+            if (group != null && user != null && IsMemberOfGroup(user, group)) {
+                return;
+            }
+
+            // There is no system user beloning to the admin group
+            Db.Transact(() => {
+                if (group == null) {
+                    group = new SystemUserGroup();
+                    group.Name = AdminGroupName;
+                    group.Description = AdminGroupDescription;
+                }
+
+                if (user == null) {
+                    Person person = new Person() {
+                        FirstName = AdminUsername,
+                        LastName = AdminUsername
+                    };
+
+                    user = new SystemUser() {
+                        WhatIs = person,
+                        Username = AdminUsername
+                    };
+
+                    // Set password
+                    string hash;
+                    SystemUserPassword.GeneratePasswordHash(user.Username.ToLower(), AdminPassword, out hash);
+
+                    user.Password = hash;
+
+                    // Add ability to also sign in with email
+                    EmailAddress email = new EmailAddress();
+                    EmailAddressRelation relation = new EmailAddressRelation();
+
+                    relation.ToWhat = user;
+                    relation.WhatIs = email;
+
+                    email.EMail = AdminUsername + "@starcounter.com";
+                }
+
+                // Add the admin group to the system admin user
+                SystemUserGroupMember member = new Simplified.Ring3.SystemUserGroupMember();
+
+                member.WhatIs = user;
+                member.ToWhat = group;
+            });
+        }
+
+        internal static bool IsMemberOfGroup(SystemUser User, SystemUserGroup Group) {
+            if (User == null || Group == null) {
+                return false;
+            }
+
+            SystemUserGroupMember group = Db.SQL<SystemUserGroupMember>("SELECT o FROM Simplified.Ring3.SystemUserGroupMember o WHERE o.SystemUser = ? AND o.SystemUserGroup = ?", User, Group).First;
+
+            return group != null;
+        }
+        #endregion
 
         #region Commit Hook replacement
 
