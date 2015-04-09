@@ -70,7 +70,6 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server\CommitHooks.cs" />
-    <Compile Include="Server\Cookie.cs" />
     <Compile Include="Server\Program.cs" />
     <Compile Include="Server\SignInPage.json.cs">
       <DependentUpon>SignInPage.json</DependentUpon>
