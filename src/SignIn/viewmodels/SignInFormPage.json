@@ -1,6 +1,6 @@
 {
     "Uri": "",
-    "Html": "/SignIn/html/SignInFormPage.html",
+    "Html": "/SignIn/viewmodels/SignInFormPage.html",
     "Username$": "",
     "Password$": "",
     "IsSignedIn": false,

@@ -1,2 +1,2 @@
 @echo off
-star --resourcedir="%~dp0src\wwwroot" "%~dp0src\bin\Debug\SignIn.exe"
+star --resourcedir="%~dp0src\SignIn\wwwroot" "%~dp0src\SignIn\bin\Debug\SignIn.exe"

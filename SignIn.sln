@@ -5,10 +5,17 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0A4901A9-025E-43C5-88F5-1EF017CBD71D}"
 	ProjectSection(SolutionItems) = preProject
+		build.bat = build.bat
+		make.bat = make.bat
+		package.bat = package.bat
+		package.json = package.json
+		README.md = README.md
 		Rebracer.xml = Rebracer.xml
+		restart.bat = restart.bat
+		run.bat = run.bat
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignIn", "SignIn.csproj", "{AD9637E2-BC66-48CF-AFEF-AAE2454413EF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignIn", "src\SignIn\SignIn.csproj", "{AD9637E2-BC66-48CF-AFEF-AAE2454413EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

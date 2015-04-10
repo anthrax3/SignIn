@@ -10,11 +10,11 @@ IF EXIST "%~dp0temp\NUL" (
 
 REM Prepare Executables
 md "%~dp0temp\app"
-xcopy "%~dp0src\bin\Debug\*.*" "%~dp0temp\app"
+xcopy "%~dp0src\SignIn\bin\Debug\*.*" "%~dp0temp\app"
 
 REM Prepare wwwroot
 md "%~dp0temp\wwwroot"
-xcopy "%~dp0src\wwwroot" "%~dp0temp\wwwroot" /s /e
+xcopy "%~dp0src\SignIn\wwwroot" "%~dp0temp\wwwroot" /s /e
 
 REM Copy icon and config
 xcopy "%~dp0src\package\*.png" "%~dp0temp"
