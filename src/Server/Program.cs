@@ -56,7 +56,7 @@ namespace SignIn {
              });
 
              Handle.GET("/signin/signinuser", () => {
-                 SignInPage master = X.GET<Page>("/signin/user") as SignInPage;
+                 SignInPage master = Self.GET<Page>("/signin/user") as SignInPage;
                  SignInFormPage page = new SignInFormPage();
 
                  master.SignInForm = page;
@@ -66,7 +66,7 @@ namespace SignIn {
              });
 
              Handle.GET("/signin/signinuser?{?}", (string query) => {
-                 SignInPage master = X.GET<Page>("/signin/user") as SignInPage;
+                 SignInPage master = Self.GET<Page>("/signin/user") as SignInPage;
                  SignInFormPage page = new SignInFormPage();
                  string decodedQuery = HttpUtility.UrlDecode(query);
                  NameValueCollection queryCollection = HttpUtility.ParseQueryString(decodedQuery);

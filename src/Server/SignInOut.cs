@@ -300,7 +300,7 @@ namespace SignIn {
         /// </summary>
         /// <param name="user"></param>
         static void InvokeSignInCommitHook(string SessionIdString) {
-            Response r = X.POST(CommitHooks.MappedTo, SessionIdString, null);
+            Response r = Self.POST(CommitHooks.MappedTo, SessionIdString, null);
 
             if (r.StatusCode < 200 || r.StatusCode >= 300) {
             }
@@ -311,7 +311,7 @@ namespace SignIn {
         /// </summary>
         /// <param name="user"></param>
         static void InvokeSignOutCommitHook(string SessionIdString) {
-            Response r = X.DELETE(CommitHooks.MappedTo, SessionIdString, null);
+            Response r = Self.DELETE(CommitHooks.MappedTo, SessionIdString, null);
 
             if (r.StatusCode < 200 || r.StatusCode >= 300) {
             }
