@@ -6,44 +6,25 @@
     <template>
         <style>
             :host {
-                display: -webkit-flex;
-                display: flex;
+                display:inline-block;
+                vertical-align:middle;
+                padding:8px;
+                height:38px;
+                min-width:38px;
             }
 
             #signin {
-                display: -webkit-flex;
-                display: flex;
-                -webkit-flex: 1 0 auto;
-                flex: 1 0 auto;
-                font-size: 14px;
-                color: white;
-                display: inline-block;
-            }
-
-            .tray {
-                display: -webkit-flex;
-                display: flex;
-                flex-direction: row;
-                -webkit-flex-direction: row;
-                position: relative;
-            }
-
-            .tray > core-icon-button {
-                -webkit-flex: 1 0 auto;
-                flex: 1 0 auto;
-            }
-
-            .tray > span {
-                -webkit-flex: 1 0 auto;
-                flex: 1 0 auto;
-                align-self: center;
-                -webkit-align-self: center;
-                white-space: nowrap;
+                height:22px;
+                min-width:22px;
+                display:block;
+                font-size:14px;
+                color:white;
+                white-space:nowrap;
             }
 
             .popup_window {
                 right: 0;
-                margin-right: -32px;
+                margin-right: -25px;
                 width: 200px;
                 position: absolute;
                 z-index: 1;
@@ -56,6 +37,12 @@
                 display: block;
                 padding: 20px;
                 background: #f0f0f0;
+            }
+
+            .detailed {
+                margin-right:25px;
+                margin-top:-2px;
+                width:100%;
             }
 
             input[type="text"], input[type="password"] {
@@ -89,12 +76,28 @@
                 color: #cc3333;
                 margin-top: 10px;
             }
+
+            core-icon-button {
+                padding:0px;
+                margin:0px;
+                display:block;
+                float:right;
+            }
+
+            juicy-popover {
+                height:22px;
+                width:22px;
+            }
+
+            .full-name {
+                margin-right:48px;
+                display:block;
+            }
         </style>
         <div id="signin">
             <!-- User signed in -->
             <template if="{{IsSignedIn}}">
-                <div class="tray" style="margin-right:20px">
-                    <span>{{FullName}}</span>
+                <div class="detailed">
                     <juicy-popover position="bottom left" handleselector="core-icon-button.handle" expandableselector=".expandable">
                         <core-icon-button class="handle" src="{{ImageUrl}}"></core-icon-button>
                         <div class="expandable popup_window">
@@ -103,24 +106,28 @@
                             <button on-click="{{signOut}}">Sign out</button>
                         </div>
                     </juicy-popover>
+                    <div class="full-name">{{FullName}}</div>
                 </div>
             </template>
-
             <!-- User NOT signed in -->
             <template if="{{!IsSignedIn}}">
-                <div class="tray">
-                    <juicy-popover position="bottom left" handleselector="core-icon-button.handle" expandableselector=".expandable">
-                        <core-icon-button class="handle" icon="account-circle"></core-icon-button>
-                        <div class="expandable popup_window">
+                <juicy-popover position="bottom left" handleselector="core-icon-button.handle" expandableselector=".expandable">
+                    <core-icon-button class="handle" icon="account-circle"></core-icon-button>
+                    <div class="expandable popup_window">
+                        <div>
                             <input type="text" placeholder="Username / email" value="{{Username}}" />
-                            <input type="password" placeholder="Password" value="{{Password}}" />
-                            <button on-click="{{signIn}}">Sign in</button>
-                            <template if="{{Message}}">
-                                <div class="errorText">{{Message}}</div>
-                            </template>
                         </div>
-                    </juicy-popover>
-                </div>
+                        <div>
+                            <input type="password" placeholder="Password" value="{{Password}}" />
+                        </div>
+                        <div>
+                            <button on-click="{{signIn}}">Sign in</button>
+                        </div>
+                        <template if="{{Message}}">
+                            <div class="errorText">{{Message}}</div>
+                        </template>
+                    </div>
+                </juicy-popover>
             </template>
         </div>
     </template>
