@@ -1,22 +1,35 @@
 ﻿<link rel="stylesheet" href="/sys/bootswatch/paper/bootstrap.css" />
 <link rel="import" href="/sys/puppet-redirect/src/puppet-redirect.html" />
 <template>
+    <script>
+        function txtUsernameKeypress(s, e) {
+            if (e.which == 13) {
+                document.getElementById("txtPassword").focus();
+            }
+        }
+
+        function txtPasswordKeypress(s, e) {
+            if (e.which == 13) {
+                document.querySelector('puppet-client').network.changeState('/signin/signin/' + getModel(s).Username$ + '/' + getModel(s).Password$);
+            }
+        }
+    </script>
     <h2>Sign-in</h2>
     <template if="{{IsSignedIn == false}}">
         <template if="{{Message}}">
             <p class="alert alert-danger">{{Message}}</p>
         </template>
         <div class="form-horizontal">
-            <label class="control-label">Username</label>
+            <label class="control-label" for="txtUsername">Username</label>
         </div>
         <div>
-            <input id="Username$" type="text" value="{{ Username$ }}" placeholder="Username" class="form-control" />
+            <input id="txtUsername" type="text" value="{{ Username$ }}" placeholder="Username" class="form-control" onkeypress="txtUsernameKeypress(this, event)" />
         </div>
         <div class="form-horizontal">
-            <label for="Password$">Password</label>
+            <label class="control-label" for="txtPassword">Password</label>
         </div>
         <div>
-            <input id="Password$" type="password" value="{{ Password$ }}" placeholder="Password" class="form-control" />
+            <input id="txtPassword" type="password" value="{{ Password$ }}" placeholder="Password" class="form-control" onkeypress="txtPasswordKeypress(this, event)" />
         </div>
         <div>
             <button class="btn btn-primary" onclick="document.querySelector('puppet-client').network.changeState('/signin/signin/' + getModel(this).Username$ + '/' + getModel(this).Password$)">Sign in</button>
