@@ -112,13 +112,13 @@
             <!-- User NOT signed in -->
             <template if="{{!IsSignedIn}}">
                 <juicy-popover position="bottom left" handleselector="core-icon-button.handle" expandableselector=".expandable">
-                    <core-icon-button class="handle" icon="account-circle"></core-icon-button>
+                    <core-icon-button class="handle" icon="account-circle" on-click="{{focusPopover}}"></core-icon-button>
                     <div class="expandable popup_window">
                         <div>
-                            <input type="text" placeholder="Username / email" value="{{Username}}" />
+                            <input type="text" placeholder="Username / email" value="{{Username}}" id="txtUsername" on-keypress="{{enterUsername}}" />
                         </div>
                         <div>
-                            <input type="password" placeholder="Password" value="{{Password}}" />
+                            <input type="password" placeholder="Password" value="{{Password}}" id="txtPassword" on-keypress="{{enterPassword}}" />
                         </div>
                         <div>
                             <button on-click="{{signIn}}">Sign in</button>
@@ -148,6 +148,19 @@
             },
             signOut: function () {
                 this.puppet.network.changeState("/signin/signout");
+            },
+            focusPopover: function () {
+                this.shadowRoot.getElementById("txtUsername").focus();
+            },
+            enterUsername: function (e) {
+                if (e.which == 13) {
+                    this.shadowRoot.getElementById("txtPassword").focus();
+                }
+            },
+            enterPassword: function (e) {
+                if (e.which == 13) {
+                    this.signIn();
+                }
             }
         });
     </script>
