@@ -83,9 +83,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="wwwroot\SignIn\html\SignInFormPage.html" />
     <Content Include="wwwroot\SignIn\elements\so-signin\so-signin.html" />
-    <Content Include="wwwroot\SignIn\html\SignInPage.html" />
+    <Content Include="wwwroot\SignIn\viewmodels\SignInFormPage.html" />
+    <Content Include="wwwroot\SignIn\viewmodels\SignInPage.html" />
   </ItemGroup>
   <ItemGroup>
     <TypedJSON Include="viewmodels\SignInFormPage.json">
