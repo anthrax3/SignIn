@@ -51,6 +51,26 @@ namespace SignIn {
             return SignInSystemUser(SignInAuthToken);
         }
 
+        static public SystemUserSession SignInSystemUser(SystemUser systemUser) {
+            if (systemUser == null) {
+                return null;
+            }
+
+            SystemUserSession userSession = null;
+
+            Db.Transact(() => {
+                SystemUserTokenKey token = new SystemUserTokenKey();
+
+                token.Created = token.LastUsed = DateTime.UtcNow;
+                token.Token = CreateAuthToken(systemUser.Username);
+                token.User = systemUser;
+
+                userSession = AssureSystemUserSession(token);
+            });
+
+            return userSession;
+        }
+
         /// <summary>
         /// Sign-in user
         /// </summary>

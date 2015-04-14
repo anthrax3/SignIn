@@ -6,6 +6,7 @@ using System.Web;
 using Starcounter;
 using PolyjuiceNamespace;
 using Simplified.Ring3;
+using Simplified.Ring5;
 
 namespace SignIn {
     internal class MainHandlers {
@@ -31,6 +32,21 @@ namespace SignIn {
 
                 page.Session = session;
 
+                //Testing JWT
+                /*if (Handle.IncomingRequest.HeadersDictionary.ContainsKey("x-jwt")) {
+                    System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+                    string jwt = Handle.IncomingRequest.HeadersDictionary["x-jwt"];
+                    Dictionary<string, string> payload = JWT.JsonWebToken.DecodeToObject<Dictionary<string, string>>(jwt, string.Empty, false);
+                    string username = payload["Username"];
+                    SystemUser user = Db.SQL<SystemUser>("SELECT su FROM Simplified.Ring3.SystemUser su WHERE su.Username = ?", username).First;
+
+                    try {
+                        JWT.JsonWebToken.DecodeToObject<Dictionary<string, string>>(jwt, user.Password, true);
+                        page.SetAuthorizedState(SignInOut.SignInSystemUser(user));
+                    } catch (JWT.SignatureVerificationException) { 
+                    }
+                }*/
+
                 return page;
             });
 
@@ -42,6 +58,19 @@ namespace SignIn {
 
                 return page.SignInForm;
             });
+
+            //Testing JWT
+            /*Handle.GET("/signin/jwt/{?}/{?}", (string Username, string Password) => {
+                string message;
+                SystemUserSession session = SignInOut.SignInSystemUser(Username, Password, null, out message);
+
+                if (session != null) {
+                    string jwt = JWT.JsonWebToken.Encode(new { Username = Username, Issuer = "Polyjuice.SignIn" }, session.Token.User.Password, JWT.JwtHashAlgorithm.HS256);
+                    Handle.AddOutgoingHeader("x-jwt", jwt);
+                }
+
+                return 200;
+            });*/
 
             Handle.GET("/signin/signout", () => {
                 SignInPage page = Session.Current.Data as SignInPage;
