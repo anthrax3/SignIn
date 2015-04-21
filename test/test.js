@@ -18,7 +18,7 @@ describe('SignIn app', function () {
 
     it('Should deny unauthorised request to protected content when Accept="text/plain"', function (done) {
         request(app)
-        .get('UserAdminApp/admin/users')
+        .get('UserAdmin/admin/users')
         .set('Accept', 'text/plain')
         .expect('Content-Type', 'text/plain')
         .expect(function (res) {
@@ -26,14 +26,14 @@ describe('SignIn app', function () {
             var workspace = null;
 
             for (var i = 0; i < data.workspaces.length; i++) {
-                if (data.workspaces[i].appName == "UserAdminApp") {
+                if (data.workspaces[i].appName == "UserAdmin") {
                     workspace = data.workspaces[i];
                     break;
                 }
             }
 
-            assert(workspace, "There should be UserAdminApp workspace");
-            assert(workspace.master.UserAdminApp.RedirectUrl, "RedirectUrl should be set because of unauthorised request");
+            assert(workspace, "There should be UserAdmin workspace");
+            assert(workspace.master.UserAdmin.RedirectUrl, "RedirectUrl should be set because of unauthorised request");
         })
         .expect(200, done);
     });
@@ -64,7 +64,7 @@ describe('SignIn app', function () {
 
     it('Should accept authorised request to protected content when Accept="text/plain"', function (done) {
         request(app)
-        .get('UserAdminApp/admin/users')
+        .get('UserAdmin/admin/users')
         .set('Accept', 'text/plain')
         .set('X-Referer', location)
         .expect('Content-Type', 'text/plain')
@@ -73,15 +73,15 @@ describe('SignIn app', function () {
             var workspace = null;
 
             for (var i = 0; i < data.workspaces.length; i++) {
-                if (data.workspaces[i].appName == "UserAdminApp") {
+                if (data.workspaces[i].appName == "UserAdmin") {
                     workspace = data.workspaces[i];
                     break;
                 }
             }
 
-            assert(workspace, "There should be UserAdminApp workspace");
-            assert(!workspace.master.UserAdminApp.RedirectUrl, "RedirectUrl should be blank for authorised request");
-            assert(workspace.master.UserAdminApp.Items, "There should be some items");
+            assert(workspace, "There should be UserAdmin workspace");
+            assert(!workspace.master.UserAdmin.RedirectUrl, "RedirectUrl should be blank for authorised request");
+            assert(workspace.master.UserAdmin.Items, "There should be some items");
         })
         .expect(200, done);
     });
