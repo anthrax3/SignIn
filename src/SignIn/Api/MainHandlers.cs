@@ -14,10 +14,11 @@ namespace SignIn {
 
         public void Register() {
             Starcounter.Handle.GET("/signin/user", () => {
-                Session session = Session.Current;
+                SessionContainer container = this.GetSessionContainer();
+                //Session session = Session.Current;
 
-                if (session != null && session.Data != null) {
-                    return session.Data;
+                if (container.SignIn != null) {
+                    return container.SignIn;
                 }
 
                 List<Cookie> cookies = Handle.IncomingRequest.Cookies.Select(x => new Cookie(x)).ToList();
@@ -30,7 +31,8 @@ namespace SignIn {
                     page.SetAnonymousState();
                 }
 
-                page.Session = session;
+                //page.Session = session;
+                container.SignIn = page;
 
                 //Testing JWT
                 /*if (Handle.IncomingRequest.HeadersDictionary.ContainsKey("x-jwt")) {
@@ -51,12 +53,15 @@ namespace SignIn {
             });
 
             Handle.GET("/signin/signin/{?}/{?}", (string Username, string Password) => {
-                SignInPage page = Session.Current.Data as SignInPage;
+                SessionContainer container = this.GetSessionContainer();
+                //SignInPage page = Session.Current.Data as SignInPage;
 
-                page.SignIn(Username, Password);
-                SetAuthCookie(page);
+                //page.SignIn(Username, Password);
+                container.SignIn.SignIn(Username, Password);
+                SetAuthCookie(container.SignIn);
 
-                return page.SignInForm;
+                //return page.SignInForm;
+                return container.SignInForm;
             });
 
             //Testing JWT
@@ -73,19 +78,23 @@ namespace SignIn {
             });*/
 
             Handle.GET("/signin/signout", () => {
-                SignInPage page = Session.Current.Data as SignInPage;
+                SessionContainer container = this.GetSessionContainer();
+                //SignInPage page = Session.Current.Data as SignInPage;
 
-                page.SignOut();
-                SetAuthCookie(page);
+                //page.SignOut();
+                container.SignIn.SignOut();
+                SetAuthCookie(container.SignIn);
 
-                return page.SignInForm;
+                //return page.SignInForm;
+                return container.SignInForm;
             });
 
             Handle.GET("/signin/signinuser", () => {
                 SignInPage master = Self.GET<Page>("/signin/user") as SignInPage;
                 SignInFormPage page = new SignInFormPage();
+                SessionContainer container = this.GetSessionContainer();
 
-                master.SignInForm = page;
+                container.SignInForm = page;
                 master.UpdateSignInForm();
 
                 return page;
@@ -96,9 +105,10 @@ namespace SignIn {
                 SignInFormPage page = new SignInFormPage();
                 string decodedQuery = HttpUtility.UrlDecode(query);
                 NameValueCollection queryCollection = HttpUtility.ParseQueryString(decodedQuery);
+                SessionContainer container = this.GetSessionContainer();
 
                 page.OriginUrl = queryCollection.Get("originurl");
-                master.SignInForm = page;
+                container.SignInForm = page;
                 master.UpdateSignInForm();
 
                 return page;
@@ -128,6 +138,21 @@ namespace SignIn {
                 StatusCode = (ushort)System.Net.HttpStatusCode.InternalServerError,
                 Body = "No Current Session"
             };
+        }
+
+        protected SessionContainer GetSessionContainer() {
+            SessionContainer container = Session.Current.Data as SessionContainer;
+
+            if (container == null && Session.Current.Data != null) {
+                throw new Exception("Invalid object in session!");
+            }
+
+            if (container == null) {
+                container = new SessionContainer();
+                Session.Current.Data = container;
+            }
+
+            return container;
         }
     }
 }

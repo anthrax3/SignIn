@@ -88,7 +88,13 @@ namespace SignIn {
         }
 
         public void UpdateSignInForm() {
-            SignInFormPage page = this.SignInForm as SignInFormPage;
+            SessionContainer container = Session.Current.Data as SessionContainer;
+
+            if (container == null) {
+                return;
+            }
+
+            SignInFormPage page = container.SignInForm;
 
             if (page == null) {
                 return;

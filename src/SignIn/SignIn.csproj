@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="Api\CommitHooks.cs" />
     <Compile Include="Api\MainHandlers.cs" />
+    <Compile Include="Helpers\SessionContainer.cs" />
     <Compile Include="Helpers\SignInJwt.cs" />
     <Compile Include="Helpers\SignInOut.cs" />
     <Compile Include="Helpers\SystemUserPassword.cs" />
