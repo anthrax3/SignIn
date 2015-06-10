@@ -169,8 +169,6 @@ namespace SignIn {
         static private SystemUserSession AssureSystemUserSession(SystemUserTokenKey Token) {
             SystemUserSession userSession = null;
 
-            bool bSessionCreated = false;
-
             Db.Transact(() => {
                 userSession = Db.SQL<SystemUserSession>("SELECT o FROM Simplified.Ring5.SystemUserSession o WHERE o.SessionIdString=?", Session.Current.SessionIdString).First;
 
@@ -178,16 +176,11 @@ namespace SignIn {
                     userSession = new SystemUserSession();
                     userSession.Created = DateTime.UtcNow;
                     userSession.SessionIdString = Session.Current.SessionIdString;
-                    bSessionCreated = true;
                 }
 
                 userSession.Token = Token;
                 userSession.Touched = DateTime.UtcNow;
             });
-
-            if (bSessionCreated) {
-                InvokeSignInCommitHook(userSession.SessionIdString);
-            }
 
             return userSession;
         }
@@ -237,7 +230,6 @@ namespace SignIn {
                     string sessoinId = userSession.SessionIdString;
 
                     userSession.Delete();
-                    InvokeSignOutCommitHook(sessoinId);
                     bUserWasSignedOut = true;
                 }
 
@@ -310,31 +302,6 @@ namespace SignIn {
             SystemUserGroupMember group = Db.SQL<SystemUserGroupMember>("SELECT o FROM Simplified.Ring3.SystemUserGroupMember o WHERE o.SystemUser = ? AND o.SystemUserGroup = ?", User, Group).First;
 
             return group != null;
-        }
-        #endregion
-
-        #region Commit Hook replacement
-
-        /// <summary>
-        /// Temporary code until starcounter implements commit hooks
-        /// </summary>
-        /// <param name="user"></param>
-        static void InvokeSignInCommitHook(string SessionIdString) {
-            Response r = Self.POST(CommitHooks.MappedTo, SessionIdString, null);
-
-            if (r.StatusCode < 200 || r.StatusCode >= 300) {
-            }
-        }
-
-        /// <summary>
-        /// Temporary code until starcounter implements commit hooks
-        /// </summary>
-        /// <param name="user"></param>
-        static void InvokeSignOutCommitHook(string SessionIdString) {
-            Response r = Self.DELETE(CommitHooks.MappedTo, SessionIdString, null);
-
-            if (r.StatusCode < 200 || r.StatusCode >= 300) {
-            }
         }
         #endregion
     }

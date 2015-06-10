@@ -87,6 +87,16 @@ namespace SignIn {
             this.UpdateSignInForm();
         }
 
+        public void RefreshState() {
+            SystemUserSession session = SignInOut.GetCurrentSystemUserSession();
+
+            if (session != null) {
+                this.SetAuthorizedState(session);
+            } else {
+                this.SetAnonymousState();
+            }
+        }
+
         public void UpdateSignInForm() {
             SessionContainer container = Session.Current.Data as SessionContainer;
 

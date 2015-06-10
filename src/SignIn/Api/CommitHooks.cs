@@ -8,44 +8,45 @@ using Simplified.Ring5;
 
 namespace SignIn {
     internal class CommitHooks {
-        public static string LocalAppUrl = "/SignIn/__db/__" + StarcounterEnvironment.DatabaseNameLower + "/societyobjects/systemusersession";
-        public static string MappedTo = "/polyjuice/signin";
+        protected string appNameOnStart = "SignIn";
 
         public void Register() {
-            // User signed in event
-            Handle.POST(CommitHooks.LocalAppUrl, (Request request) => {
-                string sessionId = request.Body;
-                SystemUserSession userSession = Db.SQL<SystemUserSession>("SELECT o FROM Simplified.Ring5.SystemUserSession o WHERE o.SessionIdString = ?", sessionId).First;
-                SignInPage page = GetSignInPage();
+            appNameOnStart = StarcounterEnvironment.AppName;
 
-                if (userSession != null && page != null) {
-                    page.SetAuthorizedState(userSession);
-                }
-
-                return (ushort)System.Net.HttpStatusCode.OK;
+            Hook<SystemUserSession>.OnInsert(s => {
+                this.RefreshSignInState();
             });
 
-            // User signed out event
-            Handle.DELETE(CommitHooks.LocalAppUrl, () => {
-                SignInPage page = GetSignInPage();
-
-                if (page != null) {
-                    page.SetAnonymousState();
-                }
-
-                return (ushort)System.Net.HttpStatusCode.OK;
+            Hook<SystemUserSession>.OnDelete(s => {
+                this.RefreshSignInState();
             });
 
-            Polyjuice.Map(CommitHooks.LocalAppUrl, CommitHooks.MappedTo, "POST");
-            Polyjuice.Map(CommitHooks.LocalAppUrl, CommitHooks.MappedTo, "DELETE");
+            Hook<SystemUserSession>.OnUpdate(s => {
+                this.RefreshSignInState();
+            });
         }
 
-        private SignInPage GetSignInPage() {
-            if (Session.Current != null && Session.Current.Data is SignInPage) {
-                return Session.Current.Data as SignInPage;
+        protected void RefreshSignInState() {
+            SignInPage page = GetSignInPage();
+
+            if (page != null) {
+                page.RefreshState();
+            }
+        }
+
+        protected SignInPage GetSignInPage() {
+            string appName = StarcounterEnvironment.AppName;
+            SessionContainer container = null;
+
+            StarcounterEnvironment.AppName = this.appNameOnStart;
+
+            if (Session.Current != null && Session.Current.Data is SessionContainer) {
+                container = Session.Current.Data as SessionContainer;
             }
 
-            return null;
+            StarcounterEnvironment.AppName = appName;
+
+            return container != null ? container.SignIn : null;
         }
     }
 }
