@@ -9,17 +9,17 @@ using Simplified.Ring5;
 namespace SignIn {
     internal class CommitHooks {
         public void Register() {
-            Hook<SystemUserSession>.OnInsert(s => {
+            Hook<SystemUserSession>.CommitInsert += (s, a) => {
                 this.RefreshSignInState();
-            });
+            };
 
-            Hook<SystemUserSession>.OnDelete(s => {
+            Hook<SystemUserSession>.CommitDelete += (s, a) => {
                 this.RefreshSignInState();
-            });
+            };
 
-            Hook<SystemUserSession>.OnUpdate(s => {
+            Hook<SystemUserSession>.CommitUpdate += (s, a) => {
                 this.RefreshSignInState();
-            });
+            };
         }
 
         protected void RefreshSignInState() {
