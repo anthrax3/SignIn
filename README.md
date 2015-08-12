@@ -1,4 +1,4 @@
-SignIn
+Sign In
 =========
 
-Sign-In appliction for the Launcher
+Authenticate **users** with a username and password (default admin/admin).
