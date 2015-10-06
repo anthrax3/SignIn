@@ -1,4 +1,4 @@
-﻿<link rel="stylesheet" href="/sys/bootswatch/paper/bootstrap.css" />
+﻿<!--<link rel="stylesheet" href="/sys/bootswatch/paper/bootstrap.css" />-->
 <link rel="import" href="/sys/puppet-redirect/src/puppet-redirect.html" />
 <template>
     <template is="dom-bind">
@@ -33,10 +33,10 @@
         <dom-bind-notifier observed-object="{{model}}" path="model" deep></dom-bind-notifier>
     </template>
     <script>
-        (function (template) {
+        (function (document, template) {
             template.txtUsernameKeypress = function (e) {
                 if (e.which == 13) {
-                    document.getElementById("txtPassword").focus();
+                    template.parentNode.querySelector("#txtPassword").focus();
                 }
             };
 
@@ -55,6 +55,6 @@
             template.signOut = function () {
                 document.querySelector('puppet-client').network.changeState('/signin/signout');
             };
-        })(document.currentScript.previousElementSibling);
+        })(document.currentScript.ownerDocument, document.currentScript.previousElementSibling);
     </script>
 </template>
