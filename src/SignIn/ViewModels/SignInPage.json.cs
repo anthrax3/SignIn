@@ -1,6 +1,6 @@
-using Concepts.Ring8.Polyjuice;
-using Simplified.Ring5;
 using Starcounter;
+using Simplified.Ring3;
+using Simplified.Ring5;
 
 namespace SignIn {
     partial class SignInPage : Page {
@@ -13,7 +13,7 @@ namespace SignIn {
             }
 
             string message;
-            SystemUserSession session = SignInOut.SignInSystemUser(Username, Password, null, out message);
+            SystemUserSession session = SystemUser.SignInSystemUser(Username, Password, null, out message);
 
             if (session == null) {
                 this.SetAnonymousState(true, message);
@@ -23,7 +23,7 @@ namespace SignIn {
         }
 
         public void SignOut() {
-            SignInOut.SignOutSystemUser();
+            SystemUser.SignOutSystemUser();
             this.SetAnonymousState();
         }
 
@@ -34,7 +34,7 @@ namespace SignIn {
                 return;
             }
 
-            SystemUserSession session = SignInOut.SignInSystemUser(token.Token);
+            SystemUserSession session = SystemUser.SignInSystemUser(token.Token);
 
             if (session != null) {
                 this.SetAuthorizedState(session);
@@ -88,7 +88,7 @@ namespace SignIn {
         }
 
         public void RefreshState() {
-            SystemUserSession session = SignInOut.GetCurrentSystemUserSession();
+            SystemUserSession session = SystemUser.GetCurrentSystemUserSession();
 
             if (session != null) {
                 this.SetAuthorizedState(session);
