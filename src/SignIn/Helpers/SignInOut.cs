@@ -5,7 +5,6 @@ using Starcounter.Internal;
 using Simplified.Ring2;
 using Simplified.Ring3;
 using Simplified.Ring5;
-using Concepts.Ring8.Polyjuice;
 
 namespace SignIn {
     public class SignInOut {
@@ -46,7 +45,7 @@ namespace SignIn {
 
                     // Set password
                     string hash;
-                    SystemUserPassword.GeneratePasswordHash(user.Username.ToLower(), AdminPassword, out hash);
+                    SystemUser.GeneratePasswordHash(user.Username.ToLower(), AdminPassword, out hash);
 
                     user.Password = hash;
 

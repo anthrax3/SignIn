@@ -58,10 +58,14 @@ namespace SignIn {
         }
 
         protected SessionContainer GetSessionContainer() {
-            SessionContainer container = Session.Current.Data as SessionContainer;
+            SessionContainer container = null;
 
-            if (container == null && Session.Current.Data != null) {
-                throw new Exception("Invalid object in session!");
+            if (Session.Current != null) {
+                container = Session.Current.Data as SessionContainer;
+
+                if (container == null && Session.Current.Data != null) {
+                    throw new Exception("Invalid object in session!");
+                }
             }
 
             if (container == null) {

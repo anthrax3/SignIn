@@ -74,7 +74,6 @@
     <Compile Include="Helpers\SessionContainer.cs" />
     <Compile Include="Helpers\SignInJwt.cs" />
     <Compile Include="Helpers\SignInOut.cs" />
-    <Compile Include="Helpers\SystemUserPassword.cs" />
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
