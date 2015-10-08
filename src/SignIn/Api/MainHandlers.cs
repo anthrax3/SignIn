@@ -42,6 +42,7 @@ namespace SignIn {
             });*/
 
             UriMapping.Map("/signin/user", "/sc/mapping/user");
+            UriMapping.Map("/signin/signinuser", "/sc/mapping/access-denied");
         }
 
         protected void SetAuthCookie(SignInPage Page) {
