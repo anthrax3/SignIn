@@ -45,9 +45,11 @@ namespace SignIn {
 
                     // Set password
                     string hash;
-                    SystemUser.GeneratePasswordHash(user.Username.ToLower(), AdminPassword, out hash);
+                    string salt = Convert.ToBase64String(SystemUser.GenerateSalt(16));
+                    SystemUser.GeneratePasswordHash(user.Username.ToLower(), AdminPassword, salt, out hash);
 
                     user.Password = hash;
+                    user.PasswordSalt = salt;
 
                     // Add ability to also sign in with email
                     EmailAddress email = new EmailAddress();
