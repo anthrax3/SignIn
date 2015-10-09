@@ -55,7 +55,7 @@ namespace SignIn {
                     EmailAddress email = new EmailAddress();
                     EmailAddressRelation relation = new EmailAddressRelation();
 
-                    relation.ToWhat = user;
+                    relation.Somebody = person;
                     relation.WhatIs = email;
 
                     email.EMail = AdminUsername + "@starcounter.com";
