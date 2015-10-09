@@ -27,6 +27,8 @@ namespace SignIn {
 
             Handle.GET("/signin/user", HandleUser);
             Handle.GET<string, string>("/signin/signin/{?}/{?}", HandleSignIn);
+            Handle.GET("/signin/signin/", HandleSignIn);
+            Handle.GET("/signin/signin", HandleSignIn);
             Handle.GET("/signin/signout", HandleSignOut);
             Handle.GET("/signin/signinuser", HandleSignInUser);
             Handle.GET<string>("/signin/signinuser?{?}", HandleSignIn);
@@ -74,6 +76,10 @@ namespace SignIn {
             }
 
             return container;
+        }
+
+        protected Response HandleSignIn() {
+            return HandleSignIn(null, null);
         }
 
         protected Response HandleSignIn(string Username, string Password) {
