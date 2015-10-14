@@ -119,8 +119,6 @@ namespace SignIn {
                 page.Username = user.Username;
                 page.Password = string.Empty;
                 page.RedirectUrl = page.OriginUrl;
-            } else {
-                page.Username = string.Empty;
             }
         }
     }
