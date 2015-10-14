@@ -23,7 +23,7 @@
             </div>
         </template>
         <template is="dom-if" if="{{model.IsSignedIn}}">
-            <p class="alert alert-success">You are already signed in!</p>
+            <p class="alert alert-success">You are signed in as <b>{{model.Username$}}</b>!</p>
             <div>
                 <button class="btn btn-primary" on-click="signOut">Sign out</button>
             </div>

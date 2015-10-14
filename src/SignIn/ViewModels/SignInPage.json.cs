@@ -114,9 +114,13 @@ namespace SignIn {
             page.Message = this.Message;
 
             if (page.IsSignedIn) {
-                page.Username = string.Empty;
+                SystemUser user = SystemUser.GetCurrentSystemUser();
+
+                page.Username = user.Username;
                 page.Password = string.Empty;
                 page.RedirectUrl = page.OriginUrl;
+            } else {
+                page.Username = string.Empty;
             }
         }
     }
