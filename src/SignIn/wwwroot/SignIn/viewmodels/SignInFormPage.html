@@ -1,8 +1,7 @@
-﻿<!--<link rel="stylesheet" href="/sys/bootswatch/paper/bootstrap.css" />-->
-<link rel="import" href="/sys/puppet-redirect/src/puppet-redirect.html" />
+﻿<link rel="import" href="/sys/puppet-redirect/src/puppet-redirect.html" />
 <template>
     <template is="dom-bind">
-        <h2>Sign-in</h2>
+        <h2>Sign-in!</h2>
         <template is="dom-if" if="{{!model.IsSignedIn}}">
             <template is="dom-if" if="{{model.Message}}">
                 <p class="alert alert-danger">{{model.Message}}</p>
@@ -32,10 +31,10 @@
         <link is="puppet-redirect" history url$="{{model.RedirectUrl}}" />
         <dom-bind-notifier observed-object="{{model}}" path="model" deep></dom-bind-notifier>
     </template>
-    <script>
+    <script id="signin-signin-form-page-script">
         (function () {
-            // use shimed currentScript if provided
-            var template = (document._currentScript ||  document.currentScript).previousElementSibling;
+            var template = (document._currentScript || document.currentScript || document.querySelector("#signin-signin-form-page-script")).previousElementSibling;
+
             template.txtUsernameKeypress = function (e) {
                 if (e.which == 13) {
                     template.parentNode.querySelector("#txtPassword").focus();
