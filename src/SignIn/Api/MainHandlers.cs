@@ -132,8 +132,7 @@ namespace SignIn {
                 return container.SignIn;
             }
 
-            List<Cookie> cookies = Handle.IncomingRequest.Cookies.Select(x => new Cookie(x)).ToList();
-            Cookie cookie = cookies.FirstOrDefault(x => x.Name == AuthCookieName);
+            Cookie cookie = GetSignInCookie();
             SignInPage page = new SignInPage();
 
             if (cookie != null) {
@@ -160,6 +159,13 @@ namespace SignIn {
             }*/
 
             return page;
+        }
+
+        protected Cookie GetSignInCookie() {
+            List<Cookie> cookies = Handle.IncomingRequest.Cookies.Select(x => new Cookie(x)).ToList();
+            Cookie cookie = cookies.FirstOrDefault(x => x.Name == AuthCookieName);
+
+            return cookie;
         }
     }
 }

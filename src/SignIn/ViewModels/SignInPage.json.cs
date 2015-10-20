@@ -28,13 +28,8 @@ namespace SignIn {
         }
 
         public void FromCookie(string SignInAuthToken) {
-            SystemUserTokenKey token = Db.SQL<SystemUserTokenKey>("SELECT t FROM Simplified.Ring5.SystemUserTokenKey t WHERE t.Token = ?", SignInAuthToken).First;
-
-            if (token == null) {
-                return;
-            }
-
-            SystemUserSession session = SystemUser.SignInSystemUser(token.Token);
+            //SystemUserTokenKey token = Db.SQL<SystemUserTokenKey>("SELECT t FROM Simplified.Ring5.SystemUserTokenKey t WHERE t.Token = ?", SignInAuthToken).First;
+            SystemUserSession session = SystemUser.SignInSystemUser(SignInAuthToken);
 
             if (session != null) {
                 this.SetAuthorizedState(session);
