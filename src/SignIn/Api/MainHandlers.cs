@@ -43,8 +43,8 @@ namespace SignIn {
                 return 200;
             });*/
 
-            UriMapping.Map("/signin/user", "/sc/mapping/user");
-			UriMapping.Map("/signin/signinuser", "/sc/mapping/userform");
+            UriMapping.Map("/signin/user", "/sc/mapping/user"); //expandable icon; used in Launcher
+			UriMapping.Map("/signin/signinuser", "/sc/mapping/userform"); //inline form; used in RSE Launcher
         }
 
         protected void SetAuthCookie(SignInPage Page) {
