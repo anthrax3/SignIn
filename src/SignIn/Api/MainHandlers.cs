@@ -67,7 +67,7 @@ namespace SignIn {
                 container = Session.Current.Data as SessionContainer;
 
                 if (container == null && Session.Current.Data != null) {
-                    throw new Exception("Invalid object in session!");
+                    throw new SignInException("Invalid object in session!");
                 }
             }
 
@@ -123,6 +123,10 @@ namespace SignIn {
 
         protected Response HandleSignOut() {
             SessionContainer container = this.GetSessionContainer();
+
+            if (container.SignIn == null) {
+                throw new SignInException("Trying to use SignIn app before if was initialized");
+            }
 
             container.SignIn.SignOut();
             SetAuthCookie(container.SignIn);
