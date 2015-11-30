@@ -135,6 +135,10 @@ namespace SignIn {
         }
 
         protected Response HandleUser() {
+            if (Session.Current == null) {
+                return null;
+            }
+
             SessionContainer container = this.GetSessionContainer();
 
             if (container.SignIn != null) {
