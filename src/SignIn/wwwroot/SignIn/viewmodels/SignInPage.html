@@ -1,13 +1,127 @@
-﻿<link rel="import" href="/SignIn/elements/so-signin/so-signin.html" />
+﻿<link rel="import" href="/sys/iron-icons/iron-icons.html" />
+<link rel="import" href="/sys/paper-icon-button/paper-icon-button.html" />
+<link rel="import" href="/sys/juicy-popover/src/juicy-popover.html" />
+
 <style>
-    .pj-launcher-user {
-        -webkit-flex: 1 0 auto;
-        flex: 1 0 auto;
+    .signin-detailed {
+        display: flex;
+        font-size: 0;
+    }
+
+    .signin-popup_window {
+        right: 0;
+        margin-right: -25px;
+        width: 200px;
+        position: absolute;
+        z-index: 1;
+        box-shadow: 0 2px 10px rgba(0,0,0,.2);
+        border-color: rgba(0,0,0,.2);
+        border: 1px solid #ccc;
+        border-radius: 2px;
+        overflow: hidden;
+        color: black;
+        display: block;
+        padding: 20px;
+        background: #f0f0f0;
+        font-size: 14px;
+    }
+
+        .signin-popup_window input[type="text"],
+        .signin-popup_window input[type="password"] {
+            box-sizing: border-box;
+            width: 100%;
+            background: #ffffff;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-family: inherit;
+            font-size: 95%;
+            color: #555;
+        }
+
+        .signin-popup_window .errorText {
+            width: 100%;
+            color: #cc3333;
+            margin-top: 10px;
+        }
+
+    paper-icon-button {
+        padding: 0px;
+        margin: 0px;
+        width: 100%;
+        height: 100%;
+    }
+
+    .full-name {
+        display: block;
+        white-space: nowrap;
+        font-size: 12px;
+        margin-left: 6px;
     }
 </style>
+
 <template>
-    <template is="dom-bind">
-        <so-signin is-signed-in="{{model.IsSignedIn}}" full-name="{{model.FullName}}" image-url="{{model.ImageUrl}}" username="{{model.Username$}}" password="{{model.Password$}}" message="{{model.Message}}"></so-signin>
+    <template is="dom-bind" strip-whitespace>
+
+        <div class="signin-detailed">
+            <!-- User signed in -->
+            <template is="dom-if" if="{{model.IsSignedIn}}" restamp strip-whitespace>
+                <juicy-popover position="bottom left" handleselector="paper-icon-button.handle" expandableselector=".expandable">
+                    <paper-icon-button class="handle" src="{{model.ImageUrl}}"></paper-icon-button>
+                    <div class="expandable signin-popup_window">
+                        <img src="{{model.ImageUrl}}" width="32" height="32" />
+                        <p style="margin-left:2px;">{{model.FullName}}</p>
+                        <a href="{{concat('/signin/partial/signout')}}" class="btn btn-primary" role="button">Sign out</a>
+                    </div>
+                </juicy-popover>
+                <div class="full-name">{{model.FullName}}</div>
+            </template>
+            <!-- User NOT signed in -->
+            <template is="dom-if" if="{{!model.IsSignedIn}}" restamp strip-whitespace>
+                <juicy-popover class="signin-popover" position="bottom left" handleselector="paper-icon-button.handle" expandableselector=".expandable">
+                    <paper-icon-button class="handle" icon="account-circle" on-click="focusPopover"></paper-icon-button>
+                    <div class="expandable signin-popup_window">
+                        <div>
+                            <input type="text" placeholder="Username / email" value="{{model.Username$::change}}" id="txtUsername" on-keypress="enterUsername" />
+                        </div>
+                        <div>
+                            <input type="password" placeholder="Password" value="{{model.Password$::change}}" id="txtPassword" on-keypress="enterPassword" />
+                        </div>
+                        <div>
+                            <a id="signin-button" href="{{concat('/signin/partial/signin/', model.Username$, '/', model.Password$)}}" class="btn btn-primary" role="button">Sign in</a>
+                        </div>
+                        <template is="dom-if" if="{{model.Message}}" strip-whitespace>
+                            <div class="errorText">{{model.Message}}</div>
+                        </template>
+                    </div>
+                </juicy-popover>
+            </template>
+        </div>
+
         <dom-bind-notifier observed-object="{{model}}" path="model" deep></dom-bind-notifier>
     </template>
+
+    <script>
+        (function init(template) {
+            template.concat = function () {
+                return Array.prototype.join.call(arguments, "");
+            };
+            template.focusPopover = function () {
+                document.getElementById("txtUsername").focus();
+            }
+            template.enterUsername = function (e) {
+                if (e.which == 13) {
+                    document.getElementById("txtPassword").focus();
+                }
+            };
+            template.enterPassword = function (e) {
+                if (e.which == 13) {
+                    this.blur();
+                    setTimeout(function () {
+                        document.getElementById("signin-button").click();
+                    }, 10);
+                }
+            };
+        })(document.currentScript.previousElementSibling);
+    </script>
 </template>
