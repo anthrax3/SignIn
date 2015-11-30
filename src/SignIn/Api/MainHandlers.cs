@@ -84,14 +84,14 @@ namespace SignIn {
         }
 
         protected Response HandleSignIn(string Username, string Password) {
-            SignInPage master = Self.GET<Page>("/signin/user") as SignInPage;
+            //SignInPage master = Self.GET<Page>("/signin/user") as SignInPage;
 
             SessionContainer container = this.GetSessionContainer();
 
             container.SignIn.SignIn(Username, Password);
             SetAuthCookie(container.SignIn);
 
-            master.UpdateSignInForm();
+            //master.UpdateSignInForm();
 
             return container;
         }
