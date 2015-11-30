@@ -97,14 +97,17 @@ namespace SignIn {
         }
 
         protected Response HandleSignIn(string Username, string Password) {
-            //SignInPage master = Self.GET<Page>("/signin/user") as SignInPage;
-
             SessionContainer container = this.GetSessionContainer();
 
-            container.SignIn.SignIn(Username, Password);
-            SetAuthCookie(container.SignIn);
+            var page = container.SignIn as SignInPage;
+            if (page == null) {
+                //as long as Registration calls /signin/partial/signin/{?}/{?} directly
+                //this handler needs to make sure SignIn page is created before it proceeds
+                page = Self.GET<Page>("/signin/user") as SignInPage;
+            }
 
-            //master.UpdateSignInForm();
+            page.SignIn(Username, Password);
+            SetAuthCookie(page);
 
             return container;
         }
