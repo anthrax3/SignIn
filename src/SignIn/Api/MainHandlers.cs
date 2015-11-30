@@ -25,6 +25,21 @@ namespace SignIn {
                 return 200;
             });*/
 
+            Handle.AddRequestFilter((Request req) => {
+                Cookie cookie = GetSignInCookie();
+
+                if (cookie != null) {
+                    Session session = Session.Current;
+                    if (session == null) {
+                        session = new Session(SessionOptions.PatchVersioning);
+                    }
+                    Session.Current = session;
+                    SystemUser.SignInSystemUser(cookie.Value);
+                }
+
+                return null;
+            });
+
             Handle.GET("/signin/user", HandleUser);
             Handle.GET<string, string>("/signin/partial/signin/{?}/{?}", HandleSignIn);
             Handle.GET("/signin/partial/signin/", HandleSignIn);
@@ -61,21 +76,19 @@ namespace SignIn {
         }
 
         protected SessionContainer GetSessionContainer() {
-            SessionContainer container = null;
+            Session session = Session.Current;
 
-            if (Session.Current != null) {
-                container = Session.Current.Data as SessionContainer;
-
-                if (container == null && Session.Current.Data != null) {
-                    throw new SignInException("Invalid object in session!");
-                }
+            if (session != null && session.Data != null) {
+                return session.Data as SessionContainer;
             }
 
-            if (container == null) {
-                container = new SessionContainer();
-                Session.Current.Data = container;
+            SessionContainer container = new SessionContainer();
+
+            if (session == null) {
+                session = new Session(SessionOptions.PatchVersioning);
             }
 
+            container.Session = session;
             return container;
         }
 
