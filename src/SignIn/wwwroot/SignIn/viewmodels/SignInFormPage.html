@@ -49,12 +49,12 @@
 
             template.signIn = function () {
                 setTimeout(function () {
-                    document.querySelector('puppet-client').network.changeState('/signin/signin/' + template.model.Username$ + '/' + template.model.Password$);
+                    document.querySelector('puppet-client').network.changeState('/signin/partial/signin/' + template.model.Username$ + '/' + template.model.Password$);
                 });
             };
 
             template.signOut = function () {
-                document.querySelector('puppet-client').network.changeState('/signin/signout');
+                document.querySelector('puppet-client').network.changeState('/signin/partial/signout');
             };
         })();
     </script>

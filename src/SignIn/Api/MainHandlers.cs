@@ -26,10 +26,10 @@ namespace SignIn {
             });*/
 
             Handle.GET("/signin/user", HandleUser);
-            Handle.GET<string, string>("/signin/signin/{?}/{?}", HandleSignIn);
-            Handle.GET("/signin/signin/", HandleSignIn);
-            Handle.GET("/signin/signin", HandleSignIn);
-            Handle.GET("/signin/signout", HandleSignOut);
+            Handle.GET<string, string>("/signin/partial/signin/{?}/{?}", HandleSignIn);
+            Handle.GET("/signin/partial/signin/", HandleSignIn);
+            Handle.GET("/signin/partial/signin", HandleSignIn);
+            Handle.GET("/signin/partial/signout", HandleSignOut);
             Handle.GET("/signin/signinuser", HandleSignInUser);
             Handle.GET<string>("/signin/signinuser?{?}", HandleSignIn);
 

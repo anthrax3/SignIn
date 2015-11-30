@@ -151,11 +151,11 @@
             },
             signIn: function () {
                 setTimeout(function () {
-                    this.puppet.network.changeState("/signin/signin/" + this.username + "/" + this.password);
+                    this.puppet.network.changeState("/signin/partial/signin/" + this.username + "/" + this.password);
                 }.bind(this));
             },
             signOut: function () {
-                this.puppet.network.changeState("/signin/signout");
+                this.puppet.network.changeState("/signin/partial/signout");
             },
             focusPopover: function () {
                 this.shadowRoot.getElementById("txtUsername").focus();
