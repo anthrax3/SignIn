@@ -71,7 +71,7 @@
                     <div class="expandable signin-popup_window">
                         <img src="{{model.ImageUrl}}" width="32" height="32" />
                         <p style="margin-left:2px;">{{model.FullName}}</p>
-                        <a href="{{concat('/signin/partial/signout')}}" class="btn btn-primary" role="button">Sign out</a>
+                        <button on-click="signOut" class="btn btn-primary" role="button">Sign out</button>
                     </div>
                 </juicy-popover>
                 <div class="full-name">{{model.FullName}}</div>
@@ -88,7 +88,7 @@
                             <input type="password" placeholder="Password" value="{{model.Password$::change}}" id="txtPassword" on-keypress="enterPassword" />
                         </div>
                         <div>
-                            <a id="signin-button" href="{{concat('/signin/partial/signin/', model.Username$, '/', model.Password$)}}" class="btn btn-primary" role="button">Sign in</a>
+                            <button id="signin-button" on-click="signIn" class="btn btn-primary" role="button">Sign in</button>
                         </div>
                         <template is="dom-if" if="{{model.Message}}" strip-whitespace>
                             <div class="errorText">{{model.Message}}</div>
@@ -121,6 +121,14 @@
                         document.getElementById("signin-button").click();
                     }, 10);
                 }
+            };
+            template.signIn = function () {
+                setTimeout(function () {
+                    document.querySelector("puppet-client").network.changeState("/signin/partial/signin/" + document.getElementById("txtUsername").value + "/" + document.getElementById("txtPassword").value);
+                }.bind(this));
+            };
+            template.signOut = function (e) {
+                document.querySelector("puppet-client").network.changeState("/signin/partial/signout");
             };
         })(document.currentScript.previousElementSibling);
     </script>
