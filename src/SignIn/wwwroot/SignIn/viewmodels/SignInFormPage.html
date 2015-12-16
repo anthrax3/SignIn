@@ -1,4 +1,4 @@
-﻿<link rel="import" href="/sys/puppet-redirect/src/puppet-redirect.html" />
+﻿<link rel="import" href="/sys/puppet-redirect/puppet-redirect.html" />
 <template>
     <template is="dom-bind">
         <h2>Sign-in!</h2>
@@ -28,7 +28,7 @@
                 <button class="btn btn-primary" on-click="signOut">Sign out</button>
             </div>
         </template>
-        <link is="puppet-redirect" history url$="{{model.RedirectUrl}}" />
+        <link is="puppet-redirect" history url="{{model.RedirectUrl$}}" />
         <dom-bind-notifier observed-object="{{model}}" path="model" deep></dom-bind-notifier>
     </template>
     <script id="signin-signin-form-page-script">
