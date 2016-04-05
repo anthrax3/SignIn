@@ -6,16 +6,16 @@
             <template is="dom-if" if="{{model.Message}}">
                 <p class="alert alert-danger">{{model.Message}}</p>
             </template>
-            <div class="form-horizontal">
+            <div class="form-horizontal" juicy-style="width: 10%; height: 45px;">
                 <label class="control-label" for="txtUsername">Username</label>
             </div>
-            <div>
+            <div juicy-style="width: 90%; height: 45px;">
                 <input id="txtUsername" type="text" value="{{model.Username$::change}}" placeholder="Username" class="form-control" on-keypress="txtUsernameKeypress" />
             </div>
-            <div class="form-horizontal">
+            <div class="form-horizontal" juicy-style="width: 10%; height: 45px;">
                 <label class="control-label" for="txtPassword">Password</label>
             </div>
-            <div>
+            <div juicy-style="width: 90%; height: 45px;">
                 <input id="txtPassword" type="password" value="{{model.Password$::change}}" placeholder="Password" class="form-control" on-keypress="txtPasswordKeypress" />
             </div>
             <div>
