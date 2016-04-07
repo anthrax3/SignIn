@@ -1,10 +1,10 @@
 {
-    "Uri": "",
-    "Html": "/SignIn/viewmodels/SignInPage.html",
-    "Username$": "",
-    "Password$": "",
-    "IsSignedIn": false,
-    "Message": "",
-    "FullName": "",
-    "ImageUrl": ""
+  "Uri": "",
+  "Html": "/SignIn/viewmodels/SignInPage.html",
+  "Username$": "",
+  "Password$": "",
+  "IsSignedIn": false,
+  "Message": "",
+  "FullName": "",
+  "ImageUrl": ""
 }
