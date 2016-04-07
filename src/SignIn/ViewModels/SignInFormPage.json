@@ -1,10 +1,10 @@
 {
-    "Uri": "",
-    "Html": "/SignIn/viewmodels/SignInFormPage.html",
-    "Username$": "",
-    "Password$": "",
-    "IsSignedIn": false,
-    "Message": "",
-    "OriginUrl": "",
-    "RedirectUrl$": ""
+  "Uri": "",
+  "Html": "/SignIn/viewmodels/SignInFormPage.html",
+  "Username$": "",
+  "Password$": "",
+  "IsSignedIn": false,
+  "Message": "",
+  "OriginUrl": "",
+  "RedirectUrl$": ""
 }
