@@ -25,7 +25,7 @@ namespace SignIn {
                 return 200;
             });*/
 
-            Handle.AddRequestFilter((Request req) => {
+            Application.Current.Use((Request req) => {
                 Cookie cookie = GetSignInCookie();
 
                 if (cookie != null) {
