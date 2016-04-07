@@ -20,6 +20,17 @@
             <div juicy-style="width: 90%; height: 45px;">
                 <input id="txtPassword" type="password" value="{{model.Password$::change}}" placeholder="Password" class="form-control" on-keypress="txtPasswordKeypress" />
             </div>
+            <div class="form-horizontal" juicy-style="width: 10%; height: 45px;">
+                <label class="control-label">&nbsp;</label>
+            </div>
+            <div juicy-style="width: 90%; height: 45px;">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" checked="{{model.RememberMe$::change}}" />
+                        <span>Remember me</span>
+                    </label>
+                </div>
+            </div>
             <div>
                 <button class="btn btn-primary" on-click="signIn">Sign in</button>
             </div>
@@ -53,8 +64,10 @@
             template.signIn = function () {
                 setTimeout(function () {
                     var password = Sha1.hash(template.model.Password$);
+                    var url = "/signin/partial/signin/" + template.model.Username$ + "/" + password + "/" + template.model.RememberMe$;
+
                     template.set("model.Password$", "");
-                    document.querySelector("puppet-client").network.changeState("/signin/partial/signin/" + template.model.Username$ + "/" + password);
+                    document.querySelector("puppet-client").network.changeState(url);
                 });
             };
 

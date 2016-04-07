@@ -10,6 +10,7 @@ using Simplified.Ring5;
 namespace SignIn {
     internal class MainHandlers {
         protected string AuthCookieName = "soauthtoken";
+        protected int rememberMeDays = 30;
 
         public void Register() {
             //Testing JWT
@@ -41,7 +42,7 @@ namespace SignIn {
             });
 
             Handle.GET("/signin/user", HandleUser);
-            Handle.GET<string, string>("/signin/partial/signin/{?}/{?}", HandleSignIn, new HandlerOptions() { SkipRequestFilters = true });
+            Handle.GET<string, string, string>("/signin/partial/signin/{?}/{?}/{?}", HandleSignIn, new HandlerOptions() { SkipRequestFilters = true });
             Handle.GET("/signin/partial/signin/", HandleSignIn, new HandlerOptions() { SkipRequestFilters = true });
             Handle.GET("/signin/partial/signin", HandleSignIn, new HandlerOptions() { SkipRequestFilters = true });
             Handle.GET("/signin/partial/signout", HandleSignOut, new HandlerOptions() { SkipRequestFilters = true });
@@ -62,8 +63,16 @@ namespace SignIn {
 			UriMapping.Map("/signin/signinuser", "/sc/mapping/userform"); //inline form; used in RSE Launcher
         }
 
-        protected void SetAuthCookie(SignInPage Page) {
+        protected void SetAuthCookie(SignInPage Page, bool RememberMe) {
             Cookie cookie = new Cookie(AuthCookieName, Page.SignInAuthToken);
+
+            if (!Page.IsSignedIn) {
+                cookie.Expires = DateTime.Today;
+            } else if (RememberMe) {
+                cookie.Expires = DateTime.Now.AddDays(rememberMeDays);
+            } else {
+                cookie.Expires = DateTime.Now.AddDays(1);
+            }
 
             Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
         }
@@ -93,10 +102,10 @@ namespace SignIn {
         }
 
         protected Response HandleSignIn() {
-            return HandleSignIn(null, null);
+            return HandleSignIn(null, null, null);
         }
 
-        protected Response HandleSignIn(string Username, string Password) {
+        protected Response HandleSignIn(string Username, string Password, string RememberMe) {
             SessionContainer container = this.GetSessionContainer();
 
             var page = container.SignIn as SignInPage;
@@ -107,7 +116,7 @@ namespace SignIn {
             }
 
             page.SignIn(Username, Password);
-            SetAuthCookie(page);
+            SetAuthCookie(page, RememberMe == "true");
 
             return container;
         }
@@ -145,7 +154,7 @@ namespace SignIn {
             }
 
             container.SignIn.SignOut();
-            SetAuthCookie(container.SignIn);
+            SetAuthCookie(container.SignIn, false);
 
             return container;
         }

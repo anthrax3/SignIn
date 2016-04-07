@@ -87,6 +87,12 @@
                         <div>
                             <input type="password" placeholder="Password" value="{{model.Password$::change}}" id="txtPassword" on-keypress="enterPassword" />
                         </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" checked="{{model.RememberMe$::change}}" />
+                                <span>Remember me</span>
+                            </label>
+                        </div>
                         <div>
                             <button id="signin-button" on-click="signIn" class="btn btn-primary" role="button">Sign in</button>
                         </div>
@@ -125,8 +131,10 @@
             template.signIn = function () {
                 setTimeout(function () {
                     var password = Sha1.hash(template.model.Password$);
+                    var url = "/signin/partial/signin/" + template.model.Username$ + "/" + password + "/" + template.model.RememberMe$;
+
                     template.set("model.Password$", "");
-                    document.querySelector("puppet-client").network.changeState("/signin/partial/signin/" + template.model.Username$ + "/" + password);
+                    document.querySelector("puppet-client").network.changeState(url);
                 }.bind(this));
             };
             template.signOut = function (e) {
