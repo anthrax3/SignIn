@@ -1,4 +1,6 @@
 ﻿<link rel="import" href="/sys/puppet-redirect/puppet-redirect.html" />
+<script src="/SignIn/scripts/sha1.js"></script>
+
 <template>
     <template is="dom-bind">
         <h2>Sign-in!</h2>
@@ -33,7 +35,8 @@
     </template>
     <script id="signin-signin-form-page-script">
         (function () {
-            var template = (document._currentScript || document.currentScript || document.querySelector("#signin-signin-form-page-script")).previousElementSibling;
+            var script = document._currentScript || document.currentScript || document.querySelector("#signin-signin-form-page-script");
+            var template = script.previousElementSibling;
 
             template.txtUsernameKeypress = function (e) {
                 if (e.which == 13) {
@@ -49,12 +52,14 @@
 
             template.signIn = function () {
                 setTimeout(function () {
-                    document.querySelector('puppet-client').network.changeState('/signin/partial/signin/' + template.model.Username$ + '/' + template.model.Password$);
+                    var password = Sha1.hash(template.model.Password$);
+                    template.set("model.Password$", "");
+                    document.querySelector("puppet-client").network.changeState("/signin/partial/signin/" + template.model.Username$ + "/" + password);
                 });
             };
 
             template.signOut = function () {
-                document.querySelector('puppet-client').network.changeState('/signin/partial/signout');
+                document.querySelector("puppet-client").network.changeState("/signin/partial/signout");
             };
         })();
     </script>

@@ -46,7 +46,8 @@ namespace SignIn {
                     // Set password
                     string hash;
                     string salt = Convert.ToBase64String(SystemUser.GenerateSalt(16));
-                    SystemUser.GeneratePasswordHash(user.Username.ToLower(), AdminPassword, salt, out hash);
+                    string password = SystemUser.GenerateClientSideHash(AdminPassword);
+                    SystemUser.GeneratePasswordHash(user.Username.ToLower(), password, salt, out hash);
 
                     user.Password = hash;
                     user.PasswordSalt = salt;
