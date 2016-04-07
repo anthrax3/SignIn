@@ -124,7 +124,9 @@
             };
             template.signIn = function () {
                 setTimeout(function () {
-                    document.querySelector("puppet-client").network.changeState("/signin/partial/signin/" + document.getElementById("txtUsername").value + "/" + document.getElementById("txtPassword").value);
+                    var password = Sha1.hash(template.model.Password$);
+                    template.set("model.Password$", "");
+                    document.querySelector("puppet-client").network.changeState("/signin/partial/signin/" + template.model.Username$ + "/" + password);
                 }.bind(this));
             };
             template.signOut = function (e) {
