@@ -12,5 +12,10 @@ namespace SignIn {
             get;
             set;
         } 
+
+        public RegistrationFormPage RegistrationForm {
+            get;
+            set;
+        }
     }
 }

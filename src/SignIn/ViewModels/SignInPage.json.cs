@@ -44,14 +44,15 @@ namespace SignIn {
 
                 if (!string.IsNullOrEmpty(Session.Token.User.WhoIs.ImageURL)) {
                     this.ImageUrl = Session.Token.User.WhoIs.ImageURL;
-                }
-                else {
+                } else {
                     this.ImageUrl = Utils.GetGravatarUrl(string.Empty);
                 }
-            }
-            else {
-                this.FullName = Session.Token.User.Username;
+            } else {
                 this.ImageUrl = Utils.GetGravatarUrl(string.Empty);
+            }
+
+            if (string.IsNullOrEmpty(this.FullName)) {
+                this.FullName = Session.Token.User.Username;
             }
 
             this.SignInAuthToken = Session.Token.Token;

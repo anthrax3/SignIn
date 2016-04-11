@@ -31,9 +31,11 @@
                     </label>
                 </div>
             </div>
-            <div>
-                <button class="btn btn-primary" on-click="signIn">Sign in</button>
+            <div class="form-horizontal" juicy-style="width: 10%; height: 30px;">
+                <label class="control-label">&nbsp;</label>
             </div>
+            <button class="btn btn-primary" on-click="signIn" juicy-style="width: 74px; height: 30px;">Sign in</button>
+            <a href="/signin/registration" class="btn btn-default" juicy-style="width: 84px; height: 30px;">Registration</a>
         </template>
         <template is="dom-if" if="{{model.IsSignedIn}}">
             <p class="alert alert-success">You are signed in as <b>{{model.Username$}}</b>!</p>

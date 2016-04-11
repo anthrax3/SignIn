@@ -75,6 +75,9 @@
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\RegistrationFormPage.json.cs">
+      <DependentUpon>RegistrationFormPage.json</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\SignInFormPage.json.cs">
       <DependentUpon>SignInFormPage.json</DependentUpon>
     </Compile>
@@ -84,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="wwwroot\SignIn\scripts\sha1.js" />
+    <Content Include="wwwroot\SignIn\viewmodels\RegistrationFormPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\SignInFormPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\SignInPage.html" />
   </ItemGroup>
@@ -102,6 +106,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <TypedJSON Include="ViewModels\RegistrationFormPage.json">
+      <Generator>MsBuild:Compile</Generator>
+    </TypedJSON>
     <None Include="weaver.ignore">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

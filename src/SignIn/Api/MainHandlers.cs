@@ -49,6 +49,12 @@ namespace SignIn {
             Handle.GET("/signin/signinuser", HandleSignInUser);
             Handle.GET<string>("/signin/signinuser?{?}", HandleSignIn);
 
+            Handle.GET("/signin/registration", () => {
+                return new RegistrationFormPage() {
+                    Data = null
+                };
+            });
+
             //Test handler
             /*Handle.GET("/signin/deleteadminuser", () => {
                 Db.Transact(() => {
