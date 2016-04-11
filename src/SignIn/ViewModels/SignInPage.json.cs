@@ -83,7 +83,7 @@ namespace SignIn {
             this.UpdateSignInForm();
         }
 
-        public void RefreshState() {
+        public void RefreshSignInState() {
             SystemUserSession session = SystemUser.GetCurrentSystemUserSession();
 
             if (session != null) {
@@ -100,21 +100,10 @@ namespace SignIn {
                 return;
             }
 
-            SignInFormPage page = container.SignInForm;
+            MasterPage page = container.Master;
 
-            if (page == null) {
-                return;
-            }
-
-            page.IsSignedIn = this.IsSignedIn;
-            page.Message = this.Message;
-
-            if (page.IsSignedIn) {
-                SystemUser user = SystemUser.GetCurrentSystemUser();
-
-                page.Username = user.Username;
-                page.Password = string.Empty;
-                page.RedirectUrl = page.OriginUrl;
+            if (page != null) {
+                page.RefreshSignInState();
             }
         }
     }

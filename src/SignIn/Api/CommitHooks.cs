@@ -26,7 +26,7 @@ namespace SignIn {
             SignInPage page = GetSignInPage();
 
             if (page != null) {
-                page.RefreshState();
+                page.RefreshSignInState();
             }
         }
 
