@@ -33,7 +33,7 @@ namespace SignIn {
             } else if (string.IsNullOrEmpty(this.Email)) {
                 message = "E-mail address is required!";
             } else if (!System.Text.RegularExpressions.Regex.IsMatch(this.Email, emailPatternt)) {
-                message = "This is not a valid e-mail address";
+                message = "This is not a valid e-mail address!";
             } else if (string.IsNullOrEmpty(this.Password)) {
                 message = "Password is required!";
             } else if (this.Password != this.RepeatPassword) {
