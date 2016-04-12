@@ -39,5 +39,19 @@ namespace SignIn {
                 return "http://www.gravatar.com/avatar/" + sBuilder.ToString() + "?s=32&d=mm";
             }
         }
+
+        public static string RandomString(int Size) {
+            string input = "abcdefghijklmnopqrstuvwxyz0123456789";
+            StringBuilder builder = new StringBuilder();
+            Random random = new Random();
+            char ch;
+
+            for (int i = 0; i < Size; i++) {
+                ch = input[random.Next(0, input.Length)];
+                builder.Append(ch);
+            }
+
+            return builder.ToString();
+        }
     }
 }

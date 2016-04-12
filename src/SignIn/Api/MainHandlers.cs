@@ -91,9 +91,18 @@ namespace SignIn {
                 return master;
             });
 
+            Handle.GET("/signin/restore", () => {
+                MasterPage master = this.GetMaster();
+
+                master.Open("/signin/partial/restore-form");
+
+                return master;
+            });
+
             Handle.GET("/signin/partial/signin-form", () => new SignInFormPage(), new HandlerOptions() { SelfOnly = true });
             Handle.GET("/signin/partial/registration-form", () => new RegistrationFormPage(), new HandlerOptions() { SelfOnly = true });
             Handle.GET("/signin/partial/alreadyin-form", () => new AlreadyInPage() { Data = null }, new HandlerOptions() { SelfOnly = true });
+            Handle.GET("/signin/partial/restore-form", () => new RestorePasswordFormPage(), new HandlerOptions() { SelfOnly = true });
 
             //Test handler
             /*Handle.GET("/signin/deleteadminuser", () => {

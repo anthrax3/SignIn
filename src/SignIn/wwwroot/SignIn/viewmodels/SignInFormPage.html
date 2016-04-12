@@ -35,7 +35,8 @@
             <label class="control-label">&nbsp;</label>
         </div>
         <button class="btn btn-primary" value="{{model.SignInClick$::click}}" disabled="{{model.SignInClick$}}" onmouseup="++this.value;" juicy-style="width: 74px; height: 30px;">Sign in</button>
-        <a href="/signin/registration" class="btn btn-default" juicy-style="width: 84px; height: 30px;">Registration</a>
+        <a href="/signin/registration" class="btn btn-link" juicy-style="width: 84px; height: 30px;">Registration</a>
+        <a href="/signin/restore" class="btn btn-link" juicy-style="width: 100px; height: 30px;">Forgot password</a>
         <signin-element username="{{model.Username$}}" password="{{local.password}}" remember-me="{{model.RememberMe$}}" submit="{{model.Submit}}"></signin-element>
     </template>
     <script>

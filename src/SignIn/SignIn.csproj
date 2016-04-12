@@ -83,6 +83,9 @@
     <Compile Include="ViewModels\RegistrationFormPage.json.cs">
       <DependentUpon>RegistrationFormPage.json</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\RestorePasswordFormPage.json.cs">
+      <DependentUpon>RestorePasswordFormPage.json</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\SignInFormPage.json.cs">
       <DependentUpon>SignInFormPage.json</DependentUpon>
     </Compile>
@@ -96,6 +99,7 @@
     <Content Include="wwwroot\SignIn\viewmodels\AlreadyInPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\MasterPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\RegistrationFormPage.html" />
+    <Content Include="wwwroot\SignIn\viewmodels\RestorePasswordFormPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\SignInFormPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\SignInPage.html" />
   </ItemGroup>
@@ -119,6 +123,9 @@
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
     <TypedJSON Include="ViewModels\AlreadyInPage.json">
+      <Generator>MsBuild:Compile</Generator>
+    </TypedJSON>
+    <TypedJSON Include="ViewModels\RestorePasswordFormPage.json">
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
     <None Include="weaver.ignore">
