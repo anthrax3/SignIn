@@ -55,6 +55,7 @@ namespace SignIn {
             client.UseDefaultCredentials = false;
             client.Credentials = new NetworkCredential(settings.Username, settings.Password);
             client.Host = settings.Host;
+            client.EnableSsl = settings.EnableSsl;
 
             mail.Subject = "Restore password";
             mail.Body = string.Format("<h1>Hello {0}</h1><p>You have requested a new password for your <b>{1}</b> account.</p><p>Your new password is: <b>{2}</b>.</p>", Name, Username, NewPassword);
@@ -70,10 +71,11 @@ namespace SignIn {
                 Db.Transact(() => {
                     settings = new SettingsMailServer() {
                         Name = name,
-                        Port = 25,
+                        Port = 587,
                         Host = "mail.your-server.de",
-                        Username = "wordpress@starcounter.com",
-                        Password = "I0bF2004zTS5w2QU",
+                        Username = "signinapp@starcounter.io",
+                        Password = "*****",
+                        EnableSsl = true
                     };
                 });
             }
