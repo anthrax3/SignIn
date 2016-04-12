@@ -92,7 +92,6 @@ namespace SignIn {
             });
 
             Handle.GET("/signin/partial/signin-form", () => new SignInFormPage(), new HandlerOptions() { SelfOnly = true });
-            Handle.GET("/signin/partial/signin-form?{?}", (string originalUrl) => new SignInFormPage() { OriginalUrl = originalUrl }, new HandlerOptions() { SelfOnly = true });
             Handle.GET("/signin/partial/registration-form", () => new RegistrationFormPage(), new HandlerOptions() { SelfOnly = true });
             Handle.GET("/signin/partial/alreadyin-form", () => new AlreadyInPage() { Data = null }, new HandlerOptions() { SelfOnly = true });
 
@@ -185,11 +184,8 @@ namespace SignIn {
         protected Response HandleSignInForm(string OriginalUrl) {
             MasterPage master = this.GetMaster();
 
-            if (string.IsNullOrEmpty(OriginalUrl)) { 
-                master.Open("/signin/partial/signin-form");
-            } else {
-                master.Open("/signin/partial/signin-form?" + OriginalUrl);
-            }
+            master.OriginalUrl = OriginalUrl;
+            master.Open("/signin/partial/signin-form");
 
             return master;
         }
