@@ -69,7 +69,6 @@
     <Compile Include="Api\CommitHooks.cs" />
     <Compile Include="Api\MainHandlers.cs" />
     <Compile Include="Helpers\SessionContainer.cs" />
-    <Compile Include="Helpers\SignInException.cs" />
     <Compile Include="Helpers\SignInJwt.cs" />
     <Compile Include="Helpers\SignInOut.cs" />
     <Compile Include="Helpers\Utils.cs" />
@@ -110,9 +109,7 @@
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Database\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
     <TypedJSON Include="ViewModels\RegistrationFormPage.json">
