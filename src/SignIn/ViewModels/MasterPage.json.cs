@@ -13,7 +13,11 @@ namespace SignIn {
         public void RefreshSignInState() {
             SystemUser user = SystemUser.GetCurrentSystemUser();
 
-            if (user == null && !string.IsNullOrEmpty(this.url)) {
+            if (this.RequireSignIn && user != null) {
+                this.Partial = Self.GET(this.url);
+            } else if (this.RequireSignIn && user == null) {
+                this.Partial = Self.GET("/signin/partial/accessdenied-form");
+            } else if (user == null && !string.IsNullOrEmpty(this.url)) {
                 this.Partial = Self.GET(this.url);
             } else if(!string.IsNullOrEmpty(this.OriginalUrl)) {
                 this.Partial = null;

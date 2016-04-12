@@ -1,6 +1,6 @@
 ﻿<template>
     <template is="dom-bind">
-        <p class="alert alert-success">You are signed in as <b>{{model.Username}}</b>!</p>
+        <p class="alert alert-success">You are signed in as <a href="/signin/profile"><b>{{model.Username}}</b></a>!</p>
         <div>
             <button class="btn btn-primary" on-click="signOut">Sign out</button>
         </div>

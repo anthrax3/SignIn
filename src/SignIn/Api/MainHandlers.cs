@@ -86,6 +86,7 @@ namespace SignIn {
             Handle.GET("/signin/registration", () => {
                 MasterPage master = this.GetMaster();
 
+                master.RequireSignIn = false;
                 master.Open("/signin/partial/registration-form");
 
                 return master;
@@ -94,7 +95,17 @@ namespace SignIn {
             Handle.GET("/signin/restore", () => {
                 MasterPage master = this.GetMaster();
 
+                master.RequireSignIn = false;
                 master.Open("/signin/partial/restore-form");
+
+                return master;
+            });
+
+            Handle.GET("/signin/profile", () => {
+                MasterPage master = this.GetMaster();
+
+                master.RequireSignIn = true;
+                master.Open("/signin/partial/profile-form");
 
                 return master;
             });
@@ -103,6 +114,8 @@ namespace SignIn {
             Handle.GET("/signin/partial/registration-form", () => new RegistrationFormPage(), new HandlerOptions() { SelfOnly = true });
             Handle.GET("/signin/partial/alreadyin-form", () => new AlreadyInPage() { Data = null }, new HandlerOptions() { SelfOnly = true });
             Handle.GET("/signin/partial/restore-form", () => new RestorePasswordFormPage(), new HandlerOptions() { SelfOnly = true });
+            Handle.GET("/signin/partial/profile-form", () => new ProfileFormPage() { Data = null }, new HandlerOptions() { SelfOnly = true });
+            Handle.GET("/signin/partial/accessdenied-form", () => new AccessDeniedPage(), new HandlerOptions() { SelfOnly = true });
 
             //Test handler
             /*Handle.GET("/signin/deleteadminuser", () => {
@@ -181,6 +194,22 @@ namespace SignIn {
 
         protected Response HandleSignIn(string Username, string Password, string RememberMe) {
             SystemUserSession session = SystemUser.SignInSystemUser(Username, Password);
+
+            if (session == null) {
+                SessionContainer container = GetSessionContainer();
+                MasterPage master = container.Master;
+                string message = "Invalid username or password!";
+
+                if (container.SignIn != null) {
+                    container.SignIn.Message = message;
+                }
+
+                if (master != null && master.Partial is SignInFormPage) {
+                    SignInFormPage page = master.Partial as SignInFormPage;
+                    page.Message = message;
+                }
+            }
+
             SetAuthCookie(session, RememberMe == "true");
 
             return this.GetSessionContainer();
@@ -193,6 +222,7 @@ namespace SignIn {
         protected Response HandleSignInForm(string OriginalUrl) {
             MasterPage master = this.GetMaster();
 
+            master.RequireSignIn = false;
             master.OriginalUrl = OriginalUrl;
             master.Open("/signin/partial/signin-form");
 

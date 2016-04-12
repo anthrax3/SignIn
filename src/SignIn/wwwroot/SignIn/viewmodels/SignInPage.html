@@ -71,7 +71,9 @@
                     <paper-icon-button class="handle" src="{{model.ImageUrl}}"></paper-icon-button>
                     <div class="expandable signin-popup_window">
                         <img src="{{model.ImageUrl}}" width="32" height="32" />
-                        <p style="margin-left:2px;">{{model.FullName}}</p>
+                        <p style="margin-left:2px;">
+                            <a href="/signin/profile">{{model.FullName}}</a>
+                        </p>
                         <button on-click="signOut" class="btn btn-primary" role="button">Sign out</button>
                     </div>
                 </juicy-popover>

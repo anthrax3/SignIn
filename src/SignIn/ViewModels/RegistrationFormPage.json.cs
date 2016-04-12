@@ -3,8 +3,6 @@ using Simplified.Ring3;
 
 namespace SignIn {
     partial class RegistrationFormPage : Page {
-        string emailPatternt = @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$";
-
         protected override void OnData() {
             base.OnData();
 
@@ -32,7 +30,7 @@ namespace SignIn {
                 message = "Username is required!";
             } else if (string.IsNullOrEmpty(this.Email)) {
                 message = "E-mail address is required!";
-            } else if (!System.Text.RegularExpressions.Regex.IsMatch(this.Email, emailPatternt)) {
+            } else if (!Utils.IsValidEmail(this.Email)) {
                 message = "This is not a valid e-mail address!";
             } else if (string.IsNullOrEmpty(this.Password)) {
                 message = "Password is required!";

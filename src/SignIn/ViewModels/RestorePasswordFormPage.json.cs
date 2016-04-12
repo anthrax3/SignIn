@@ -24,7 +24,7 @@ namespace SignIn {
             }
 
             Person person = user.WhoIs as Person;
-            EmailAddress email = Db.SQL<EmailAddress>("SELECT r.EmailAddress FROM Simplified.Ring3.EmailAddressRelation r WHERE r.Somebody = ?", person).First;
+            EmailAddress email = Utils.GetUserEmailAddress(user);
 
             if (person == null || email == null) {
                 this.Message = "Unable to restore password, no e-mail address found!";

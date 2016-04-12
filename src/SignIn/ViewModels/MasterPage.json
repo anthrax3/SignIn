@@ -2,5 +2,6 @@
   "Html": "/SignIn/viewmodels/MasterPage.html",
   "Partial": { },
   "OriginalUrl": "",
-  "RedirectUrl$": ""
+  "RedirectUrl$": "",
+  "RequireSignIn": false
 }
