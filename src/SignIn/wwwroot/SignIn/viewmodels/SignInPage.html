@@ -1,6 +1,7 @@
 ﻿<link rel="import" href="/sys/iron-icons/iron-icons.html" />
 <link rel="import" href="/sys/paper-icon-button/paper-icon-button.html" />
 <link rel="import" href="/sys/juicy-popover/src/juicy-popover.html" />
+<link rel="import" href="/SignIn/elements/signin-element.html" />
 
 <style>
     .signin-detailed {
@@ -82,10 +83,10 @@
                     <paper-icon-button class="handle" icon="account-circle" on-click="focusPopover"></paper-icon-button>
                     <div class="expandable signin-popup_window">
                         <div>
-                            <input type="text" placeholder="Username / email" value="{{model.Username$::change}}" id="txtUsername" on-keypress="enterUsername" />
+                            <input type="text" placeholder="Username / email" value="{{model.Username$::change}}" on-keypress="txtKeypress" />
                         </div>
                         <div>
-                            <input type="password" placeholder="Password" value="{{model.Password$::change}}" id="txtPassword" on-keypress="enterPassword" />
+                            <input type="password" placeholder="Password" value="{{local.password::change}}" on-keypress="txtKeypress" />
                         </div>
                         <div class="checkbox">
                             <label>
@@ -94,13 +95,14 @@
                             </label>
                         </div>
                         <div>
-                            <button id="signin-button" on-click="signIn" class="btn btn-primary" role="button">Sign in</button>
+                            <button class="btn btn-primary" role="button" value="{{model.SignInClick$::click}}" disabled="{{model.SignInClick$}}" onmouseup="++this.value;">Sign in</button>
                         </div>
                         <template is="dom-if" if="{{model.Message}}" strip-whitespace>
                             <div class="errorText">{{model.Message}}</div>
                         </template>
                     </div>
                 </juicy-popover>
+                <signin-element username="{{model.Username$}}" password="{{local.password}}" remember-me="{{model.RememberMe$}}" submit="{{model.Submit}}"></signin-element>
             </template>
         </div>
 
@@ -108,38 +110,31 @@
     </template>
 
     <script>
-        (function init(template) {
-            template.concat = function () {
-                return Array.prototype.join.call(arguments, "");
-            };
-            template.focusPopover = function () {
-                document.getElementById("txtUsername").focus();
-            }
-            template.enterUsername = function (e) {
-                if (e.which == 13) {
-                    document.getElementById("txtPassword").focus();
-                }
-            };
-            template.enterPassword = function (e) {
-                if (e.which == 13) {
-                    this.blur();
-                    setTimeout(function () {
-                        document.getElementById("signin-button").click();
-                    }, 10);
-                }
-            };
-            template.signIn = function () {
-                setTimeout(function () {
-                    var password = Sha1.hash(template.model.Password$);
-                    var url = "/signin/partial/signin/" + template.model.Username$ + "/" + password + "/" + template.model.RememberMe$;
+        (function () {
+            var script = document._currentScript || document.currentScript;
+            var template = script.previousElementSibling;
 
-                    template.set("model.Password$", "");
-                    document.querySelector("puppet-client").network.changeState(url);
-                }.bind(this));
+            template.local = {
+                password: ""
             };
+
+            template.txtKeypress = function (e) {
+                if (e.which != 13) {
+                    return;
+                }
+
+                setTimeout(function () {
+                    template.set("model.SignInClick$", template.model.SignInClick$ + 1);
+                });
+            };
+
+            template.focusPopover = function (e) {
+                e.currentTarget.parentNode.querySelector("input").focus();
+            };
+
             template.signOut = function (e) {
                 document.querySelector("puppet-client").network.changeState("/signin/partial/signout");
             };
-        })(document.currentScript.previousElementSibling);
+        })();
     </script>
 </template>

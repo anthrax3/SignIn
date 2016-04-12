@@ -19,7 +19,7 @@ namespace SignIn {
             }
 
             if (this.Master != null) {
-                this.SignIn.RefreshSignInState();
+                this.Master.RefreshSignInState();
             }
         }
     }
