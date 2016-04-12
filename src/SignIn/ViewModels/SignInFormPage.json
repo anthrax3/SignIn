@@ -5,7 +5,7 @@
   "RememberMe$": true,
   "IsSignedIn": false,
   "Message": "",
-  "OriginUrl": "",
+  "OriginalUrl": "",
   "Submit": 0,
   "SignInClick$": 0
 }
