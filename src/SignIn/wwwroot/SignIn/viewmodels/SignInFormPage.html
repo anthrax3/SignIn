@@ -1,80 +1,61 @@
-﻿<link rel="import" href="/sys/puppet-redirect/puppet-redirect.html" />
-<script src="/SignIn/scripts/sha1.js"></script>
+﻿<link rel="import" href="/SignIn/elements/signin-element.html" />
 
 <template>
     <template is="dom-bind">
         <h2>Sign-in!</h2>
-        <template is="dom-if" if="{{!model.IsSignedIn}}">
+        <div>
             <template is="dom-if" if="{{model.Message}}">
                 <p class="alert alert-danger">{{model.Message}}</p>
             </template>
-            <div class="form-horizontal" juicy-style="width: 10%; height: 45px;">
-                <label class="control-label" for="txtUsername">Username</label>
+        </div>
+        <div class="form-horizontal" juicy-style="width: 10%; height: 45px;">
+            <label class="control-label" for="txtUsername">Username</label>
+        </div>
+        <div juicy-style="width: 90%; height: 45px;">
+            <input type="text" value="{{model.Username$::change}}" placeholder="Username" class="form-control" on-keypress="txtKeypress" />
+        </div>
+        <div class="form-horizontal" juicy-style="width: 10%; height: 45px;">
+            <label class="control-label" for="txtPassword">Password</label>
+        </div>
+        <div juicy-style="width: 90%; height: 45px;">
+            <input type="password" value="{{local.password::change}}" placeholder="Password" class="form-control" on-keypress="txtKeypress" />
+        </div>
+        <div class="form-horizontal" juicy-style="width: 10%; height: 45px;">
+            <label class="control-label">&nbsp;</label>
+        </div>
+        <div juicy-style="width: 90%; height: 45px;">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" checked="{{model.RememberMe$::change}}" />
+                    <span>Remember me</span>
+                </label>
             </div>
-            <div juicy-style="width: 90%; height: 45px;">
-                <input id="txtUsername" type="text" value="{{model.Username$::change}}" placeholder="Username" class="form-control" on-keypress="txtUsernameKeypress" />
-            </div>
-            <div class="form-horizontal" juicy-style="width: 10%; height: 45px;">
-                <label class="control-label" for="txtPassword">Password</label>
-            </div>
-            <div juicy-style="width: 90%; height: 45px;">
-                <input id="txtPassword" type="password" value="{{model.Password$::change}}" placeholder="Password" class="form-control" on-keypress="txtPasswordKeypress" />
-            </div>
-            <div class="form-horizontal" juicy-style="width: 10%; height: 45px;">
-                <label class="control-label">&nbsp;</label>
-            </div>
-            <div juicy-style="width: 90%; height: 45px;">
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" checked="{{model.RememberMe$::change}}" />
-                        <span>Remember me</span>
-                    </label>
-                </div>
-            </div>
-            <div class="form-horizontal" juicy-style="width: 10%; height: 30px;">
-                <label class="control-label">&nbsp;</label>
-            </div>
-            <button class="btn btn-primary" on-click="signIn" juicy-style="width: 74px; height: 30px;">Sign in</button>
-            <a href="/signin/registration" class="btn btn-default" juicy-style="width: 84px; height: 30px;">Registration</a>
-        </template>
-        <template is="dom-if" if="{{model.IsSignedIn}}">
-            <p class="alert alert-success">You are signed in as <b>{{model.Username$}}</b>!</p>
-            <div>
-                <button class="btn btn-primary" on-click="signOut">Sign out</button>
-            </div>
-        </template>
-        <link is="puppet-redirect" history url="{{model.RedirectUrl$}}" />
-        <dom-bind-notifier observed-object="{{model}}" path="model" deep></dom-bind-notifier>
+        </div>
+        <div class="form-horizontal" juicy-style="width: 10%; height: 30px;">
+            <label class="control-label">&nbsp;</label>
+        </div>
+        <button class="btn btn-primary" value="{{model.SignInClick$::click}}" disabled="{{model.SignInClick$}}" onmouseup="++this.value;" juicy-style="width: 74px; height: 30px;">Sign in</button>
+        <a href="/signin/registration" class="btn btn-link" juicy-style="width: 84px; height: 30px;">Registration</a>
+        <a href="/signin/restore" class="btn btn-link" juicy-style="width: 100px; height: 30px;">Forgot password</a>
+        <signin-element username="{{model.Username$}}" password="{{local.password}}" remember-me="{{model.RememberMe$}}" submit="{{model.Submit}}"></signin-element>
     </template>
-    <script id="signin-signin-form-page-script">
+    <script>
         (function () {
-            var script = document._currentScript || document.currentScript || document.querySelector("#signin-signin-form-page-script");
+            var script = document._currentScript || document.currentScript;
             var template = script.previousElementSibling;
 
-            template.txtUsernameKeypress = function (e) {
-                if (e.which == 13) {
-                    template.parentNode.querySelector("#txtPassword").focus();
-                }
+            template.local = {
+                password: ""
             };
 
-            template.txtPasswordKeypress = function (e) {
-                if (e.which == 13) {
-                    template.signIn();
+            template.txtKeypress = function (e) {
+                if (e.which != 13) {
+                    return;
                 }
-            };
 
-            template.signIn = function () {
                 setTimeout(function () {
-                    var password = Sha1.hash(template.model.Password$);
-                    var url = "/signin/partial/signin/" + template.model.Username$ + "/" + password + "/" + template.model.RememberMe$;
-
-                    template.set("model.Password$", "");
-                    document.querySelector("puppet-client").network.changeState(url);
+                    template.set("model.SignInClick$", template.model.SignInClick$ + 1);
                 });
-            };
-
-            template.signOut = function () {
-                document.querySelector("puppet-client").network.changeState("/signin/partial/signout");
             };
         })();
     </script>

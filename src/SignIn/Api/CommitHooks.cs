@@ -23,21 +23,19 @@ namespace SignIn {
         }
 
         protected void RefreshSignInState() {
-            SignInPage page = GetSignInPage();
+            SessionContainer container = GetSessionContainer();
 
-            if (page != null) {
-                page.RefreshState();
+            if (container != null) {
+                container.RefreshSignInState();
             }
         }
 
-        protected SignInPage GetSignInPage() {
-            SessionContainer container = null;
-
-            if (Session.Current != null && Session.Current.Data is SessionContainer) {
-                container = Session.Current.Data as SessionContainer;
+        protected SessionContainer GetSessionContainer() {
+            if (Session.Current != null) {
+                return Session.Current.Data as SessionContainer;
             }
 
-            return container != null ? container.SignIn : null;
+            return null;
         }
     }
 }

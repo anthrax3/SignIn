@@ -3,19 +3,24 @@ using Starcounter;
 
 namespace SignIn {
     internal class SessionContainer : Json {
-        public SignInFormPage SignInForm {
-            get;
-            set;
-        }
-
         public SignInPage SignIn {
             get;
             set;
         } 
 
-        public RegistrationFormPage RegistrationForm {
+        public MasterPage Master {
             get;
             set;
+        }
+
+        public void RefreshSignInState() {
+            if (this.SignIn != null) {
+                this.SignIn.RefreshSignInState();
+            }
+
+            if (this.Master != null) {
+                this.Master.RefreshSignInState();
+            }
         }
     }
 }

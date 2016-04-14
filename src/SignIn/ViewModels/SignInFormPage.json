@@ -2,10 +2,9 @@
   "Uri": "",
   "Html": "/SignIn/viewmodels/SignInFormPage.html",
   "Username$": "",
-  "Password$": "",
   "RememberMe$": true,
   "IsSignedIn": false,
   "Message": "",
-  "OriginUrl": "",
-  "RedirectUrl$": ""
+  "Submit": 0,
+  "SignInClick$": 0
 }

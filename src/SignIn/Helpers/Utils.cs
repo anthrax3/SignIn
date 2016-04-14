@@ -4,6 +4,10 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Starcounter;
+using Simplified.Ring2;
+using Simplified.Ring3;
+using Simplified.Ring4;
 
 namespace SignIn {
     public class Utils {
@@ -38,6 +42,32 @@ namespace SignIn {
                 }
                 return "http://www.gravatar.com/avatar/" + sBuilder.ToString() + "?s=32&d=mm";
             }
+        }
+
+        public static string RandomString(int Size) {
+            string input = "abcdefghijklmnopqrstuvwxyz0123456789";
+            StringBuilder builder = new StringBuilder();
+            Random random = new Random();
+            char ch;
+
+            for (int i = 0; i < Size; i++) {
+                ch = input[random.Next(0, input.Length)];
+                builder.Append(ch);
+            }
+
+            return builder.ToString();
+        }
+
+        public static EmailAddress GetUserEmailAddress(SystemUser User) {
+            Person person = User.WhoIs as Person;
+
+            if (person == null) {
+                return null;
+            }
+
+            EmailAddress email = Db.SQL<EmailAddress>("SELECT r.EmailAddress FROM Simplified.Ring3.EmailAddressRelation r WHERE r.Somebody = ?", person).First;
+
+            return email;
         }
     }
 }

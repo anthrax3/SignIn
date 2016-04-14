@@ -30,30 +30,92 @@ namespace SignIn {
                 Cookie cookie = GetSignInCookie();
 
                 if (cookie != null) {
-                    Session session = Session.Current;
-                    if (session == null) {
-                        session = new Session(SessionOptions.PatchVersioning);
+                    if (Session.Current == null) {
+                        Session.Current = new Session(SessionOptions.PatchVersioning);
                     }
-                    Session.Current = session;
+
                     SystemUser.SignInSystemUser(cookie.Value);
                 }
 
                 return null;
             });
 
-            Handle.GET("/signin/user", HandleUser);
+            Handle.GET("/signin/user", () => {
+                SessionContainer container = this.GetSessionContainer();
+
+                if (container.SignIn != null) {
+                    return container.SignIn;
+                }
+
+                Cookie cookie = GetSignInCookie();
+                SignInPage page = new SignInPage();
+
+                container.SignIn = page;
+
+                if (cookie != null) {
+                    SystemUser.SignInSystemUser(cookie.Value);
+                    this.RefreshSignInState();
+                }
+
+                //Testing JWT
+                /*if (Handle.IncomingRequest.HeadersDictionary.ContainsKey("x-jwt")) {
+                    System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+                    string jwt = Handle.IncomingRequest.HeadersDictionary["x-jwt"];
+                    Dictionary<string, string> payload = JWT.JsonWebToken.DecodeToObject<Dictionary<string, string>>(jwt, string.Empty, false);
+                    string username = payload["Username"];
+                    SystemUser user = Db.SQL<SystemUser>("SELECT su FROM Simplified.Ring3.SystemUser su WHERE su.Username = ?", username).First;
+
+                    try {
+                        JWT.JsonWebToken.DecodeToObject<Dictionary<string, string>>(jwt, user.Password, true);
+                        page.SetAuthorizedState(SignInOut.SignInSystemUser(user));
+                    } catch (JWT.SignatureVerificationException) { 
+                    }
+                }*/
+
+                return page;
+            });
+
             Handle.GET<string, string, string>("/signin/partial/signin/{?}/{?}/{?}", HandleSignIn, new HandlerOptions() { SkipRequestFilters = true });
             Handle.GET("/signin/partial/signin/", HandleSignIn, new HandlerOptions() { SkipRequestFilters = true });
             Handle.GET("/signin/partial/signin", HandleSignIn, new HandlerOptions() { SkipRequestFilters = true });
             Handle.GET("/signin/partial/signout", HandleSignOut, new HandlerOptions() { SkipRequestFilters = true });
-            Handle.GET("/signin/signinuser", HandleSignInUser);
-            Handle.GET<string>("/signin/signinuser?{?}", HandleSignIn);
+
+            Handle.GET("/signin/signinuser", HandleSignInForm);
+            Handle.GET<string>("/signin/signinuser?{?}", HandleSignInForm);
 
             Handle.GET("/signin/registration", () => {
-                return new RegistrationFormPage() {
-                    Data = null
-                };
+                MasterPage master = this.GetMaster();
+
+                master.RequireSignIn = false;
+                master.Open("/signin/partial/registration-form");
+
+                return master;
             });
+
+            Handle.GET("/signin/restore", () => {
+                MasterPage master = this.GetMaster();
+
+                master.RequireSignIn = false;
+                master.Open("/signin/partial/restore-form");
+
+                return master;
+            });
+
+            Handle.GET("/signin/profile", () => {
+                MasterPage master = this.GetMaster();
+
+                master.RequireSignIn = true;
+                master.Open("/signin/partial/profile-form");
+
+                return master;
+            });
+
+            Handle.GET("/signin/partial/signin-form", () => new SignInFormPage(), new HandlerOptions() { SelfOnly = true });
+            Handle.GET("/signin/partial/registration-form", () => new RegistrationFormPage(), new HandlerOptions() { SelfOnly = true });
+            Handle.GET("/signin/partial/alreadyin-form", () => new AlreadyInPage() { Data = null }, new HandlerOptions() { SelfOnly = true });
+            Handle.GET("/signin/partial/restore-form", () => new RestorePasswordFormPage(), new HandlerOptions() { SelfOnly = true });
+            Handle.GET("/signin/partial/profile-form", () => new ProfileFormPage() { Data = null }, new HandlerOptions() { SelfOnly = true });
+            Handle.GET("/signin/partial/accessdenied-form", () => new AccessDeniedPage(), new HandlerOptions() { SelfOnly = true });
 
             //Test handler
             /*Handle.GET("/signin/deleteadminuser", () => {
@@ -69,10 +131,20 @@ namespace SignIn {
 			UriMapping.Map("/signin/signinuser", "/sc/mapping/userform"); //inline form; used in RSE Launcher
         }
 
-        protected void SetAuthCookie(SignInPage Page, bool RememberMe) {
-            Cookie cookie = new Cookie(AuthCookieName, Page.SignInAuthToken);
+        protected void ClearAuthCookie() {
+            this.SetAuthCookie(null, false);
+        }
 
-            if (!Page.IsSignedIn) {
+        protected void SetAuthCookie(SystemUserSession Session, bool RememberMe) {
+            Cookie cookie = new Cookie() {
+                Name = AuthCookieName
+            };
+
+            if (Session != null && Session.Token != null) {
+                cookie.Value = Session.Token.Token;
+            }
+
+            if (Session == null) {
                 cookie.Expires = DateTime.Today;
             } else if (RememberMe) {
                 cookie.Expires = DateTime.Now.AddDays(rememberMeDays);
@@ -81,13 +153,6 @@ namespace SignIn {
             }
 
             Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
-        }
-
-        protected Response GetNoSessionResult() {
-            return new Response() {
-                StatusCode = (ushort)System.Net.HttpStatusCode.InternalServerError,
-                Body = "No Current Session"
-            };
         }
 
         protected SessionContainer GetSessionContainer() {
@@ -107,102 +172,68 @@ namespace SignIn {
             return container;
         }
 
+        protected MasterPage GetMaster() {
+            SessionContainer container = this.GetSessionContainer();
+
+            if (container.Master == null) {
+                container.Master = new MasterPage();
+            }
+
+            return container.Master;
+        }
+
+        protected void RefreshSignInState() {
+            SessionContainer container = this.GetSessionContainer();
+
+            container.RefreshSignInState();
+        }
+
         protected Response HandleSignIn() {
             return HandleSignIn(null, null, null);
         }
 
         protected Response HandleSignIn(string Username, string Password, string RememberMe) {
-            SessionContainer container = this.GetSessionContainer();
+            SystemUserSession session = SystemUser.SignInSystemUser(Username, Password);
 
-            var page = container.SignIn as SignInPage;
-            if (page == null) {
-                //as long as Registration calls /signin/partial/signin/{?}/{?} directly
-                //this handler needs to make sure SignIn page is created before it proceeds
-                page = Self.GET<Page>("/signin/user") as SignInPage;
+            if (session == null) {
+                SessionContainer container = GetSessionContainer();
+                MasterPage master = container.Master;
+                string message = "Invalid username or password!";
+
+                if (container.SignIn != null) {
+                    container.SignIn.Message = message;
+                }
+
+                if (master != null && master.Partial is SignInFormPage) {
+                    SignInFormPage page = master.Partial as SignInFormPage;
+                    page.Message = message;
+                }
             }
 
-            page.SignIn(Username, Password);
-            SetAuthCookie(page, RememberMe == "true");
+            SetAuthCookie(session, RememberMe == "true");
 
-            return container;
+            return this.GetSessionContainer();
         }
 
-        protected Response HandleSignIn(string Query) {
-            SignInPage master = Self.GET<Page>("/signin/user") as SignInPage;
-            SignInFormPage page = new SignInFormPage();
-            string decodedQuery = HttpUtility.UrlDecode(Query);
-            NameValueCollection queryCollection = HttpUtility.ParseQueryString(decodedQuery);
-            SessionContainer container = this.GetSessionContainer();
-
-            page.OriginUrl = queryCollection.Get("originurl");
-            container.SignInForm = page;
-            master.UpdateSignInForm();
-
-            return page;
+        protected Response HandleSignInForm() {
+            return this.HandleSignInForm(string.Empty);
         }
 
-        protected Response HandleSignInUser() {
-            SignInPage master = Self.GET<Page>("/signin/user") as SignInPage;
-            SignInFormPage page = new SignInFormPage();
-            SessionContainer container = this.GetSessionContainer();
+        protected Response HandleSignInForm(string OriginalUrl) {
+            MasterPage master = this.GetMaster();
 
-            container.SignInForm = page;
-            master.UpdateSignInForm();
+            master.RequireSignIn = false;
+            master.OriginalUrl = OriginalUrl;
+            master.Open("/signin/partial/signin-form");
 
-            return page;
+            return master;
         }
 
         protected Response HandleSignOut() {
-            SessionContainer container = this.GetSessionContainer();
+            SystemUser.SignOutSystemUser();
+            ClearAuthCookie();
 
-            if (container.SignIn == null) {
-                throw new SignInException("Trying to use SignIn app before if was initialized");
-            }
-
-            container.SignIn.SignOut();
-            SetAuthCookie(container.SignIn, false);
-
-            return container;
-        }
-
-        protected Response HandleUser() {
-            if (Session.Current == null) {
-                return null;
-            }
-
-            SessionContainer container = this.GetSessionContainer();
-
-            if (container.SignIn != null) {
-                return container.SignIn;
-            }
-
-            Cookie cookie = GetSignInCookie();
-            SignInPage page = new SignInPage();
-
-            if (cookie != null) {
-                page.FromCookie(cookie.Value);
-            } else {
-                page.SetAnonymousState();
-            }
-
-            container.SignIn = page;
-
-            //Testing JWT
-            /*if (Handle.IncomingRequest.HeadersDictionary.ContainsKey("x-jwt")) {
-                System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
-                string jwt = Handle.IncomingRequest.HeadersDictionary["x-jwt"];
-                Dictionary<string, string> payload = JWT.JsonWebToken.DecodeToObject<Dictionary<string, string>>(jwt, string.Empty, false);
-                string username = payload["Username"];
-                SystemUser user = Db.SQL<SystemUser>("SELECT su FROM Simplified.Ring3.SystemUser su WHERE su.Username = ?", username).First;
-
-                try {
-                    JWT.JsonWebToken.DecodeToObject<Dictionary<string, string>>(jwt, user.Password, true);
-                    page.SetAuthorizedState(SignInOut.SignInSystemUser(user));
-                } catch (JWT.SignatureVerificationException) { 
-                }
-            }*/
-
-            return page;
+            return this.GetSessionContainer();
         }
 
         protected Cookie GetSignInCookie() {
