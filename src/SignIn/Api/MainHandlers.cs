@@ -193,6 +193,8 @@ namespace SignIn {
         }
 
         protected Response HandleSignIn(string Username, string Password, string RememberMe) {
+            Username = Uri.UnescapeDataString(Username);
+
             SystemUserSession session = SystemUser.SignInSystemUser(Username, Password);
 
             if (session == null) {
