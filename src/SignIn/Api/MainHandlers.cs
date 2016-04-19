@@ -34,7 +34,11 @@ namespace SignIn {
                         Session.Current = new Session(SessionOptions.PatchVersioning);
                     }
 
-                    SystemUser.SignInSystemUser(cookie.Value);
+                    SystemUserSession session = SystemUser.SignInSystemUser(cookie.Value);
+
+                    if (session != null) {
+                        RefreshAuthCookie(session);
+                    }
                 }
 
                 return null;
@@ -135,7 +139,25 @@ namespace SignIn {
             this.SetAuthCookie(null, false);
         }
 
+        protected void RefreshAuthCookie(SystemUserSession Session) {
+            Cookie cookie = GetSignInCookie();
+
+            if (cookie == null) {
+                return;
+            }
+
+            Db.Transact(() => {
+                Session.Token.Token = SystemUser.CreateAuthToken(Session.Token.User.Username);
+            });
+
+            cookie.Value = Session.Token.Token;
+
+            Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
+        }
+
         protected void SetAuthCookie(SystemUserSession Session, bool RememberMe) {
+            
+
             Cookie cookie = new Cookie() {
                 Name = AuthCookieName
             };
