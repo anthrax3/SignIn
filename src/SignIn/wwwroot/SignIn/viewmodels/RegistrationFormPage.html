@@ -3,6 +3,9 @@
 <template>
     <template is="dom-bind">
         <h2>Registration</h2>
+        <p>
+            Already registered - <a href="/signin/signinuser">Sign in</a>
+        </p>
         <div>
             <template is="dom-if" if="{{model.Message}}">
                 <p class$="{{model.MessageCss}}">{{model.Message}}</p>
@@ -36,7 +39,6 @@
             <label class="control-label">&nbsp;</label>
         </div>
         <button type="button" class="btn btn-primary" value="{{model.RegisterClick$::click}}" juicy-style="width: 84px; height: 30px;" disabled="{{model.RegisterClick$}}" onmouseup="++this.value;">Register</button>
-        <a href="/signin/signinuser" class="btn btn-link" juicy-style="width: 74px; height: 30px;">Sign in</a>
     </template>
     <script>
         (function () {
