@@ -9,7 +9,7 @@
         font-size: 0;
     }
 
-    .signin-popup_window {
+    .signin-popup-window {
         right: 0;
         margin-right: -25px;
         width: 350px;
@@ -27,33 +27,32 @@
         font-size: 14px;
     }
 
-    .signin-popup_window input[type="text"],
-    .signin-popup_window input[type="password"] {
-        box-sizing: border-box;
-        width: 100%;
+    .signin-popup-window__control,
+    .signin-popup-window__control.form-control {
         background: #ffffff;
         margin-bottom: 10px;
-        border: 1px solid #ccc;
-        padding: 10px;
-        font-family: inherit;
-        font-size: 95%;
         color: #555;
+        padding-left: 5px;
     }
 
-    .signin-popup_window .errorText {
+    .signin-popup-window__error {
         width: 100%;
         color: #cc3333;
         margin-top: 10px;
     }
 
-    paper-icon-button {
+    .signin-popup-window__user-name {
+        margin-left: 2px;
+    }
+
+    .signin-popup-handle {
         padding: 0px;
         margin: 0px;
         width: 100%;
         height: 100%;
     }
 
-    .full-name {
+    .signin-popup-user-name {
         display: block;
         white-space: nowrap;
         font-size: 12px;
@@ -68,27 +67,27 @@
             <!-- User signed in -->
             <template is="dom-if" if="{{model.IsSignedIn}}" restamp strip-whitespace>
                 <juicy-popover position="bottom left" handleselector="paper-icon-button.handle" expandableselector=".expandable">
-                    <paper-icon-button class="handle" src="{{model.ImageUrl}}"></paper-icon-button>
-                    <div class="expandable signin-popup_window">
+                    <paper-icon-button class="handle signin-popup-handle" src="{{model.ImageUrl}}"></paper-icon-button>
+                    <div class="expandable signin-popup-window">
                         <img src="{{model.ImageUrl}}" width="32" height="32" />
-                        <p style="margin-left:2px;">
+                        <p class="signin-popup-window__user-name">
                             <a href="/signin/profile">{{model.FullName}}</a>
                         </p>
                         <button on-click="signOut" class="btn btn-primary" role="button">Sign out</button>
                     </div>
                 </juicy-popover>
-                <div class="full-name">{{model.FullName}}</div>
+                <div class="signin-popup-user-name">{{model.FullName}}</div>
             </template>
             <!-- User NOT signed in -->
             <template is="dom-if" if="{{!model.IsSignedIn}}" restamp strip-whitespace>
                 <juicy-popover class="signin-popover" position="bottom left" handleselector="paper-icon-button.handle" expandableselector=".expandable">
-                    <paper-icon-button class="handle" icon="account-circle" on-click="focusPopover"></paper-icon-button>
-                    <div class="expandable signin-popup_window">
+                    <paper-icon-button class="handle signin-popup-handle" icon="account-circle" on-click="focusPopover"></paper-icon-button>
+                    <div class="expandable signin-popup-window">
                         <div>
-                            <input type="text" placeholder="Username" value="{{model.Username$::change}}" on-keypress="txtKeypress" />
+                            <input class="form-control signin-popup-window__control" type="text" placeholder="Username" value="{{model.Username$::change}}" on-keypress="txtKeypress" />
                         </div>
                         <div>
-                            <input type="password" placeholder="Password" value="{{local.password::change}}" on-keypress="txtKeypress" />
+                            <input class="form-control signin-popup-window__control" type="password" placeholder="Password" value="{{local.password::change}}" on-keypress="txtKeypress" />
                         </div>
                         <div class="checkbox">
                             <label>
@@ -102,7 +101,7 @@
                             <a href="/signin/restore" class="btn btn-link btn-sm">Forgot password</a>
                         </div>
                         <template is="dom-if" if="{{model.Message}}" strip-whitespace>
-                            <div class="errorText">{{model.Message}}</div>
+                            <div class="signin-popup-window__error">{{model.Message}}</div>
                         </template>
                     </div>
                 </juicy-popover>
