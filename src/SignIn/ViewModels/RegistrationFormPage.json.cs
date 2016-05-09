@@ -54,9 +54,24 @@ namespace SignIn {
                 user = SystemUser.RegisterSystemUser(this.Username, this.Email, this.Password);
             });
 
-            this.Message = "Registration completed now you can sign in!";
-            this.MessageCss = "alert alert-success";
+            //this.Message = "Registration completed now you can sign in!";
+            //this.MessageCss = "alert alert-success";
             this.Readonly = true;
+            this.Submit++;
+        }
+
+        void Handle(Input.SignInClick Action) {
+            Action.Cancel();
+
+            if (this.MainForm != null) {
+                this.MainForm.OpenSignIn();
+            }
+        }
+
+        protected MainFormPage MainForm {
+            get {
+                return this.Parent as MainFormPage;
+            }
         }
     }
 }

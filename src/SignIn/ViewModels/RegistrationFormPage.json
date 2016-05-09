@@ -7,5 +7,7 @@
   "Email$": "",
   "Password$": "",
   "RepeatPassword$": "",
-  "RegisterClick$": 0
+  "RegisterClick$": 0,
+  "Submit": 0,
+  "SignInClick$": 0
 }

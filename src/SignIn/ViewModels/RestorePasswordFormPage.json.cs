@@ -8,11 +8,19 @@ using Simplified.Ring6;
 
 namespace SignIn {
     partial class RestorePasswordFormPage : Page {
+        void Handle(Input.SignInClick Action) {
+            Action.Cancel();
+
+            if (this.MainForm != null) {
+                this.MainForm.OpenSignIn();
+            }
+        }
+
         void Handle(Input.RestoreClick Action) {
             this.MessageCss = "alert alert-danger";
 
             if (string.IsNullOrEmpty(this.Username)) {
-                this.Message = "E-mail address is required!";
+                this.Message = "Username is required!";
                 return; 
             }
 
@@ -81,6 +89,12 @@ namespace SignIn {
             }
 
             return settings;
+        }
+
+        protected MainFormPage MainForm {
+            get {
+                return this.Parent as MainFormPage;
+            }
         }
     }
 }

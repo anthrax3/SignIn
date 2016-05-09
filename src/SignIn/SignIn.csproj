@@ -80,6 +80,9 @@
     <Compile Include="ViewModels\AlreadyInPage.json.cs">
       <DependentUpon>AlreadyInPage.json</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\MainFormPage.json.cs">
+      <DependentUpon>MainFormPage.json</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\MasterPage.json.cs">
       <DependentUpon>MasterPage.json</DependentUpon>
     </Compile>
@@ -104,6 +107,7 @@
     <Content Include="wwwroot\SignIn\scripts\sha1.js" />
     <Content Include="wwwroot\SignIn\viewmodels\AccessDeniedPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\AlreadyInPage.html" />
+    <Content Include="wwwroot\SignIn\viewmodels\MainFormPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\MasterPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\ProfileFormPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\RegistrationFormPage.html" />
@@ -140,6 +144,9 @@
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
     <TypedJSON Include="ViewModels\AccessDeniedPage.json">
+      <Generator>MsBuild:Compile</Generator>
+    </TypedJSON>
+    <TypedJSON Include="ViewModels\MainFormPage.json">
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
     <None Include="weaver.ignore">

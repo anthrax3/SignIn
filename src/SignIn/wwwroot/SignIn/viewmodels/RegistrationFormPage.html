@@ -1,10 +1,10 @@
-﻿<script src="/SignIn/scripts/sha1.js"></script>
+﻿<link rel="import" href="/SignIn/elements/signin-element.html" />
 
 <template>
     <template is="dom-bind">
         <h2>Registration</h2>
         <p>
-            Already registered - <a href="/signin/signinuser">Sign in</a>
+            Already registered - <button type="button" class="btn btn-link btn-xs" value="{{model.SignInClick$::click}}" disabled="{{model.SignInClick$}}" onmouseup="++this.value;">Sign in</button>
         </p>
         <div>
             <template is="dom-if" if="{{model.Message}}">
@@ -27,7 +27,7 @@
             <label class="control-label">Password</label>
         </div>
         <div juicy-style="width: 90%; height: 45px;">
-            <input type="password" on-change="onPasswordChange" placeholder="Password" class="form-control" disabled="{{model.Readonly}}" />
+            <input type="password" value="{{local.password::change}}" on-change="onPasswordChange" placeholder="Password" class="form-control" disabled="{{model.Readonly}}" />
         </div>
         <div class="form-horizontal" juicy-style="width: 10%; height: 45px;">
             <label class="control-label">Repeat password</label>
@@ -39,11 +39,16 @@
             <label class="control-label">&nbsp;</label>
         </div>
         <button type="button" class="btn btn-primary" value="{{model.RegisterClick$::click}}" juicy-style="width: 84px; height: 30px;" disabled="{{model.RegisterClick$}}" onmouseup="++this.value;">Register</button>
+        <signin-element username="{{model.Username$}}" password="{{local.password}}" submit="{{model.Submit}}"></signin-element>
     </template>
     <script>
         (function () {
             var script = document._currentScript || document.currentScript || document.querySelector("#signin-signin-form-page-script");
             var template = script.previousElementSibling;
+
+            template.local = {
+                password: ""
+            };
 
             template.onPasswordChange = function (e) {
                 var p = Sha1.hash(e.currentTarget.value);

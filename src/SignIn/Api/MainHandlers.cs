@@ -86,25 +86,7 @@ namespace SignIn {
 
             Handle.GET("/signin/signinuser", HandleSignInForm);
             Handle.GET<string>("/signin/signinuser?{?}", HandleSignInForm);
-
-            Handle.GET("/signin/registration", () => {
-                MasterPage master = this.GetMaster();
-
-                master.RequireSignIn = false;
-                master.Open("/signin/partial/registration-form");
-
-                return master;
-            });
-
-            Handle.GET("/signin/restore", () => {
-                MasterPage master = this.GetMaster();
-
-                master.RequireSignIn = false;
-                master.Open("/signin/partial/restore-form");
-
-                return master;
-            });
-
+            
             Handle.GET("/signin/profile", () => {
                 MasterPage master = this.GetMaster();
 
@@ -120,6 +102,8 @@ namespace SignIn {
             Handle.GET("/signin/partial/restore-form", () => new RestorePasswordFormPage(), new HandlerOptions() { SelfOnly = true });
             Handle.GET("/signin/partial/profile-form", () => new ProfileFormPage() { Data = null }, new HandlerOptions() { SelfOnly = true });
             Handle.GET("/signin/partial/accessdenied-form", () => new AccessDeniedPage(), new HandlerOptions() { SelfOnly = true });
+
+            Handle.GET("/signin/partial/main-form", () => new MainFormPage() { Data = null }, new HandlerOptions() { SelfOnly = true });
 
             //Test handler
             /*Handle.GET("/signin/deleteadminuser", () => {

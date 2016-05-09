@@ -97,8 +97,9 @@
                         </div>
                         <div>
                             <button class="btn btn-primary" role="button" value="{{model.SignInClick$::click}}" disabled="{{model.SignInClick$}}" onmouseup="++this.value;">Sign in</button>
-                            <a href="/signin/registration" class="btn btn-link btn-sm">Registration</a>
-                            <a href="/signin/restore" class="btn btn-link btn-sm">Forgot password</a>
+                            <a href="/signin/signinuser" class="btn btn-link btn-sm" on-mouseover="btnFormHover">
+                                Registration / Forgot password
+                            </a>
                         </div>
                         <template is="dom-if" if="{{model.Message}}" strip-whitespace>
                             <div class="signin-popup-window__error">{{model.Message}}</div>
@@ -136,6 +137,19 @@
 
             template.signOut = function (e) {
                 document.querySelector("puppet-client").network.changeState("/signin/partial/signout");
+            };
+
+            template.btnFormHover = function (e) {
+                var path = window.location.pathname + window.location.search;
+                var href = "/signin/signinuser";
+
+                if (path.indexOf(href) != 0) {
+                    href += "?" + escape(path);
+                } else {
+                    href = path;
+                }
+
+                e.currentTarget.setAttribute("href", href);
             };
         })();
     </script>
