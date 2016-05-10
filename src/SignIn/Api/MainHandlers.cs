@@ -232,7 +232,7 @@ namespace SignIn {
 
             master.RequireSignIn = false;
             master.OriginalUrl = OriginalUrl;
-            master.Open("/signin/partial/signin-form");
+            master.Open("/signin/partial/main-form");
 
             return master;
         }
