@@ -105,15 +105,7 @@ namespace SignIn {
 
             Handle.GET("/signin/partial/main-form", () => new MainFormPage() { Data = null }, new HandlerOptions() { SelfOnly = true });
 
-            //Test handler
-            /*Handle.GET("/signin/deleteadminuser", () => {
-                Db.Transact(() => {
-                    Db.SlowSQL("DELETE FROM Simplified.Ring3.SystemUserGroupMember WHERE SystemUser.Username = ?", SignInOut.AdminUsername);
-                    Db.SlowSQL("DELETE FROM Simplified.Ring3.SystemUser WHERE Username = ?", SignInOut.AdminUsername);
-                });
 
-                return 200;
-            });*/
 
             UriMapping.Map("/signin/user", "/sc/mapping/user"); //expandable icon; used in Launcher
 			UriMapping.Map("/signin/signinuser", "/sc/mapping/userform"); //inline form; used in RSE Launcher
