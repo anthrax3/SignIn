@@ -105,7 +105,16 @@ namespace SignIn {
 
             Handle.GET("/signin/partial/main-form", () => new MainFormPage() { Data = null }, new HandlerOptions() { SelfOnly = true });
 
+            Handle.GET("/signin/generateadminuser", () => {
+                if (Db.SQL("SELECT o FROM Simplified.Ring3.SystemUser o").First != null) {
+                    Handle.SetOutgoingStatusCode(403);
+                    return "Unable to generate admin user: database is not empty!";
+                }
 
+                SignInOut.AssureAdminSystemUser();
+
+                return "Default admin user has been successfully generated.";
+            });
 
             UriMapping.Map("/signin/user", "/sc/mapping/user"); //expandable icon; used in Launcher
 			UriMapping.Map("/signin/signinuser", "/sc/mapping/userform"); //inline form; used in RSE Launcher

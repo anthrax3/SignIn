@@ -5,6 +5,10 @@ Authenticate **users** with a username and password (default admin/admin).
 
 ## Developer instructions
 
+### Default admin user
+
+Open `/signin/generateadminuser` to generate an `admin` user with default credentials. The default user will be generated only if there is no users in database.
+
 ### How to release a package
 
 This repo comes with a tool that automatically increments the information `package.config` (version number, version date, Starcounter dependency version) and creates a ZIP file containing the packaged app. To use it follow the below steps:
