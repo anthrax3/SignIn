@@ -1,16 +1,23 @@
-﻿using System;
 using Starcounter;
 
 namespace SignIn {
-    internal class SessionContainer : Json {
+    partial class SessionContainer : Json {
         public SignInPage SignIn {
-            get;
-            set;
+            get {
+                return this.SignInPage as SignInPage;
+            }
+            set {
+                this.SignInPage = value;
+            }
         } 
 
         public MasterPage Master {
-            get;
-            set;
+            get {
+                return this.MasterPage as MasterPage;
+            }
+            set {
+                this.MasterPage = value;
+            }
         }
 
         public void RefreshSignInState() {

@@ -68,7 +68,6 @@
   <ItemGroup>
     <Compile Include="Api\CommitHooks.cs" />
     <Compile Include="Api\MainHandlers.cs" />
-    <Compile Include="Helpers\SessionContainer.cs" />
     <Compile Include="Helpers\SignInJwt.cs" />
     <Compile Include="Helpers\SignInOut.cs" />
     <Compile Include="Helpers\Utils.cs" />
@@ -94,6 +93,9 @@
     </Compile>
     <Compile Include="ViewModels\RestorePasswordFormPage.json.cs">
       <DependentUpon>RestorePasswordFormPage.json</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\SessionContainer.json.cs">
+      <DependentUpon>SessionContainer.json</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\SignInFormPage.json.cs">
       <DependentUpon>SignInFormPage.json</DependentUpon>
@@ -147,6 +149,9 @@
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
     <TypedJSON Include="ViewModels\MainFormPage.json">
+      <Generator>MsBuild:Compile</Generator>
+    </TypedJSON>
+    <TypedJSON Include="ViewModels\SessionContainer.json">
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
     <None Include="weaver.ignore">
