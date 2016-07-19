@@ -1,5 +1,14 @@
+<!--
+`juicy-popover` - Custom Element that expands an area when clicked on a handle
+@element juicy-popover
+version: 0.0.3
+-->
 <template id="juicy-popover-template">
     <style>
+        #container {
+            position: relative;
+        }
+
         #expandable {
             display: none;
             position: absolute;
@@ -12,12 +21,14 @@
             display: inline-block;
         }
     </style>
-    <span id="handle">
-        <content select="{{handleSelector}}"></content>
-    </span>
-    <span id="expandable">
-        <content select="{{expandableSelector}}"></content>
-    </span>
+    <div id="container">
+        <span id="handle">
+            <content select="{{handleSelector}}"></content>
+        </span>
+        <span id="expandable">
+            <content select="{{expandableSelector}}"></content>
+        </span>
+    </div>
 </template>
 
 <script>
@@ -54,39 +65,32 @@
             this.createShadowRoot().appendChild(clone);
 
             var ignore = false;
+            var handle = this.shadowRoot.querySelector("#handle");
             var expandable = this.shadowRoot.querySelector("#expandable");
-            this.shadowRoot.querySelector("#handle").addEventListener("mousedown", function (ev) {
+
+            handle.addEventListener("mousedown", function (ev) {
                 if (!expandable.classList.contains("expanded")) {
                     this.expand(ev.target);
-                    ev.stopPropagation();
                     ignore = true;
                 }
             }.bind(this));
 
-            this.shadowRoot.querySelector("#handle").addEventListener("mouseup", function (ev) {
+            handle.addEventListener("mouseup", function (ev) {
                 if (ev.target.nodeName == "INPUT") {
                     ignore = true; //just a friendly feature - don't collapse the expandable if clicked on a handler which is an input
                 }
             }.bind(this));
 
+            expandable.addEventListener("mouseup", function (ev) {
+                ignore = true;
+            }.bind(this));
+
             window.addEventListener("mouseup", function (ev) {
                 if (!ignore && expandable.classList.contains("expanded")) {
                     this.collapse();
-                    ev.preventDefault();
-                    ev.stopPropagation();
                 }
                 ignore = false;
             }.bind(this));
-
-            /**
-             * Temporary solution for autoclosing popover, when clicking inside expandable
-             * Prevents default behavior for given event.
-             * @param  {Event} ev event
-             */
-            expandable.addEventListener("mouseup", function excludeExpandable(ev) {
-                ev.preventDefault();
-                ev.stopPropagation();
-            });
 
             window.addEventListener("resize", function (e) {
                 if (expandable.classList.contains("expanded")) {
