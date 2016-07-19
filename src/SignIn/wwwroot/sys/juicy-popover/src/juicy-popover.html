@@ -1,6 +1,6 @@
 <template id="juicy-popover-template">
     <style>
-        :host {
+        #container {
             position: relative;
         }
 
@@ -16,12 +16,14 @@
             display: inline-block;
         }
     </style>
-    <span id="handle">
-        <content select="{{handleSelector}}"></content>
-    </span>
-    <span id="expandable">
-        <content select="{{expandableSelector}}"></content>
-    </span>
+    <div id="container">
+        <span id="handle">
+            <content select="{{handleSelector}}"></content>
+        </span>
+        <span id="expandable">
+            <content select="{{expandableSelector}}"></content>
+        </span>
+    </div>
 </template>
 
 <script>
@@ -58,18 +60,24 @@
             this.createShadowRoot().appendChild(clone);
 
             var ignore = false;
+            var handle = this.shadowRoot.querySelector("#handle");
             var expandable = this.shadowRoot.querySelector("#expandable");
-            this.shadowRoot.querySelector("#handle").addEventListener("mousedown", function (ev) {
+
+            handle.addEventListener("mousedown", function (ev) {
                 if (!expandable.classList.contains("expanded")) {
                     this.expand(ev.target);
                     ignore = true;
                 }
             }.bind(this));
 
-            this.shadowRoot.querySelector("#handle").addEventListener("mouseup", function (ev) {
+            handle.addEventListener("mouseup", function (ev) {
                 if (ev.target.nodeName == "INPUT") {
                     ignore = true; //just a friendly feature - don't collapse the expandable if clicked on a handler which is an input
                 }
+            }.bind(this));
+
+            expandable.addEventListener("mouseup", function (ev) {
+                ignore = true;
             }.bind(this));
 
             window.addEventListener("mouseup", function (ev) {
@@ -87,7 +95,6 @@
         };
 
         JuicyPopoverElementPrototype.reposition = function () {
-          return;
             var expandable = this.shadowRoot.querySelector("#expandable");
             var elem = this.expandedOnElement || this.shadowRoot.querySelector("#handle");
             var position = this.getAttribute("position") || "bottom left";
