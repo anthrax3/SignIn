@@ -84,6 +84,11 @@
                     <paper-icon-button class="handle signin-popup-handle" icon="account-circle" on-click="focusPopover"></paper-icon-button>
                     <div class="expandable signin-popup-window">
                         <div>
+                          <template is="dom-if" if="{{model.Message}}" strip-whitespace restamp>
+                              <div class="signin-popup-window__error">{{model.Message}}</div>
+                          </template>
+                        </div>
+                        <div>
                             <input class="form-control signin-popup-window__control" type="text" placeholder="Username" value="{{model.Username$::change}}" on-keypress="txtKeypress" />
                         </div>
                         <div>
@@ -96,14 +101,11 @@
                             </label>
                         </div>
                         <div>
-                            <button class="btn btn-primary" role="button" value="{{model.SignInClick$::click}}" disabled="{{model.SignInClick$}}" onmouseup="++this.value;">Sign in</button>
+                            <button class="btn btn-primary" role="button" value="{{model.SignInClick$::click}}" disabled="{{model.SignInClick$}}" onmousedown="++this.value;">Sign in</button>
                             <a href="/signin/signinuser" class="btn btn-link btn-sm" on-mouseover="btnFormHover">
                                 Registration / Forgot password
                             </a>
                         </div>
-                        <template is="dom-if" if="{{model.Message}}" strip-whitespace>
-                            <div class="signin-popup-window__error">{{model.Message}}</div>
-                        </template>
                     </div>
                 </juicy-popover>
                 <signin-element username="{{model.Username$}}" password="{{local.password}}" remember-me="{{model.RememberMe$}}" submit="{{model.Submit}}"></signin-element>

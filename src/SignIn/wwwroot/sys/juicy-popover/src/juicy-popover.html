@@ -1,5 +1,9 @@
 <template id="juicy-popover-template">
     <style>
+        :host {
+            position: relative;
+        }
+
         #expandable {
             display: none;
             position: absolute;
@@ -58,7 +62,6 @@
             this.shadowRoot.querySelector("#handle").addEventListener("mousedown", function (ev) {
                 if (!expandable.classList.contains("expanded")) {
                     this.expand(ev.target);
-                    ev.stopPropagation();
                     ignore = true;
                 }
             }.bind(this));
@@ -72,21 +75,9 @@
             window.addEventListener("mouseup", function (ev) {
                 if (!ignore && expandable.classList.contains("expanded")) {
                     this.collapse();
-                    ev.preventDefault();
-                    ev.stopPropagation();
                 }
                 ignore = false;
             }.bind(this));
-
-            /**
-             * Temporary solution for autoclosing popover, when clicking inside expandable
-             * Prevents default behavior for given event.
-             * @param  {Event} ev event
-             */
-            expandable.addEventListener("mouseup", function excludeExpandable(ev) {
-                ev.preventDefault();
-                ev.stopPropagation();
-            });
 
             window.addEventListener("resize", function (e) {
                 if (expandable.classList.contains("expanded")) {
@@ -96,6 +87,7 @@
         };
 
         JuicyPopoverElementPrototype.reposition = function () {
+          return;
             var expandable = this.shadowRoot.querySelector("#expandable");
             var elem = this.expandedOnElement || this.shadowRoot.querySelector("#handle");
             var position = this.getAttribute("position") || "bottom left";
