@@ -12,16 +12,13 @@
             <label class="control-label" for="txtUsername">Username</label>
         </div>
         <div juicy-style="width: 90%; height: 45px;">
-            <input type="text" value="{{model.Username$::change}}" placeholder="Username" class="form-control" on-keypress="txtKeypress" />
+            <input id="txtUsername" type="text" value="{{model.Username$::change}}" placeholder="Username" class="form-control" on-keypress="txtKeypress" />
         </div>
         <div class="form-horizontal" juicy-style="width: 10%; height: 45px;">
             <label class="control-label" for="txtPassword">Password</label>
         </div>
         <div juicy-style="width: 90%; height: 45px;">
-            <input type="password" value="{{local.password::change}}" placeholder="Password" class="form-control" on-keypress="txtKeypress" />
-        </div>
-        <div class="form-horizontal" juicy-style="width: 10%; height: 45px;">
-            <label class="control-label">&nbsp;</label>
+            <input id="txtPassword" type="password" value="{{local.password::change}}" placeholder="Password" class="form-control" on-keypress="txtKeypress" />
         </div>
         <div juicy-style="width: 90%; height: 45px;">
             <div class="checkbox">
@@ -30,9 +27,6 @@
                     <span>Remember me</span>
                 </label>
             </div>
-        </div>
-        <div class="form-horizontal" juicy-style="width: 10%; height: 30px;">
-            <label class="control-label">&nbsp;</label>
         </div>
         <button type="button" class="btn btn-primary" value="{{model.SignInClick$::click}}" disabled="{{model.SignInClick$}}" onmouseup="++this.value;" juicy-style="width: 74px; height: 30px;">Sign in</button>
         <button type="button" class="btn btn-link" value="{{model.RegistrationClick$::click}}" disabled="{{model.RegistrationClick$}}" onmouseup="++this.value;" juicy-style="width: 84px; height: 30px;">Registration</button>
