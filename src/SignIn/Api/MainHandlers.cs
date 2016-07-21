@@ -97,7 +97,6 @@ namespace SignIn {
             });
 
             Handle.GET("/signin/partial/signin-form", () => new SignInFormPage(), new HandlerOptions() { SelfOnly = true });
-            Handle.GET("/signin/partial/registration-form", () => new RegistrationFormPage(), new HandlerOptions() { SelfOnly = true });
             Handle.GET("/signin/partial/alreadyin-form", () => new AlreadyInPage() { Data = null }, new HandlerOptions() { SelfOnly = true });
             Handle.GET("/signin/partial/restore-form", () => new RestorePasswordFormPage(), new HandlerOptions() { SelfOnly = true });
             Handle.GET("/signin/partial/profile-form", () => new ProfileFormPage() { Data = null }, new HandlerOptions() { SelfOnly = true });

@@ -15,14 +15,6 @@ namespace SignIn {
             this.Submit++;
         }
 
-        void Handle(Input.RegistrationClick Action) {
-            Action.Cancel();
-
-            if (this.MainForm != null) {
-                this.MainForm.OpenRegistration();
-            }
-        }
-
         void Handle(Input.RestoreClick Action) {
             Action.Cancel();
 

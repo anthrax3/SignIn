@@ -11,10 +11,6 @@ namespace SignIn {
             this.CurrentForm = Self.GET("/signin/partial/signin-form");
         }
 
-        public void OpenRegistration() {
-            this.CurrentForm = Self.GET("/signin/partial/registration-form");
-        }
-
         public void OpenRestorePassword() {
             this.CurrentForm = Self.GET("/signin/partial/restore-form");
         }

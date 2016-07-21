@@ -29,8 +29,7 @@
             </div>
         </div>
         <button type="button" class="btn btn-primary" value="{{model.SignInClick$::click}}" disabled="{{model.SignInClick$}}" onmouseup="++this.value;" juicy-style="width: 74px; height: 30px;">Sign in</button>
-        <button type="button" class="btn btn-link" value="{{model.RegistrationClick$::click}}" disabled="{{model.RegistrationClick$}}" onmouseup="++this.value;" juicy-style="width: 84px; height: 30px;">Registration</button>
-        <button type="button" class="btn btn-link" value="{{model.RestoreClick$::click}}" disabled="{{model.RestoreClick$::click}}" onmouseup="++this.value;" juicy-style="width: 100px; height: 30px;">Forgot password</button>
+        <button type="button" class="btn btn-link" value="{{model.RestoreClick$::click}}" disabled="{{model.RestoreClick$::click}}" onmouseup="++this.value;" juicy-style="width: 100px; height: 30px;">Forgot password?</button>
         <signin-element username="{{model.Username$}}" password="{{local.password}}" remember-me="{{model.RememberMe$}}" submit="{{model.Submit}}"></signin-element>
     </template>
     <script>
