@@ -113,7 +113,7 @@ namespace SignIn {
                 SignInOut.AssureAdminSystemUser();
 
                 return "Default admin user has been successfully generated.";
-            });
+            }, new HandlerOptions() { SkipRequestFilters = true });
 
             UriMapping.Map("/signin/user", "/sc/mapping/user"); //expandable icon; used in Launcher
 			UriMapping.Map("/signin/signinuser", "/sc/mapping/userform"); //inline form; used in RSE Launcher
