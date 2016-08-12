@@ -1,6 +1,6 @@
 {
     "name": "signin",
-    "version": "3.1.11",
+    "version": "5.0.0",
     "private": true,
 	"devDependencies": {
 		"grunt": "^0.4.5",
