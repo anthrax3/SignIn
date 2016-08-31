@@ -231,7 +231,7 @@ namespace SignIn {
             MasterPage master = this.GetMaster();
 
             master.RequireSignIn = false;
-            master.OriginalUrl = OriginalUrl;
+            master.OriginalUrl = HttpUtility.UrlDecode(OriginalUrl);
             master.Open("/signin/partial/main-form");
 
             return master;
