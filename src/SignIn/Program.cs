@@ -6,14 +6,17 @@ using System.Web;
 using Starcounter;
 using Simplified.Ring3;
 
-namespace SignIn {
-    class Program {
-         static void Main() {
-             CommitHooks hooks = new CommitHooks();
-             MainHandlers handlers = new MainHandlers();
+namespace SignIn
+{
+    class Program
+    {
+        static void Main()
+        {
+            CommitHooks hooks = new CommitHooks();
+            MainHandlers handlers = new MainHandlers();
 
-             hooks.Register();
-             handlers.Register();
-         }
+            hooks.Register();
+            handlers.Register();
+        }
     }
 }
