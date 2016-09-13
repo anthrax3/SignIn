@@ -2,13 +2,17 @@ using Starcounter;
 using Simplified.Ring3;
 using Simplified.Ring5;
 
-namespace SignIn {
-    partial class SignInPage : Page {
-        void Handle(Input.SignInClick Action) {
+namespace SignIn
+{
+    partial class SignInPage : Page
+    {
+        void Handle(Input.SignInClick Action)
+        {
             this.Message = null;
             Action.Cancel();
 
-            if (string.IsNullOrEmpty(this.Username)) {
+            if (string.IsNullOrEmpty(this.Username))
+            {
                 this.Message = "Username is required!";
                 return;
             }
@@ -16,41 +20,54 @@ namespace SignIn {
             this.Submit++;
         }
 
-        public void SetAuthorizedState(SystemUserSession Session) {
+        public void SetAuthorizedState(SystemUserSession Session)
+        {
             this.Message = string.Empty;
 
-            if (Session.Token.User.WhoIs != null) {
+            if (Session.Token.User.WhoIs != null)
+            {
                 this.FullName = Session.Token.User.WhoIs.FullName;
 
-                if (!string.IsNullOrEmpty(Session.Token.User.WhoIs.ImageURL)) {
+                if (!string.IsNullOrEmpty(Session.Token.User.WhoIs.ImageURL))
+                {
                     this.ImageUrl = Session.Token.User.WhoIs.ImageURL;
-                } else {
+                }
+                else
+                {
                     this.ImageUrl = Utils.GetGravatarUrl(string.Empty);
                 }
-            } else {
+            }
+            else
+            {
                 this.ImageUrl = Utils.GetGravatarUrl(string.Empty);
             }
 
-            if (string.IsNullOrEmpty(this.FullName)) {
+            if (string.IsNullOrEmpty(this.FullName))
+            {
                 this.FullName = Session.Token.User.Username;
             }
 
             this.IsSignedIn = true;
         }
 
-        public void SetAnonymousState() {
+        public void SetAnonymousState()
+        {
             this.Username = string.Empty;
             this.FullName = string.Empty;
             this.Message = Message;
             this.IsSignedIn = false;
         }
 
-        public void RefreshSignInState() {
+        public void RefreshSignInState()
+        {
             SystemUserSession session = SystemUser.GetCurrentSystemUserSession();
 
-            if (session != null) {
+            if (session != null)
+            {
                 this.SetAuthorizedState(session);
-            } else {
+            }
+            else
+            {
                 this.SetAnonymousState();
             }
         }

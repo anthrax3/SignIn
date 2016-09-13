@@ -9,20 +9,24 @@ using Simplified.Ring2;
 using Simplified.Ring3;
 using Simplified.Ring4;
 
-namespace SignIn {
-    public class Utils {
-
+namespace SignIn
+{
+    public class Utils
+    {
         /// <summary>
         /// Check if Email has the correct syntax
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
-        static public bool IsValidEmail(string email) {
-            try {
+        static public bool IsValidEmail(string email)
+        {
+            try
+            {
                 var addr = new System.Net.Mail.MailAddress(email);
                 return addr.Address == email;
             }
-            catch {
+            catch
+            {
                 return false;
             }
         }
@@ -32,25 +36,29 @@ namespace SignIn {
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
-        static public string GetGravatarUrl(string email) {
-
-            using (MD5 md5Hash = MD5.Create()) {
+        static public string GetGravatarUrl(string email)
+        {
+            using (MD5 md5Hash = MD5.Create())
+            {
                 byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(email.Trim().ToLowerInvariant()));
                 StringBuilder sBuilder = new StringBuilder();
-                for (int i = 0; i < data.Length; i++) {
+                for (int i = 0; i < data.Length; i++)
+                {
                     sBuilder.Append(data[i].ToString("x2"));
                 }
                 return "http://www.gravatar.com/avatar/" + sBuilder.ToString() + "?s=32&d=mm";
             }
         }
 
-        public static string RandomString(int Size) {
+        public static string RandomString(int Size)
+        {
             string input = "abcdefghijklmnopqrstuvwxyz0123456789";
             StringBuilder builder = new StringBuilder();
             Random random = new Random();
             char ch;
 
-            for (int i = 0; i < Size; i++) {
+            for (int i = 0; i < Size; i++)
+            {
                 ch = input[random.Next(0, input.Length)];
                 builder.Append(ch);
             }
@@ -58,14 +66,19 @@ namespace SignIn {
             return builder.ToString();
         }
 
-        public static EmailAddress GetUserEmailAddress(SystemUser User) {
+        public static EmailAddress GetUserEmailAddress(SystemUser User)
+        {
             Person person = User.WhoIs as Person;
 
-            if (person == null) {
+            if (person == null)
+            {
                 return null;
             }
 
-            EmailAddress email = Db.SQL<EmailAddress>("SELECT r.EmailAddress FROM Simplified.Ring3.EmailAddressRelation r WHERE r.Somebody = ?", person).First;
+            EmailAddress email =
+                Db.SQL<EmailAddress>(
+                        "SELECT r.EmailAddress FROM Simplified.Ring3.EmailAddressRelation r WHERE r.Somebody = ?", person)
+                    .First;
 
             return email;
         }

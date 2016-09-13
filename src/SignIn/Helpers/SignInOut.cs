@@ -6,8 +6,10 @@ using Simplified.Ring2;
 using Simplified.Ring3;
 using Simplified.Ring5;
 
-namespace SignIn {
-    public class SignInOut {
+namespace SignIn
+{
+    public class SignInOut
+    {
         internal static string AdminGroupName = "Admin (System Users)";
         internal static string AdminGroupDescription = "System User Administrator Group";
         internal static string AdminUsername = "admin";
@@ -16,29 +18,40 @@ namespace SignIn {
         /// <summary>
         /// Assure that there is at least one system user beloning to the admin group 
         /// </summary>
-        internal static void AssureAdminSystemUser() {
-            SystemUserGroup group = Db.SQL<SystemUserGroup>("SELECT o FROM Simplified.Ring3.SystemUserGroup o WHERE o.Name = ?", AdminGroupName).First;
-            SystemUser user = Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.Username = ?", AdminUsername).First;
+        internal static void AssureAdminSystemUser()
+        {
+            SystemUserGroup group =
+                Db.SQL<SystemUserGroup>("SELECT o FROM Simplified.Ring3.SystemUserGroup o WHERE o.Name = ?",
+                    AdminGroupName).First;
+            SystemUser user =
+                Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.Username = ?", AdminUsername)
+                    .First;
 
-            if (group != null && user != null && SystemUser.IsMemberOfGroup(user, group)) {
+            if (group != null && user != null && SystemUser.IsMemberOfGroup(user, group))
+            {
                 return;
             }
 
             // There is no system user beloning to the admin group
-            Db.Transact(() => {
-                if (group == null) {
+            Db.Transact(() =>
+            {
+                if (group == null)
+                {
                     group = new SystemUserGroup();
                     group.Name = AdminGroupName;
                     group.Description = AdminGroupDescription;
                 }
 
-                if (user == null) {
-                    Person person = new Person() {
+                if (user == null)
+                {
+                    Person person = new Person()
+                    {
                         FirstName = AdminUsername,
                         LastName = AdminUsername
                     };
 
-                    user = new SystemUser() {
+                    user = new SystemUser()
+                    {
                         WhatIs = person,
                         Username = AdminUsername
                     };
