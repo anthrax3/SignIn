@@ -7,12 +7,15 @@ using Starcounter;
 using Simplified.Ring3;
 using Simplified.Ring5;
 
-namespace SignIn {
-    internal class MainHandlers {
+namespace SignIn
+{
+    internal class MainHandlers
+    {
         protected string AuthCookieName = "soauthtoken";
         protected int rememberMeDays = 30;
 
-        public void Register() {
+        public void Register()
+        {
             //Testing JWT
             /*Handle.GET("/signin/jwt/{?}/{?}", (string Username, string Password) => {
                 string message;
@@ -26,17 +29,21 @@ namespace SignIn {
                 return 200;
             });*/
 
-            Application.Current.Use((Request req) => {
+            Application.Current.Use((Request req) =>
+            {
                 Cookie cookie = GetSignInCookie();
 
-                if (cookie != null) {
-                    if (Session.Current == null) {
+                if (cookie != null)
+                {
+                    if (Session.Current == null)
+                    {
                         Session.Current = new Session(SessionOptions.PatchVersioning);
                     }
 
                     SystemUserSession session = SystemUser.SignInSystemUser(cookie.Value);
 
-                    if (session != null) {
+                    if (session != null)
+                    {
                         RefreshAuthCookie(session);
                     }
                 }
@@ -44,10 +51,12 @@ namespace SignIn {
                 return null;
             });
 
-            Handle.GET("/signin/user", () => {
+            Handle.GET("/signin/user", () =>
+            {
                 SessionContainer container = this.GetSessionContainer();
 
-                if (container.SignIn != null) {
+                if (container.SignIn != null)
+                {
                     return container.SignIn;
                 }
 
@@ -56,7 +65,8 @@ namespace SignIn {
 
                 container.SignIn = page;
 
-                if (cookie != null) {
+                if (cookie != null)
+                {
                     SystemUser.SignInSystemUser(cookie.Value);
                     this.RefreshSignInState();
                 }
@@ -79,15 +89,17 @@ namespace SignIn {
                 return page;
             });
 
-            Handle.GET<string, string, string>("/signin/partial/signin/{?}/{?}/{?}", HandleSignIn, new HandlerOptions() { SkipRequestFilters = true });
-            Handle.GET("/signin/partial/signin/", HandleSignIn, new HandlerOptions() { SkipRequestFilters = true });
-            Handle.GET("/signin/partial/signin", HandleSignIn, new HandlerOptions() { SkipRequestFilters = true });
-            Handle.GET("/signin/partial/signout", HandleSignOut, new HandlerOptions() { SkipRequestFilters = true });
+            Handle.GET<string, string, string>("/signin/partial/signin/{?}/{?}/{?}", HandleSignIn,
+                new HandlerOptions() {SkipRequestFilters = true});
+            Handle.GET("/signin/partial/signin/", HandleSignIn, new HandlerOptions() {SkipRequestFilters = true});
+            Handle.GET("/signin/partial/signin", HandleSignIn, new HandlerOptions() {SkipRequestFilters = true});
+            Handle.GET("/signin/partial/signout", HandleSignOut, new HandlerOptions() {SkipRequestFilters = true});
 
             Handle.GET("/signin/signinuser", HandleSignInForm);
             Handle.GET<string>("/signin/signinuser?{?}", HandleSignInForm);
-            
-            Handle.GET("/signin/profile", () => {
+
+            Handle.GET("/signin/profile", () =>
+            {
                 MasterPage master = this.GetMaster();
 
                 master.RequireSignIn = true;
@@ -96,16 +108,23 @@ namespace SignIn {
                 return master;
             });
 
-            Handle.GET("/signin/partial/signin-form", () => new SignInFormPage(), new HandlerOptions() { SelfOnly = true });
-            Handle.GET("/signin/partial/alreadyin-form", () => new AlreadyInPage() { Data = null }, new HandlerOptions() { SelfOnly = true });
-            Handle.GET("/signin/partial/restore-form", () => new RestorePasswordFormPage(), new HandlerOptions() { SelfOnly = true });
-            Handle.GET("/signin/partial/profile-form", () => new ProfileFormPage() { Data = null }, new HandlerOptions() { SelfOnly = true });
-            Handle.GET("/signin/partial/accessdenied-form", () => new AccessDeniedPage(), new HandlerOptions() { SelfOnly = true });
+            Handle.GET("/signin/partial/signin-form", () => new SignInFormPage(), new HandlerOptions() {SelfOnly = true});
+            Handle.GET("/signin/partial/alreadyin-form", () => new AlreadyInPage() {Data = null},
+                new HandlerOptions() {SelfOnly = true});
+            Handle.GET("/signin/partial/restore-form", () => new RestorePasswordFormPage(),
+                new HandlerOptions() {SelfOnly = true});
+            Handle.GET("/signin/partial/profile-form", () => new ProfileFormPage() {Data = null},
+                new HandlerOptions() {SelfOnly = true});
+            Handle.GET("/signin/partial/accessdenied-form", () => new AccessDeniedPage(),
+                new HandlerOptions() {SelfOnly = true});
 
-            Handle.GET("/signin/partial/main-form", () => new MainFormPage() { Data = null }, new HandlerOptions() { SelfOnly = true });
+            Handle.GET("/signin/partial/main-form", () => new MainFormPage() {Data = null},
+                new HandlerOptions() {SelfOnly = true});
 
-            Handle.GET("/signin/generateadminuser", () => {
-                if (Db.SQL("SELECT o FROM Simplified.Ring3.SystemUser o").First != null) {
+            Handle.GET("/signin/generateadminuser", () =>
+            {
+                if (Db.SQL("SELECT o FROM Simplified.Ring3.SystemUser o").First != null)
+                {
                     Handle.SetOutgoingStatusCode(403);
                     return "Unable to generate admin user: database is not empty!";
                 }
@@ -113,64 +132,74 @@ namespace SignIn {
                 SignInOut.AssureAdminSystemUser();
 
                 return "Default admin user has been successfully generated.";
-            }, new HandlerOptions() { SkipRequestFilters = true });
+            }, new HandlerOptions() {SkipRequestFilters = true});
 
             UriMapping.Map("/signin/user", "/sc/mapping/user"); //expandable icon; used in Launcher
-			UriMapping.Map("/signin/signinuser", "/sc/mapping/userform"); //inline form; used in RSE Launcher
+            UriMapping.Map("/signin/signinuser", "/sc/mapping/userform"); //inline form; used in RSE Launcher
         }
 
-        protected void ClearAuthCookie() {
+        protected void ClearAuthCookie()
+        {
             this.SetAuthCookie(null, false);
         }
 
-        protected void RefreshAuthCookie(SystemUserSession Session) {
+        protected void RefreshAuthCookie(SystemUserSession Session)
+        {
             Cookie cookie = GetSignInCookie();
 
-            if (cookie == null) {
+            if (cookie == null)
+            {
                 return;
             }
 
-            Db.Transact(() => {
-                Session.Token.Token = SystemUser.CreateAuthToken(Session.Token.User.Username);
-            });
+            Db.Transact(() => { Session.Token.Token = SystemUser.CreateAuthToken(Session.Token.User.Username); });
 
             cookie.Value = Session.Token.Token;
 
             Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
         }
 
-        protected void SetAuthCookie(SystemUserSession Session, bool RememberMe) {
-            
-
-            Cookie cookie = new Cookie() {
+        protected void SetAuthCookie(SystemUserSession Session, bool RememberMe)
+        {
+            Cookie cookie = new Cookie()
+            {
                 Name = AuthCookieName
             };
 
-            if (Session != null && Session.Token != null) {
+            if (Session != null && Session.Token != null)
+            {
                 cookie.Value = Session.Token.Token;
             }
 
-            if (Session == null) {
+            if (Session == null)
+            {
                 cookie.Expires = DateTime.Today;
-            } else if (RememberMe) {
+            }
+            else if (RememberMe)
+            {
                 cookie.Expires = DateTime.Now.AddDays(rememberMeDays);
-            } else {
+            }
+            else
+            {
                 cookie.Expires = DateTime.Now.AddDays(1);
             }
 
             Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
         }
 
-        protected SessionContainer GetSessionContainer() {
+        protected SessionContainer GetSessionContainer()
+        {
             Session session = Session.Current;
 
-            if (session != null && session.Data != null) {
+            if (session != null && session.Data != null)
+            {
                 return session.Data as SessionContainer;
             }
 
             SessionContainer container = new SessionContainer();
 
-            if (session == null) {
+            if (session == null)
+            {
                 session = new Session(SessionOptions.PatchVersioning);
             }
 
@@ -178,41 +207,49 @@ namespace SignIn {
             return container;
         }
 
-        protected MasterPage GetMaster() {
+        protected MasterPage GetMaster()
+        {
             SessionContainer container = this.GetSessionContainer();
 
-            if (container.Master == null) {
+            if (container.Master == null)
+            {
                 container.Master = new MasterPage();
             }
 
             return container.Master;
         }
 
-        protected void RefreshSignInState() {
+        protected void RefreshSignInState()
+        {
             SessionContainer container = this.GetSessionContainer();
 
             container.RefreshSignInState();
         }
 
-        protected Response HandleSignIn() {
+        protected Response HandleSignIn()
+        {
             return HandleSignIn(null, null, null);
         }
 
-        protected Response HandleSignIn(string Username, string Password, string RememberMe) {
+        protected Response HandleSignIn(string Username, string Password, string RememberMe)
+        {
             Username = Uri.UnescapeDataString(Username);
 
             SystemUserSession session = SystemUser.SignInSystemUser(Username, Password);
 
-            if (session == null) {
+            if (session == null)
+            {
                 SessionContainer container = GetSessionContainer();
                 MasterPage master = container.Master;
                 string message = "Invalid username or password!";
 
-                if (container.SignIn != null) {
+                if (container.SignIn != null)
+                {
                     container.SignIn.Message = message;
                 }
 
-                if (master != null && master.Partial is SignInFormPage) {
+                if (master != null && master.Partial is SignInFormPage)
+                {
                     SignInFormPage page = master.Partial as SignInFormPage;
                     page.Message = message;
                 }
@@ -223,11 +260,13 @@ namespace SignIn {
             return this.GetSessionContainer();
         }
 
-        protected Response HandleSignInForm() {
+        protected Response HandleSignInForm()
+        {
             return this.HandleSignInForm(string.Empty);
         }
 
-        protected Response HandleSignInForm(string OriginalUrl) {
+        protected Response HandleSignInForm(string OriginalUrl)
+        {
             MasterPage master = this.GetMaster();
 
             master.RequireSignIn = false;
@@ -237,14 +276,16 @@ namespace SignIn {
             return master;
         }
 
-        protected Response HandleSignOut() {
+        protected Response HandleSignOut()
+        {
             SystemUser.SignOutSystemUser();
             ClearAuthCookie();
 
             return this.GetSessionContainer();
         }
 
-        protected Cookie GetSignInCookie() {
+        protected Cookie GetSignInCookie()
+        {
             List<Cookie> cookies = Handle.IncomingRequest.Cookies.Select(x => new Cookie(x)).ToList();
             Cookie cookie = cookies.FirstOrDefault(x => x.Name == AuthCookieName);
 
