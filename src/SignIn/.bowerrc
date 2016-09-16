@@ -1,3 +1,14 @@
 {
-  "directory" : "wwwroot/sys"
+  "directory": "wwwroot/sys",
+  "ignoredDependencies": [
+    "webcomponentsjs",
+    "PuppetJs",
+    "imported-template",
+    "puppet-redirect",
+    "juicy-redirect",
+    "starcounter-debug-aid",
+    "puppet-client",
+    "bootswatch",
+    "polymer"
+  ]
 }
