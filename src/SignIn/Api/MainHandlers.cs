@@ -140,7 +140,7 @@ namespace SignIn
 
         protected void ClearAuthCookie()
         {
-            this.SetAuthCookie(null, false);
+            this.SetAuthCookie("", false);
         }
 
         protected void RefreshAuthCookie(SystemUserSession Session)
@@ -159,19 +159,15 @@ namespace SignIn
             Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
         }
 
-        protected void SetAuthCookie(SystemUserSession Session, bool RememberMe)
+        protected void SetAuthCookie(string token, bool RememberMe)
         {
             Cookie cookie = new Cookie()
             {
-                Name = AuthCookieName
+                Name = AuthCookieName,
+                Value = token
             };
 
-            if (Session != null && Session.Token != null)
-            {
-                cookie.Value = Session.Token.Token;
-            }
-
-            if (Session == null)
+            if (token == "")
             {
                 cookie.Expires = DateTime.Today;
             }
@@ -255,7 +251,7 @@ namespace SignIn
                 }
             }
 
-            SetAuthCookie(session, RememberMe == "true");
+            SetAuthCookie(session.Token.Token, RememberMe == "true");
 
             return this.GetSessionContainer();
         }
