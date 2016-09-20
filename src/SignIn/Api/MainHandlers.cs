@@ -251,8 +251,10 @@ namespace SignIn
                     page.Message = message;
                 }
             }
-
-            SetAuthCookie(session.Token.Token, RememberMe == "true");
+            else
+            {
+                SetAuthCookie(session.Token.Token, RememberMe == "true");
+            }
 
             return this.GetSessionContainer();
         }
