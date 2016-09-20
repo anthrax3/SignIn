@@ -156,6 +156,8 @@ namespace SignIn
 
             cookie.Value = Session.Token.Token;
 
+            //TODO: refreshing cookie removes the Expires date
+            //store the Expires date in Simplified and use it here
             Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
         }
 
@@ -169,15 +171,14 @@ namespace SignIn
 
             if (token == "")
             {
-                cookie.Expires = DateTime.Today;
+                //to delete a cookie, explicitly use a date in the past
+                cookie.Expires = DateTime.Now.AddDays(-1).ToUniversalTime();
             }
             else if (RememberMe)
             {
-                cookie.Expires = DateTime.Now.AddDays(rememberMeDays);
-            }
-            else
-            {
-                cookie.Expires = DateTime.Now.AddDays(1);
+                //cookie with expiration date is persistent until that date
+                //cookie without expiration date expires when the browser is closed
+                cookie.Expires = DateTime.Now.AddDays(rememberMeDays).ToUniversalTime();
             }
 
             Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
