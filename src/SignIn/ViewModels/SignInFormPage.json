@@ -1,8 +1,6 @@
 {
   "Uri": "",
   "Html": "/SignIn/viewmodels/SignInFormPage.html",
-  "Username$": "",
-  "RememberMe$": true,
   "IsSignedIn": false,
   "Message": "",
   "Submit": 0,

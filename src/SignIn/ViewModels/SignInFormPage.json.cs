@@ -10,12 +10,6 @@ namespace SignIn
             this.Message = null;
             Action.Cancel();
 
-            if (string.IsNullOrEmpty(this.Username))
-            {
-                this.Message = "Username is required!";
-                return;
-            }
-
             this.Submit++;
         }
 
