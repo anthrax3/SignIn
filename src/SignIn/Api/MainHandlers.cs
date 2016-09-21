@@ -245,6 +245,16 @@ namespace SignIn
                     container.SignIn.Message = message;
                 }
 
+                if (master != null && master.Partial is MainFormPage)
+                {
+                    MainFormPage page = (MainFormPage)master.Partial;
+                    if (page.CurrentForm is SignInFormPage)
+                    {
+                        SignInFormPage form = (SignInFormPage)page.CurrentForm;
+                        form.Message = message;
+                    }
+                }
+
                 if (master != null && master.Partial is SignInFormPage)
                 {
                     SignInFormPage page = master.Partial as SignInFormPage;
