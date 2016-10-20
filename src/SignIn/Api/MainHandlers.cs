@@ -121,7 +121,7 @@ namespace SignIn
             Handle.GET("/signin/partial/main-form", () => new MainFormPage() {Data = null},
                 new HandlerOptions() {SelfOnly = true});
 
-            Handle.GET("/signin/generateadminuser", () =>
+            Handle.GET("/signin/generateadminuser", (Request request) =>
             {
                 if (Db.SQL("SELECT o FROM Simplified.Ring3.SystemUser o").First != null)
                 {
@@ -129,9 +129,17 @@ namespace SignIn
                     return "Unable to generate admin user: database is not empty!";
                 }
 
-                SignInOut.AssureAdminSystemUser();
+                string ip = request.ClientIpAddress.ToString();
+                if (ip == "127.0.0.1" || ip == "localhost")
+                {
+                    SignInOut.AssureAdminSystemUser();
 
-                return "Default admin user has been successfully generated.";
+                    return "Default admin user has been successfully generated.";
+                }
+
+                Handle.SetOutgoingStatusCode(403);
+                return "Access denied.";
+
             }, new HandlerOptions() {SkipRequestFilters = true});
 
             UriMapping.Map("/signin/user", "/sc/mapping/user"); //expandable icon; used in Launcher
