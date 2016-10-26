@@ -57,13 +57,12 @@ namespace SignIn
 
             SystemUser.GeneratePasswordHash(user.Username, hash, user.PasswordSalt, out hash);
 
-            Db.Transact(() => { user.Password = hash; });
-
             try
             {
                 this.SendNewPassword(person.FullName, user.Username, password, email.Name);
                 this.Message = "Your new password has been sent to your email address.";
                 this.MessageCss = "alert alert-success";
+                Db.Transact(() => { user.Password = hash; });
             }
             catch (Exception ex)
             {
