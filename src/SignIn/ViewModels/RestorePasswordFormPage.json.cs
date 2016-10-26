@@ -22,11 +22,12 @@ namespace SignIn
 
         void Handle(Input.Username action) // Makes the Reset Password clickable again.
         {
-            this.RestoreClick = 0;
+            this.DisableRestoreClick = 0;
         }
 
         void Handle(Input.RestoreClick Action)
         {
+            this.DisableRestoreClick = 1;
             this.MessageCss = "alert alert-danger";
 
             if (string.IsNullOrEmpty(this.Username))
