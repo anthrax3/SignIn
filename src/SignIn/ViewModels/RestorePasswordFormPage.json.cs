@@ -20,8 +20,14 @@ namespace SignIn
             }
         }
 
+        void Handle(Input.Username action) // Makes the Reset Password clickable again.
+        {
+            this.DisableRestoreClick = 0;
+        }
+
         void Handle(Input.RestoreClick Action)
         {
+            this.DisableRestoreClick = 1;
             this.MessageCss = "alert alert-danger";
 
             if (string.IsNullOrEmpty(this.Username))
@@ -52,11 +58,20 @@ namespace SignIn
 
             SystemUser.GeneratePasswordHash(user.Username, hash, user.PasswordSalt, out hash);
 
-            Db.Transact(() => { user.Password = hash; });
-
-            this.SendNewPassword(person.FullName, user.Username, password, email.Name);
-            this.Message = "Your new password has been sent to your email address.";
-            this.MessageCss = "alert alert-success";
+            try
+            {
+                this.SendNewPassword(person.FullName, user.Username, password, email.Name);
+                this.Message = "Your new password has been sent to your email address.";
+                this.MessageCss = "alert alert-success";
+                Db.Transact(() => { user.Password = hash; });
+            }
+            catch (Exception ex)
+            {
+                this.Message = "Mail server is currently unavailable.";
+                this.MessageCss = "alert alert-danger";
+                Starcounter.Logging.LogSource log = new Starcounter.Logging.LogSource(Application.Current.Name);
+                log.LogException(ex);
+            }
         }
 
         protected void SendNewPassword(string Name, string Username, string NewPassword, string Email)
@@ -98,7 +113,7 @@ namespace SignIn
                         Port = 587,
                         Host = "mail.your-server.de",
                         Username = "signinapp@starcounter.io",
-                        Password = "*****",
+                        Password = "*****", // replace for real password
                         EnableSsl = true
                     };
                 });
