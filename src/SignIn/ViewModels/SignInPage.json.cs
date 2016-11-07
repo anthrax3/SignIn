@@ -6,6 +6,14 @@ namespace SignIn
 {
     partial class SignInPage : Page
     {
+        public string Referer
+        {
+            get
+            {
+                return "/_" + Starcounter.Internal.StarcounterEnvironment.DatabaseNameLower + "/" + Session?.SessionId;
+            }
+        }
+
         void Handle(Input.SignInClick Action)
         {
             this.Message = null;

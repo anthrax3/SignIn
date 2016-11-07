@@ -70,10 +70,9 @@ namespace SignIn
             this.MessageCss = "alert alert-danger";
 
             SystemUser user = SystemUser.GetCurrentSystemUser();
-            string password = SystemUser.GenerateClientSideHash(this.OldPassword);
-            SystemUser.GeneratePasswordHash(user.Username, password, user.PasswordSalt, out password);
+            bool validOldPassword = SystemUser.ValidatePasswordHash(user.Username, this.OldPassword, user.PasswordSalt, user.Password);
 
-            if (password != user.Password)
+            if (!validOldPassword)
             {
                 this.Message = "Invalid old password!";
                 return;
@@ -91,8 +90,7 @@ namespace SignIn
                 return;
             }
 
-            password = SystemUser.GenerateClientSideHash(this.NewPassword);
-            SystemUser.GeneratePasswordHash(user.Username, password, user.PasswordSalt, out password);
+            string password = SystemUser.GeneratePasswordHash(user.Username, this.NewPassword, user.PasswordSalt);
 
             Db.Transact(() => { user.Password = password; });
 

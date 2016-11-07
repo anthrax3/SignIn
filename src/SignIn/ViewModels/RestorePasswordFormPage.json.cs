@@ -20,7 +20,7 @@ namespace SignIn
             }
         }
 
-        void Handle(Input.Username action) // Makes the Reset Password clickable again.
+        void Handle(Input.Username Action) // Makes the Reset Password clickable again.
         {
             this.DisableRestoreClick = 0;
         }
@@ -47,16 +47,14 @@ namespace SignIn
             Person person = user.WhoIs as Person;
             EmailAddress email = Utils.GetUserEmailAddress(user);
 
-            if (person == null || email == null)
+            if (person == null || email == null || string.IsNullOrEmpty(email.EMail))
             {
                 this.Message = "Unable to restore password, no e-mail address found!";
                 return;
             }
 
             string password = Utils.RandomString(5);
-            string hash = SystemUser.GenerateClientSideHash(password);
-
-            SystemUser.GeneratePasswordHash(user.Username, hash, user.PasswordSalt, out hash);
+            string hash = SystemUser.GeneratePasswordHash(user.Username, password, user.PasswordSalt);
 
             try
             {
