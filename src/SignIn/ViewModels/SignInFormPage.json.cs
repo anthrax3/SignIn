@@ -5,6 +5,12 @@ namespace SignIn
 {
     partial class SignInFormPage : Page
     {
+        protected override void OnData()
+        {
+            base.OnData();
+            this.Referer = Utils.GetRefererHeader();
+        }
+
         void Handle(Input.SignInClick Action)
         {
             this.Message = null;

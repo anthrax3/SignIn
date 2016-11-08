@@ -82,5 +82,10 @@ namespace SignIn
 
             return email;
         }
+
+        public static string GetRefererHeader()
+        {
+            return "/_" + Starcounter.Internal.StarcounterEnvironment.DatabaseNameLower + "/" + Session.Current?.SessionId;
+        }
     }
 }

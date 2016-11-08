@@ -6,12 +6,10 @@ namespace SignIn
 {
     partial class SignInPage : Page
     {
-        public string Referer
+        protected override void OnData()
         {
-            get
-            {
-                return "/_" + Starcounter.Internal.StarcounterEnvironment.DatabaseNameLower + "/" + Session?.SessionId;
-            }
+            base.OnData();
+            this.Referer = Utils.GetRefererHeader();
         }
 
         void Handle(Input.SignInClick Action)

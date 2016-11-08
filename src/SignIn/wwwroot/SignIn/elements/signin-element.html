@@ -44,10 +44,6 @@
                 http.setRequestHeader("X-Referer", this.referer);
 
                 http.onreadystatechange = function () {
-                    console.log(http.readyState, http.status);
-                    //if (http.readyState == 4 && http.status == 200) {
-                    //    alert(http.responseText);
-                    //}
                 };
 
                 http.send(params);

@@ -61,7 +61,7 @@ namespace SignIn
                 }
 
                 Cookie cookie = GetSignInCookie();
-                SignInPage page = new SignInPage();
+                SignInPage page = new SignInPage() { Data = null };
 
                 container.SignIn = page;
 
@@ -104,7 +104,7 @@ namespace SignIn
                 return master;
             });
 
-            Handle.GET("/signin/partial/signin-form", () => new SignInFormPage(), new HandlerOptions() { SelfOnly = true });
+            Handle.GET("/signin/partial/signin-form", () => new SignInFormPage() { Data = null }, new HandlerOptions() { SelfOnly = true });
             Handle.GET("/signin/partial/alreadyin-form", () => new AlreadyInPage() { Data = null },
                 new HandlerOptions() { SelfOnly = true });
             Handle.GET("/signin/partial/restore-form", () => new RestorePasswordFormPage(),
