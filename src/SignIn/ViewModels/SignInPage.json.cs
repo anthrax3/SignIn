@@ -9,7 +9,7 @@ namespace SignIn
         protected override void OnData()
         {
             base.OnData();
-            this.Referer = Utils.GetRefererHeader();
+            this.Referer = Session.Current.Referer;
         }
 
         void Handle(Input.SignInClick Action)
