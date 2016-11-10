@@ -10,9 +10,9 @@ namespace SignIn
 {
     partial class RestorePasswordFormPage : Page
     {
-        void Handle(Input.SignInClick Action)
+        void Handle(Input.SignInClick action)
         {
-            Action.Cancel();
+            action.Cancel();
 
             if (this.MainForm != null)
             {
@@ -20,12 +20,12 @@ namespace SignIn
             }
         }
 
-        void Handle(Input.Username Action) // Makes the Reset Password clickable again.
+        void Handle(Input.Username action) // Makes the Reset Password clickable again.
         {
             this.DisableRestoreClick = 0;
         }
 
-        void Handle(Input.RestoreClick Action)
+        void Handle(Input.RestoreClick action)
         {
             this.DisableRestoreClick = 1;
             this.MessageCss = "alert alert-danger";

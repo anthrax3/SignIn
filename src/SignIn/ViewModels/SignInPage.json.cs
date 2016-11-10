@@ -12,10 +12,10 @@ namespace SignIn
             this.Referer = Session.Current.Referer;
         }
 
-        void Handle(Input.SignInClick Action)
+        void Handle(Input.SignInClick action)
         {
             this.Message = null;
-            Action.Cancel();
+            action.Cancel();
 
             this.Submit++;
         }

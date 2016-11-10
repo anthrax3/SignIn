@@ -22,9 +22,9 @@ namespace SignIn
             }
         }
 
-        void Handle(Input.UpdateClick Action)
+        void Handle(Input.UpdateClick action)
         {
-            Action.Cancel();
+            action.Cancel();
             this.Message = null;
             this.MessageCss = "alert alert-danger";
 
@@ -63,9 +63,9 @@ namespace SignIn
             this.MessageCss = "alert alert-success";
         }
 
-        void Handle(Input.ChangePasswordClick Action)
+        void Handle(Input.ChangePasswordClick action)
         {
-            Action.Cancel();
+            action.Cancel();
             this.Message = null;
             this.MessageCss = "alert alert-danger";
 
