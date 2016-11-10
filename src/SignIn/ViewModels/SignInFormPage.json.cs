@@ -8,7 +8,7 @@ namespace SignIn
         protected override void OnData()
         {
             base.OnData();
-            this.Referer = Session.Current.Referer;
+            this.SessionUri = Session.Current.SessionUri;
         }
 
         void Handle(Input.SignInClick action)

@@ -15,7 +15,7 @@
                 rememberMe: { type: Boolean, value: false },
                 url: { type: String, value: "/signin/partial/signin" },
                 submit: { type: Number, value: 0, observer: "submitChanged" },
-                referer: { type: String }
+                sessionUri: { type: String }
             },
             attached: function () {
                 this.attachedCalled = true;
@@ -36,7 +36,7 @@
 
                 http.open("POST", url, true);
                 http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                http.setRequestHeader("X-Referer", this.referer);
+                http.setRequestHeader("X-Referer", this.sessionUri);
 
                 http.onreadystatechange = function () {
                 };
