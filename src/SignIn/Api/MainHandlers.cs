@@ -149,11 +149,6 @@ namespace SignIn
                 HandleSignIn(username, password, rememberMe);
                 Session.Current.CalculatePatchAndPushOnWebSocket();
 
-                //Session.ScheduleTask(Session.Current.SessionId, (s, id) =>
-                //{
-                    
-                //});
-
                 return 200;
             }, new HandlerOptions() { SkipRequestFilters = true });
 
