@@ -6,10 +6,16 @@ namespace SignIn
 {
     partial class SignInPage : Page
     {
-        void Handle(Input.SignInClick Action)
+        protected override void OnData()
+        {
+            base.OnData();
+            this.SessionUri = Session.Current.SessionUri;
+        }
+
+        void Handle(Input.SignInClick action)
         {
             this.Message = null;
-            Action.Cancel();
+            action.Cancel();
 
             this.Submit++;
         }

@@ -5,17 +5,23 @@ namespace SignIn
 {
     partial class SignInFormPage : Page
     {
-        void Handle(Input.SignInClick Action)
+        protected override void OnData()
+        {
+            base.OnData();
+            this.SessionUri = Session.Current.SessionUri;
+        }
+
+        void Handle(Input.SignInClick action)
         {
             this.Message = null;
-            Action.Cancel();
+            action.Cancel();
 
             this.Submit++;
         }
 
-        void Handle(Input.RestoreClick Action)
+        void Handle(Input.RestoreClick action)
         {
-            Action.Cancel();
+            action.Cancel();
 
             if (this.MainForm != null)
             {

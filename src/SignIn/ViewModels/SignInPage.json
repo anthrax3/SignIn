@@ -6,5 +6,6 @@
   "FullName": "",
   "ImageUrl": "",
   "SignInClick$": 0,
-  "Submit": 0
+  "Submit": 0,
+  "SessionUri": ""
 }

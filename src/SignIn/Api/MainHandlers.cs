@@ -61,7 +61,7 @@ namespace SignIn
                 }
 
                 Cookie cookie = GetSignInCookie();
-                SignInPage page = new SignInPage();
+                SignInPage page = new SignInPage() { Data = null };
 
                 container.SignIn = page;
 
@@ -88,12 +88,8 @@ namespace SignIn
 
                 return page;
             });
-
-            Handle.GET<string, string, string>("/signin/partial/signin/{?}/{?}/{?}", HandleSignIn,
-                new HandlerOptions() {SkipRequestFilters = true});
-            Handle.GET("/signin/partial/signin/", HandleSignIn, new HandlerOptions() {SkipRequestFilters = true});
-            Handle.GET("/signin/partial/signin", HandleSignIn, new HandlerOptions() {SkipRequestFilters = true});
-            Handle.GET("/signin/partial/signout", HandleSignOut, new HandlerOptions() {SkipRequestFilters = true});
+            
+            Handle.GET("/signin/partial/signout", HandleSignOut, new HandlerOptions() { SkipRequestFilters = true });
 
             Handle.GET("/signin/signinuser", HandleSignInForm);
             Handle.GET<string>("/signin/signinuser?{?}", HandleSignInForm);
@@ -108,18 +104,18 @@ namespace SignIn
                 return master;
             });
 
-            Handle.GET("/signin/partial/signin-form", () => new SignInFormPage(), new HandlerOptions() {SelfOnly = true});
-            Handle.GET("/signin/partial/alreadyin-form", () => new AlreadyInPage() {Data = null},
-                new HandlerOptions() {SelfOnly = true});
+            Handle.GET("/signin/partial/signin-form", () => new SignInFormPage() { Data = null }, new HandlerOptions() { SelfOnly = true });
+            Handle.GET("/signin/partial/alreadyin-form", () => new AlreadyInPage() { Data = null },
+                new HandlerOptions() { SelfOnly = true });
             Handle.GET("/signin/partial/restore-form", () => new RestorePasswordFormPage(),
-                new HandlerOptions() {SelfOnly = true});
-            Handle.GET("/signin/partial/profile-form", () => new ProfileFormPage() {Data = null},
-                new HandlerOptions() {SelfOnly = true});
+                new HandlerOptions() { SelfOnly = true });
+            Handle.GET("/signin/partial/profile-form", () => new ProfileFormPage() { Data = null },
+                new HandlerOptions() { SelfOnly = true });
             Handle.GET("/signin/partial/accessdenied-form", () => new AccessDeniedPage(),
-                new HandlerOptions() {SelfOnly = true});
+                new HandlerOptions() { SelfOnly = true });
 
-            Handle.GET("/signin/partial/main-form", () => new MainFormPage() {Data = null},
-                new HandlerOptions() {SelfOnly = true});
+            Handle.GET("/signin/partial/main-form", () => new MainFormPage() { Data = null },
+                new HandlerOptions() { SelfOnly = true });
 
             Handle.GET("/signin/generateadminuser", (Request request) =>
             {
@@ -130,6 +126,7 @@ namespace SignIn
                 }
 
                 string ip = request.ClientIpAddress.ToString();
+
                 if (ip == "127.0.0.1" || ip == "localhost")
                 {
                     SignInOut.AssureAdminSystemUser();
@@ -140,7 +137,20 @@ namespace SignIn
                 Handle.SetOutgoingStatusCode(403);
                 return "Access denied.";
 
-            }, new HandlerOptions() {SkipRequestFilters = true});
+            }, new HandlerOptions() { SkipRequestFilters = true });
+
+            Handle.POST("/signin/partial/signin", (Request request) =>
+            {
+                NameValueCollection values = HttpUtility.ParseQueryString(request.Body);
+                string username = values["username"];
+                string password = values["password"];
+                string rememberMe = values["rememberMe"];
+
+                HandleSignIn(username, password, rememberMe);
+                Session.Current.CalculatePatchAndPushOnWebSocket();
+
+                return 200;
+            }, new HandlerOptions() { SkipRequestFilters = true });
 
             UriMapping.Map("/signin/user", "/sc/mapping/user"); //expandable icon; used in Launcher
             UriMapping.Map("/signin/signinuser", "/sc/mapping/userform"); //inline form; used in RSE Launcher
@@ -231,12 +241,7 @@ namespace SignIn
             container.RefreshSignInState();
         }
 
-        protected Response HandleSignIn()
-        {
-            return HandleSignIn(null, null, null);
-        }
-
-        protected Response HandleSignIn(string Username, string Password, string RememberMe)
+        protected void HandleSignIn(string Username, string Password, string RememberMe)
         {
             Username = Uri.UnescapeDataString(Username);
 
@@ -273,8 +278,6 @@ namespace SignIn
             {
                 SetAuthCookie(session.Token.Token, RememberMe == "true");
             }
-
-            return this.GetSessionContainer();
         }
 
         protected Response HandleSignInForm()
