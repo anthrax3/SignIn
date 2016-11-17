@@ -8,11 +8,11 @@ using Starcounter.Internal;
 // associated with an assembly.
 
 [assembly: AssemblyTitle("SignIn")]
-[assembly: AssemblyDescription("Sign-In application for Polyjuice powered by Starcounter and Society Objects")]
+[assembly: AssemblyDescription("Authenticate **users** with a username and password (default admin/admin).")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Polyjuice")]
+[assembly: AssemblyCompany("StarcounterSamples")]
 [assembly: AssemblyProduct("SignIn")]
-[assembly: AssemblyCopyright("Copyright 2015 Polyjuice")]
+[assembly: AssemblyCopyright("Copyright 2016 Starcounter")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -38,7 +38,12 @@ using Starcounter.Internal;
 // [assembly: AssemblyVersion("1.0.*")]
 
 [assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("5.0.4")]
+
+// Starcounter Package information
+//
+// Unique warehouse id e.g. <myorganization.myapp>
+[assembly: AssemblyMetadata("ID", "StarcounterSamples.SignIn")]
 
 // Assures the current assembly has a reference to the Starcounter
 // assembly. A reference to Starcounter is currently required for
