@@ -163,14 +163,7 @@ namespace SignIn
             Db.Transact(() => { Session.Token.Token = SystemUser.CreateAuthToken(Session.Token.User.Username); });
 
             cookie.Value = Session.Token.Token;
-            if (Session.Token.ValidDurationTicks.HasValue)
-            {
-                cookie.Expires = DateTime.UtcNow.AddTicks(Session.Token.ValidDurationTicks.Value);
-            }
-            else
-            {
-                cookie.Expires = Session.Token.Expires;
-            }
+            cookie.Expires = Session.Token.Expires;
 
             Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
         }
@@ -190,14 +183,7 @@ namespace SignIn
             else
             {
                 cookie.Value = token.Token;
-                if (token.ValidDurationTicks.HasValue)
-                {
-                    cookie.Expires = DateTime.UtcNow.AddTicks(token.ValidDurationTicks.Value);
-                }
-                else
-                {
-                    cookie.Expires = token.Expires;
-                }
+                cookie.Expires = token.Expires;
             }
 
             Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
@@ -284,7 +270,7 @@ namespace SignIn
             {
                 if (RememberMe == "true")
                 {
-                    Db.Transact(() => { session.Token.ValidDurationTicks = new TimeSpan(rememberMeDays, 0, 0, 0).Ticks; });
+                    Db.Transact(() => { session.Token.Expires = DateTime.UtcNow.AddDays(rememberMeDays); });
                 }
                 SetAuthCookie(session.Token);
             }
