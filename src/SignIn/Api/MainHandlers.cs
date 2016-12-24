@@ -163,7 +163,10 @@ namespace SignIn
             Db.Transact(() => { Session.Token.Token = SystemUser.CreateAuthToken(Session.Token.User.Username); });
 
             cookie.Value = Session.Token.Token;
-            cookie.Expires = Session.Token.Expires;
+            if (Session.Token.IsPersistent)
+            {
+                cookie.Expires = Session.Token.Expires;
+            }
 
             Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
         }
@@ -183,7 +186,10 @@ namespace SignIn
             else
             {
                 cookie.Value = token.Token;
-                cookie.Expires = token.Expires;
+                if (token.IsPersistent)
+                {
+                    cookie.Expires = token.Expires;
+                }
             }
 
             Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
@@ -270,7 +276,11 @@ namespace SignIn
             {
                 if (RememberMe == "true")
                 {
-                    Db.Transact(() => { session.Token.Expires = DateTime.UtcNow.AddDays(rememberMeDays); });
+                    Db.Transact(() =>
+                    {
+                        session.Token.Expires = DateTime.UtcNow.AddDays(rememberMeDays);
+                        session.Token.IsPersistent = true;
+                    });
                 }
                 SetAuthCookie(session.Token);
             }
