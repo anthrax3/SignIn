@@ -160,7 +160,14 @@ namespace SignIn
                 return;
             }
 
-            Db.Transact(() => { Session.Token.Token = SystemUser.CreateAuthToken(Session.Token.User.Username); });
+            Db.Transact(() =>
+            {
+                Session.Token = SystemUser.CreateAuthToken(Session.Token);
+                if (Session.Token.IsPersistent)
+                {
+                    Session.Token.Expires = DateTime.UtcNow.AddDays(rememberMeDays);
+                }
+            });
 
             cookie.Value = Session.Token.Token;
             if (Session.Token.IsPersistent)
