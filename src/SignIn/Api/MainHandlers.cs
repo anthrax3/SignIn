@@ -162,7 +162,7 @@ namespace SignIn
 
             Db.Transact(() =>
             {
-                Session.Token = SystemUser.CreateAuthToken(Session.Token);
+                Session.Token = SystemUser.RenewAuthToken(Session.Token);
                 if (Session.Token.IsPersistent)
                 {
                     Session.Token.Expires = DateTime.UtcNow.AddDays(rememberMeDays);
