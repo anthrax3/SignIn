@@ -26,7 +26,7 @@ namespace SignIn
 
             if (string.IsNullOrEmpty(this.ImageUrl))
             {
-                this.ImageUrl = Utils.GetGravatarUrl(string.Empty);
+                this.ImageUrl = "/SignIn/css/empty_user.png";
             }
 
             if (string.IsNullOrEmpty(this.FullName))
