@@ -10,9 +10,9 @@ namespace SignIn
 {
     partial class RestorePasswordFormPage : Page
     {
-        void Handle(Input.SignInClick Action)
+        void Handle(Input.SignInClick action)
         {
-            Action.Cancel();
+            action.Cancel();
 
             if (this.MainForm != null)
             {
@@ -25,7 +25,7 @@ namespace SignIn
             this.DisableRestoreClick = 0;
         }
 
-        void Handle(Input.RestoreClick Action)
+        void Handle(Input.RestoreClick action)
         {
             this.DisableRestoreClick = 1;
             this.MessageCss = "alert alert-danger";
@@ -47,16 +47,14 @@ namespace SignIn
             Person person = user.WhoIs as Person;
             EmailAddress email = Utils.GetUserEmailAddress(user);
 
-            if (person == null || email == null)
+            if (person == null || email == null || string.IsNullOrEmpty(email.EMail))
             {
                 this.Message = "Unable to restore password, no e-mail address found!";
                 return;
             }
 
             string password = Utils.RandomString(5);
-            string hash = SystemUser.GenerateClientSideHash(password);
-
-            SystemUser.GeneratePasswordHash(user.Username, hash, user.PasswordSalt, out hash);
+            string hash = SystemUser.GeneratePasswordHash(user.Username, password, user.PasswordSalt);
 
             try
             {

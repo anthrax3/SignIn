@@ -14,6 +14,7 @@ namespace SignIn
         internal static string AdminGroupDescription = "System User Administrator Group";
         internal static string AdminUsername = "admin";
         internal static string AdminPassword = "admin";
+        internal static string AdminEmail = "admin@starcounter.com";
 
         /// <summary>
         /// Assure that there is at least one system user beloning to the admin group 
@@ -50,29 +51,8 @@ namespace SignIn
                         LastName = AdminUsername
                     };
 
-                    user = new SystemUser()
-                    {
-                        WhatIs = person,
-                        Username = AdminUsername
-                    };
-
-                    // Set password
-                    string hash;
-                    string salt = Convert.ToBase64String(SystemUser.GenerateSalt(16));
-                    string password = SystemUser.GenerateClientSideHash(AdminPassword);
-                    SystemUser.GeneratePasswordHash(user.Username.ToLower(), password, salt, out hash);
-
-                    user.Password = hash;
-                    user.PasswordSalt = salt;
-
-                    // Add ability to also sign in with email
-                    EmailAddress email = new EmailAddress();
-                    EmailAddressRelation relation = new EmailAddressRelation();
-
-                    relation.Somebody = person;
-                    relation.WhatIs = email;
-
-                    email.EMail = AdminUsername + "@starcounter.com";
+                    user = SystemUser.RegisterSystemUser(AdminUsername, AdminEmail, AdminPassword);
+                    user.WhatIs = person;
                 }
 
                 // Add the admin group to the system admin user

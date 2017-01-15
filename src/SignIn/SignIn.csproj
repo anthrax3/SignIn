@@ -103,7 +103,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="wwwroot\SignIn\elements\signin-element.html" />
-    <Content Include="wwwroot\SignIn\scripts\sha1.js" />
     <Content Include="wwwroot\SignIn\viewmodels\AccessDeniedPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\AlreadyInPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\MainFormPage.html" />
