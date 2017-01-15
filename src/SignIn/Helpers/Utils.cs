@@ -31,25 +31,6 @@ namespace SignIn
             }
         }
 
-        /// <summary>
-        /// Build gravatar url
-        /// </summary>
-        /// <param name="email"></param>
-        /// <returns></returns>
-        static public string GetGravatarUrl(string email)
-        {
-            using (MD5 md5Hash = MD5.Create())
-            {
-                byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(email.Trim().ToLowerInvariant()));
-                StringBuilder sBuilder = new StringBuilder();
-                for (int i = 0; i < data.Length; i++)
-                {
-                    sBuilder.Append(data[i].ToString("x2"));
-                }
-                return "http://www.gravatar.com/avatar/" + sBuilder.ToString() + "?s=32&d=mm";
-            }
-        }
-
         public static string RandomString(int Size)
         {
             string input = "abcdefghijklmnopqrstuvwxyz0123456789";
