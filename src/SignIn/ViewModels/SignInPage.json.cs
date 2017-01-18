@@ -26,7 +26,7 @@ namespace SignIn
 
             if (string.IsNullOrEmpty(this.ImageUrl))
             {
-                this.ImageUrl = "/SignIn/css/empty_user.png";
+                this.ImageUrl = "/SignIn/css/empty_user.svg";
             }
 
             if (string.IsNullOrEmpty(this.FullName))
