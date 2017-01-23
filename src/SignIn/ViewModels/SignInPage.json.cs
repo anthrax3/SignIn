@@ -30,11 +30,6 @@ namespace SignIn
                 this.ImageUrl = Session.Token.User.WhoIs.Illustration?.Content?.URL;
             }
 
-            if (string.IsNullOrEmpty(this.ImageUrl))
-            {
-                this.ImageUrl = "/SignIn/css/empty_user.svg";
-            }
-
             if (string.IsNullOrEmpty(this.FullName))
             {
                 this.FullName = Session.Token.User.Username;
