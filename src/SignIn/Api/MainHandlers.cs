@@ -154,6 +154,7 @@ namespace SignIn
 
             UriMapping.Map("/signin/user", "/sc/mapping/user"); //expandable icon; used in Launcher
             UriMapping.Map("/signin/signinuser", "/sc/mapping/userform"); //inline form; used in RSE Launcher
+            UriMapping.Map("/signin/signinuser?{?}", "/sc/mapping/userform?{?}"); //inline form; used in UserAdmin
         }
 
         protected void ClearAuthCookie()
