@@ -27,19 +27,7 @@ namespace SignIn
             if (Session.Token.User.WhoIs != null)
             {
                 this.FullName = Session.Token.User.WhoIs.FullName;
-
-                if (!string.IsNullOrEmpty(Session.Token.User.WhoIs.ImageURL))
-                {
-                    this.ImageUrl = Session.Token.User.WhoIs.ImageURL;
-                }
-                else
-                {
-                    this.ImageUrl = Utils.GetGravatarUrl(string.Empty);
-                }
-            }
-            else
-            {
-                this.ImageUrl = Utils.GetGravatarUrl(string.Empty);
+                this.ImageUrl = Session.Token.User.WhoIs.Illustration?.Content?.URL;
             }
 
             if (string.IsNullOrEmpty(this.FullName))

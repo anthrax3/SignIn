@@ -46,17 +46,27 @@
     }
 
     .signin-popup-handle {
-        padding: 0px;
-        margin: 0px;
-        width: 100%;
-        height: 100%;
+        cursor: pointer;
     }
 
-    .signin-popup-user-name {
+    .signin-popup-user-name,
+    .signin-popup-window__user-name {
         display: block;
         white-space: nowrap;
         font-size: 12px;
-        margin-left: 6px;
+        margin-left: 30px;
+        line-height: 24px;
+    }
+
+    .signin-popup-window__user-image,
+    .signin-popup-user-image {
+        width: 24px;
+        height: 24px;
+        background-size: cover;
+        background-color: white;
+        background-repeat: no-repeat;
+        background-position: center center;
+        float: left;
     }
 </style>
 
@@ -66,17 +76,31 @@
         <div class="signin-detailed">
             <!-- User signed in -->
             <template is="dom-if" if="{{model.IsSignedIn}}" restamp strip-whitespace>
-                <juicy-popover position="bottom left" handleselector="paper-icon-button.handle" expandableselector=".expandable">
-                    <paper-icon-button class="handle signin-popup-handle" src="{{model.ImageUrl}}"></paper-icon-button>
+                <juicy-popover position="bottom left" handleselector="paper-button.handle" expandableselector=".expandable">
+                    <paper-button class="handle signin-popup-handle">
+                        <div class="signin-popup-user-image" style$="{{getBackgroundImageCss(model.ImageUrl)}}">
+                            <template is="dom-if" if="{{!model.ImageUrl}}">
+                                <svg modified$="" active$="" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <use xlink:href="/SignIn/css/empty_user.svg#empty-user" />
+                                </svg>
+                            </template>
+                        </div>
+                        <div class="signin-popup-user-name">{{model.FullName}}</div>
+                    </paper-button>
                     <div class="expandable signin-popup-window">
-                        <img src="{{model.ImageUrl}}" width="32" height="32" />
+                        <div class="signin-popup-window__user-image" style$="{{getBackgroundImageCss(model.ImageUrl)}}">
+                            <template is="dom-if" if="{{!model.ImageUrl}}">
+                                <svg modified$="" active$="" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <use xlink:href="/SignIn/css/empty_user.svg#empty-user" />
+                                </svg>
+                            </template>
+                        </div>
                         <p class="signin-popup-window__user-name">
                             <a href="/signin/profile">{{model.FullName}}</a>
                         </p>
                         <button on-click="signOut" class="btn btn-primary" role="button">Sign out</button>
                     </div>
                 </juicy-popover>
-                <div class="signin-popup-user-name">{{model.FullName}}</div>
             </template>
             <!-- User NOT signed in -->
             <template is="dom-if" if="{{!model.IsSignedIn}}" restamp strip-whitespace>
@@ -160,6 +184,10 @@
                 }
 
                 e.currentTarget.setAttribute("href", href);
+            };
+
+            template.getBackgroundImageCss = function (url) {
+                return url ? "background-image:url('" + url + "');" : "";
             };
         })();
     </script>
