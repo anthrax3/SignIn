@@ -16,6 +16,9 @@ namespace SignIn
 
         public void Register()
         {
+            Application.Current.Use(new HtmlFromJsonProvider());
+            Application.Current.Use(new PartialToStandaloneHtmlProvider());
+
             //Testing JWT
             /*Handle.GET("/signin/jwt/{?}/{?}", (string Username, string Password) => {
                 string message;
