@@ -197,7 +197,7 @@
                     return false;
                 }
                 for (var item in userImage) {
-                    if (item && userImage[item].hasOwnProperty("Html")) {
+                    if (userImage[item] && userImage[item].hasOwnProperty("Html")) {
                         return true;
                     }
                 }
