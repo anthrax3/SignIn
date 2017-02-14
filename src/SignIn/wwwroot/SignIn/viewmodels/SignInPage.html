@@ -78,8 +78,9 @@
             <template is="dom-if" if="{{model.IsSignedIn}}" restamp strip-whitespace>
                 <juicy-popover position="bottom left" handleselector="paper-button.handle" expandableselector=".expandable">
                     <paper-button class="handle signin-popup-handle">
-                        <div class="signin-popup-user-image" style$="{{getBackgroundImageCss(model.ImageUrl)}}">
-                            <template is="dom-if" if="{{!model.ImageUrl}}">
+                        <div class="signin-popup-user-image">
+                            <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
+                            <template is="dom-if" if="{{!hasUserImage(model.UserImage)}}">
                                 <svg modified$="" active$="" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                     <use xlink:href="/SignIn/css/empty_user.svg#empty-user" />
                                 </svg>
@@ -88,8 +89,9 @@
                         <div class="signin-popup-user-name">{{model.FullName}}</div>
                     </paper-button>
                     <div class="expandable signin-popup-window">
-                        <div class="signin-popup-window__user-image" style$="{{getBackgroundImageCss(model.ImageUrl)}}">
-                            <template is="dom-if" if="{{!model.ImageUrl}}">
+                        <div class="signin-popup-window__user-image">
+                            <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
+                            <template is="dom-if" if="{{!hasUserImage(model.UserImage)}}">
                                 <svg modified$="" active$="" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                     <use xlink:href="/SignIn/css/empty_user.svg#empty-user" />
                                 </svg>
@@ -189,6 +191,18 @@
             template.getBackgroundImageCss = function (url) {
                 return url ? "background-image:url('" + url + "');" : "";
             };
+
+            template.hasUserImage = function (userImage) {
+                if (!userImage) {
+                    return false;
+                }
+                for (var item in userImage) {
+                    if (item && Object.keys(userImage[item]).length > 0) {
+                        return true;
+                    }
+                }
+                return false;
+            }
         })();
     </script>
 </template>

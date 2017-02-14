@@ -27,7 +27,7 @@ namespace SignIn
             if (Session.Token.User.WhoIs != null)
             {
                 this.FullName = Session.Token.User.WhoIs.FullName;
-                this.ImageUrl = Session.Token.User.WhoIs.Illustration?.Content?.URL;
+                this.UserImage = Self.GET<Json>("/signin/partials/user/image/" + Session.Token.User.WhoIs.GetObjectID());
             }
 
             if (string.IsNullOrEmpty(this.FullName))
