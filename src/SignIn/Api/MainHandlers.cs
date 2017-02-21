@@ -6,6 +6,7 @@ using System.Web;
 using Starcounter;
 using Simplified.Ring3;
 using Simplified.Ring5;
+using SignIn.ViewModels;
 
 namespace SignIn
 {
@@ -155,9 +156,29 @@ namespace SignIn
                 return 200;
             }, new HandlerOptions() { SkipRequestFilters = true });
 
+            Handle.GET("/signin/admin/settings", (Request request) =>
+            {
+                Json page;
+                if (!AuthorizationHelper.TryNavigateTo("/signin/admin/settings", request, out page))
+                {
+                    return page;
+                }
+
+                return Db.Scope(() => {
+                    var settingsPage = new SettingsPage
+                    {
+                        Html = "/SignIn/viewmodels/SettingsPage.html",
+                        Uri = request.Uri,
+                        Data = MailSettingsHelper.GetSettings()
+                    };
+                    return settingsPage;
+                });
+            });
+
             UriMapping.Map("/signin/user", "/sc/mapping/user"); //expandable icon; used in Launcher
             UriMapping.Map("/signin/signinuser", "/sc/mapping/userform"); //inline form; used in RSE Launcher
             UriMapping.Map("/signin/signinuser?{?}", "/sc/mapping/userform?{?}"); //inline form; used in UserAdmin
+            UriMapping.Map("/signin/admin/settings", UriMapping.MappingUriPrefix + "/settings");
         }
 
         protected void ClearAuthCookie()

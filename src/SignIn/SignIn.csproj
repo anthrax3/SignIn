@@ -68,6 +68,8 @@
   <ItemGroup>
     <Compile Include="Api\CommitHooks.cs" />
     <Compile Include="Api\MainHandlers.cs" />
+    <Compile Include="Helpers\AuthorizationHelper.cs" />
+    <Compile Include="Helpers\MailSettingsHelper.cs" />
     <Compile Include="Helpers\SignInJwt.cs" />
     <Compile Include="Helpers\SignInOut.cs" />
     <Compile Include="Helpers\Utils.cs" />
@@ -88,11 +90,17 @@
     <Compile Include="ViewModels\ProfileFormPage.json.cs">
       <DependentUpon>ProfileFormPage.json</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\PropertyMetadata\PropertyMetadataPage.json.cs">
+      <DependentUpon>PropertyMetadataPage.json</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\RestorePasswordFormPage.json.cs">
       <DependentUpon>RestorePasswordFormPage.json</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\SessionContainer.json.cs">
       <DependentUpon>SessionContainer.json</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\SettingsPage.json.cs">
+      <DependentUpon>SettingsPage.json</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\SignInFormPage.json.cs">
       <DependentUpon>SignInFormPage.json</DependentUpon>
@@ -110,6 +118,7 @@
     <Content Include="wwwroot\SignIn\viewmodels\MasterPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\ProfileFormPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\RestorePasswordFormPage.html" />
+    <None Include="wwwroot\SignIn\viewmodels\SettingsPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\SignInFormPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\SignInPage.html" />
   </ItemGroup>
@@ -145,6 +154,18 @@
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
     <TypedJSON Include="ViewModels\SessionContainer.json">
+      <Generator>MsBuild:Compile</Generator>
+    </TypedJSON>
+    <TypedJSON Include="ViewModels\SettingsPage.json">
+      <Generator>MsBuild:Compile</Generator>
+    </TypedJSON>
+    <TypedJSON Include="ViewModels\PropertyMetadata\PropertyMetadataItem.json">
+      <Generator>MsBuild:Compile</Generator>
+    </TypedJSON>
+    <TypedJSON Include="ViewModels\PropertyMetadata\PropertyMetadataItems.json">
+      <Generator>MsBuild:Compile</Generator>
+    </TypedJSON>
+    <TypedJSON Include="ViewModels\PropertyMetadata\PropertyMetadataPage.json">
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
     <None Include="weaver.ignore">
