@@ -1,23 +1,17 @@
 {
-  "Uri": "",
   "Html": "",
-  "RedirectUrl": "",
-
-  // General settings
-  "SiteHost$": "",
-  "SitePort$": 0,
-
-  // Email settings
-  "Enabled$": false,
-  "Host$": "",
-  "Port$": 0,
-  "EnableSsl$": true,
-  "Username$": "",
-  "Password$": "",
-
+  
   "Message": "",
-  "Save$": 0,
-  "Close$": 0,
+
+  "NewPasswordClick$": 0,
+  "NewPassword$": "",
+  "NewPasswordRepeat$": "",
+  "SaveNewPassword$": 0,
+  "CancelNewPassword$": 0,
+
+  "ResetPassword$": 0,
+  "$ResetPassword_Enabled": { "Bind": "ResetPassword_Enabled_" },
+  "ResetPassword_Enabled": false,
 
   // Inherited from PropertyMetadataItem
   "PropertyMetadataItems": [

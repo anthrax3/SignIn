@@ -72,6 +72,7 @@
     <Compile Include="Helpers\MailSettingsHelper.cs" />
     <Compile Include="Helpers\SignInJwt.cs" />
     <Compile Include="Helpers\SignInOut.cs" />
+    <Compile Include="Helpers\UserHelper.cs" />
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -93,6 +94,9 @@
     <Compile Include="ViewModels\PropertyMetadata\PropertyMetadataPage.json.cs">
       <DependentUpon>PropertyMetadataPage.json</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\ResetPasswordPage.json.cs">
+      <DependentUpon>ResetPasswordPage.json</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\RestorePasswordFormPage.json.cs">
       <DependentUpon>RestorePasswordFormPage.json</DependentUpon>
     </Compile>
@@ -108,8 +112,12 @@
     <Compile Include="ViewModels\SignInPage.json.cs">
       <DependentUpon>SignInPage.json</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\SystemUserAuthenticationSettings.json.cs">
+      <DependentUpon>SystemUserAuthenticationSettings.json</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="wwwroot\SignIn\viewmodels\ResetPasswordPage.html" />
     <Content Include="wwwroot\SignIn\css\empty_user.svg" />
     <Content Include="wwwroot\SignIn\elements\signin-element.html" />
     <Content Include="wwwroot\SignIn\viewmodels\AccessDeniedPage.html" />
@@ -118,6 +126,13 @@
     <Content Include="wwwroot\SignIn\viewmodels\MasterPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\ProfileFormPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\RestorePasswordFormPage.html" />
+    <TypedJSON Include="ViewModels\ResetPasswordPage.json">
+      <Generator>MsBuild:Compile</Generator>
+    </TypedJSON>
+    <None Include="wwwroot\SignIn\viewmodels\SystemUserAuthenticationSettings.html" />
+    <TypedJSON Include="ViewModels\SystemUserAuthenticationSettings.json">
+      <Generator>MsBuild:Compile</Generator>
+    </TypedJSON>
     <None Include="wwwroot\SignIn\viewmodels\SettingsPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\SignInFormPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\SignInPage.html" />

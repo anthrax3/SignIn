@@ -14,6 +14,7 @@ namespace SignIn
         {
             SystemUserGroup adminGroup = GetAdminGroup();
             AuthorizationHelper.AssureUriPermission("/signin/admin/settings", adminGroup);
+            AuthorizationHelper.AssureUriPermission("/signin/user/authentication/settings/{?}", adminGroup);
         }
 
         public static void AssureUriPermission(string uri, SystemUserGroup group)
@@ -51,6 +52,48 @@ namespace SignIn
             }
 
             return true;
+        }
+
+        public static bool IsMemberOfGroup(SystemUser user, SystemUserGroup basedOnGroup)
+        {
+            if (user == null) return false;
+            if (basedOnGroup == null) return false;
+
+            var groups = Db.SQL<SystemUserGroup>("SELECT o.SystemUserGroup FROM Simplified.Ring3.SystemUserGroupMember o WHERE o.SystemUser=?", user);
+            foreach (var groupItem in groups)
+            {
+                bool flag = IsBasedOnGroup(groupItem, basedOnGroup);
+                if (flag)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// TODO: Avoid circular references!!
+        /// </summary>
+        /// <param name="group"></param>
+        /// <param name="basedOnGroup"></param>
+        /// <returns></returns>
+        private static bool IsBasedOnGroup(SystemUserGroup group, SystemUserGroup basedOnGroup)
+        {
+            if (group == null) return false;
+
+            // NOTE: To compare to objects queried from database we need to use .Equals(),  "==" wont work!!.
+            if (group.Equals(basedOnGroup))
+            {
+                return true;
+            }
+
+            if (IsBasedOnGroup(group.Parent, basedOnGroup))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private static bool CanGetUri(SystemUser user, string uri, Request request)

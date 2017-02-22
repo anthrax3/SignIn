@@ -1,0 +1,110 @@
+<!--
+Copyright 2014 Smörgåsbord-Development. All rights reserved.
+-->
+<!--
+/**
+ * sgb-property-metadata
+ * http://www.html5rocks.com/en/tutorials/forms/constraintvalidation/
+ */
+-->
+<link rel="import" href="../../sys/polymer/polymer.html">
+
+<dom-module id="sgb-property-metadata">
+    <template>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+        </style>
+    </template>
+    <script>
+        Polymer({
+            is: 'sgb-property-metadata',
+            properties: {
+                items: { type: Array, value: [], observer: "itemsChanged" }
+            },
+            observers: [
+              'itemsChanged(items.*)'
+            ],
+            itemsChanged: function (changeRecord) {
+
+
+
+                if (changeRecord && changeRecord.path == 'items.splices') {
+                    // a user was added or removed
+
+                    changeRecord.value.indexSplices.forEach(function (s) {
+
+                        s.removed.forEach(function (item) {
+//                            console.log(user.name + ' was removed');
+
+                            //var item = s.removed[i];
+                            var element = document.getElementById(item.PropertyName);
+
+                            if (element == null) {
+                                console.log("Cant find the elemnt:" + item.PropertyName);
+                                //continue;
+                            }
+
+                            element.setCustomValidity("");
+                        });
+
+                        if (s.addedCount > 0) {
+//                            console.log(s.addedCount + ' users were added');
+                            for (var i = 0 ; i < s.addedCount ; i++) {
+                                var item = s.object[s.index + i];
+                                // TODO: Only search the the element in this->parent scope
+                                var element = document.getElementById(item.PropertyName);
+
+                                if (element == null) {
+                                    console.log("Cant find the elemnt:" + item.PropertyName);
+                                    continue;
+                                }
+
+                                element.setCustomValidity(item.Message);
+                            }
+                        }
+                    });
+
+
+                } else {
+                    // an individual user or its sub-properties changed
+                    // check "changeRecord.path" to determine what changed
+                }
+            },
+            itemsChanged_OLD: function (splices, old) {
+
+                splices.forEach(function (splice) {
+                    if (splice.addedCount > 0) {
+                        for (var i = 0 ; i < splice.addedCount ; i++) {
+                            var item = this.items[splice.index + i];
+                            // TODO: Only search the the element in this->parent scope
+                            var element = document.getElementById(item.PropertyName);
+
+                            if (element == null) {
+                                console.log("Cant find the elemnt:" + item.PropertyName);
+                                continue;
+                            }
+
+                            element.setCustomValidity(item.Message);
+                        }
+                    }
+
+                    var arrayLength = splice.removed.length;
+
+                    for (var i = 0; i < arrayLength; i++) {
+                        var item = splice.removed[i];
+                        var element = document.getElementById(item.PropertyName);
+
+                        if (element == null) {
+                            console.log("Cant find the elemnt:" + item.PropertyName);
+                            continue;
+                        }
+
+                        element.setCustomValidity("");
+                    }
+                }.bind(this));
+            }
+        });
+    </script>
+</dom-module>

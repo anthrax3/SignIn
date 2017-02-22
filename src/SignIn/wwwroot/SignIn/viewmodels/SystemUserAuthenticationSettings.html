@@ -1,0 +1,50 @@
+﻿<link rel="import" href="/sys/polymer/polymer.html">
+<link rel="import" href="/sys/sgb-property-metadata/sgb-property-metadata.html" />
+
+<style>
+    .signin-auth-settings {
+        margin-top: 2em;
+    }
+</style>
+
+<template>
+    <template is="dom-bind">
+        <div class="signin-auth-settings">
+            <sgb-property-metadata items="{{model.PropertyMetadataItems}}"></sgb-property-metadata>
+
+            <template is="dom-if" if="{{model.Message}}">
+                <p class="alert alert-danger">{{model.Message}}</p>
+            </template>
+
+            <h3>Authentication settings</h3>
+
+            <div>
+                <button class="btn btn-default btn-sm" onclick="++this.value;" value="{{model.NewPasswordClick$::click}}">Set New Password</button>
+                <button class="btn btn-default btn-sm" disabled$="{{!model.ResetPassword_Enabled}}" onclick="++this.value;" value="{{model.ResetPassword$::click}}">Reset Password</button>
+            </div>
+
+            <template is="dom-if" if="{{model.NewPasswordClick$}}">
+                <div>
+                    <h4>New Password</h4>
+                    <div class="form-horizontal">
+                        <label class="control-label" for="NewPassword">New Password</label>
+                    </div>
+                    <div>
+                        <input id="NewPassword" type="password" value="{{model.NewPassword$::change}}" update-on="input" class="form-control" />
+                    </div>
+
+                    <div class="form-horizontal">
+                        <label class="control-label" for="NewPasswordRepeat">Repeat Password</label>
+                    </div>
+                    <div>
+                        <input id="NewPasswordRepeat" type="password" value="{{model.NewPasswordRepeat$::change}}" update-on="input" class="form-control" />
+                    </div>
+                    <div>
+                        <button class="btn btn-primary btn-sm" onclick="++this.value;" value="{{model.SaveNewPassword$::click}}">Apply new password</button>
+                        <button class="btn btn-default btn-sm" onclick="++this.value;" value="{{model.CancelNewPassword$::click}}">Clear</button>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </template>
+</template>
