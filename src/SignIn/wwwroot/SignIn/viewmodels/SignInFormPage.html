@@ -3,18 +3,19 @@
 <template>
     <template is="dom-bind">
         <h2 slot="SignIn/header">Sign-in!</h2>
-            <template slot="SignIn/message" is="dom-if" if="{{model.Message}}">
-                <p class="alert alert-danger">{{model.Message}}</p>
-            </template>
-            <label slot="SignIn/username-label" class="control-label" for="txtUsername">Username</label>
-            <input slot="SignIn/username-input" id="txtUsername" name="username" type="text" value="{{local.username::input}}" placeholder="Username" class="form-control" on-keypress="txtKeypress"/>
-            <label slot="SignIn/password-label" class="control-label" for="txtPassword">Password</label>
-            <input slot="SignIn/password-input" id="txtPassword" name="password" type="password" value="{{local.password::input}}" placeholder="Password" class="form-control" on-keypress="txtKeypress"/>
-            <input slot="SignIn/rememberme-checkbox" type="checkbox" checked="{{local.rememberMe::change}}"/>
-            <span slot="SignIn/rememberme-label">Remember me</span>
-            <button slot="SignIn/submit-button" type="submit" class="btn btn-primary" value="{{model.SignInClick$::click}}" disabled="{{model.SignInClick$}}" onmouseup="++this.value;" juicy-style="width: 74px; height: 30px;">Sign in</button>
-            <button slot="SignIn/forgot-button" type="button" class="btn btn-link" value="{{model.RestoreClick$::click}}" disabled="{{model.RestoreClick$::click}}" onmouseup="++this.value;" juicy-style="width: 100px; height: 30px;">Forgot password?</button>
-            <signin-element slot="SignIn/signin-element" username="{{local.username}}" password="{{local.password}}" remember-me="{{local.rememberMe}}" submit="{{model.Submit}}" session-uri="{{model.SessionUri}}"></signin-element>
+        <template is="dom-if" if="{{model.Message}}">
+            <p class="alert alert-danger" slot="SignIn/message">{{model.Message}}</p>
+        </template>
+        <label slot="SignIn/username-label" for="txtUsername">Username</label>
+        <input slot="SignIn/username-input" id="txtUsername" name="username" type="text" value="{{local.username::input}}" placeholder="Username" class="form-control" on-keypress="txtKeypress"/>
+        <label slot="SignIn/password-label" for="txtPassword">Password</label>
+        <assas action="{{thing}}"></assas>
+        <input slot="SignIn/password-input" id="txtPassword" name="password" type="password" value="{{local.password::input}}" placeholder="Password" class="form-control" on-keypress="txtKeypress"/>
+        <input slot="SignIn/rememberme-checkbox" type="checkbox" checked="{{local.rememberMe::change}}"/>
+        <span slot="SignIn/rememberme-label">Remember me</span>
+        <button slot="SignIn/submit-button" type="submit" class="btn btn-primary" value="{{model.SignInClick$::click}}" disabled="{{model.SignInClick$}}" onmouseup="++this.value;">Sign in</button>
+        <button slot="SignIn/forgot-button" type="button" class="btn btn-link" value="{{model.RestoreClick$::click}}" disabled="{{model.RestoreClick$::click}}" onmouseup="++this.value;">Forgot password?</button>
+        <signin-element slot="SignIn/signin-element" username="{{local.username}}" password="{{local.password}}" remember-me="{{local.rememberMe}}" submit="{{model.Submit}}" session-uri="{{model.SessionUri}}"></signin-element>
     </template>
     <script>
         (function () {
@@ -25,10 +26,6 @@
                 username: "",
                 password: "",
                 rememberMe: false
-            };
-
-            template.preventSubmit = function(e) {
-                e.preventDefault();
             };
 
             template.txtKeypress = function (e) {
@@ -42,36 +39,72 @@
             };
         })();
     </script>
+
     <template is="declarative-shadow-dom">
+        <style>
+            .signin {
+                display: flex;
+                flex-direction: column;
+                max-width: 500px;
+            }
+            .signin__table {
+                display: table;
+                width: 100%;
+                border-spacing: 0 15px;
+            }
+
+            .signin__row {
+                display: table-row;
+            }
+
+            .signin__label,
+            .signin__input {
+                display: table-cell;
+                margin: 0 5px;
+            }
+
+            .signin__label ::content label {
+                font-weight: bold;
+            }
+
+            .signin__area {
+                display: flex;
+                flex-direction: row;
+                margin-bottom: 15px;
+            }
+        </style>
         <content select="[slot='SignIn/header']"></content>
-        <form on-submit="preventSubmit">
-            <div>
-                <content select="[slot='SignIn/message']"></content>
-            </div>
-            <div class="form-horizontal" juicy-style="width: 10%; height: 45px;">
-                <content select="[slot='SignIn/username-label']"></content>
-            </div>
-            <div juicy-style="width: 90%; height: 45px;">
-                <content select="[slot='SignIn/username-input']"></content>
-            </div>
-            <div class="form-horizontal" juicy-style="width: 10%; height: 45px;">
-                <content select="[slot='SignIn/password-label']"></content>
-            </div>
-            <div juicy-style="width: 90%; height: 45px;">
-                <content select="[slot='SignIn/password-input']"></content>
-            </div>
-            <div juicy-style="width: 90%; height: 45px;">
-                <div class="checkbox">
-                    <label>
-                        <content select="[slot='SignIn/rememberme-checkbox']"></content>
-                        <content select="[slot='SignIn/rememberme-label']"></content>
-                    </label>
+        <div class="signin">
+            <content select="[slot='SignIn/message']"></content>
+            <div class="signin__table">
+                <div class="signin__row">
+                    <div class="signin__label">
+                        <content select="[slot='SignIn/username-label']"></content>
+                    </div>
+                    <div class="signin-profile__input">
+                        <content select="[slot='SignIn/username-input']"></content>
+                    </div>
+                </div>
+                <div class="signin__row">
+                    <div class="signin__label">
+                        <content select="[slot='SignIn/password-label']"></content>
+                    </div>
+                    <div class="signin-profile__input">
+                        <content select="[slot='SignIn/password-input']"></content>
+                    </div>
                 </div>
             </div>
-            <content select="[slot='SignIn/submit-button']"></content>
-            <content select="[slot='SignIn/forgot-button']"></content>
-            <content select="[slot='SignIn/signin-element']"></content>
-        </form>
-
+            <div class="signin__area">
+                <label>
+                    <content select="[slot='SignIn/rememberme-checkbox']"></content>
+                    <content select="[slot='SignIn/rememberme-label']"></content>
+                </label>
+            </div>
+            <div class="signin__area">
+                <content select="[slot='SignIn/submit-button']"></content>
+                <content select="[slot='SignIn/forgot-button']"></content>
+            </div>
+        </div>
+        <content select="[slot='SignIn/signin-element']"></content>
     </template>
 </template>

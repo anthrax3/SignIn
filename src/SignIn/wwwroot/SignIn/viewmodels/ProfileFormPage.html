@@ -1,53 +1,106 @@
 ﻿<template>
     <template is="dom-bind">
-        <h2>User profile</h2>
-        <div>
-            <template is="dom-if" if="{{model.Message}}">
-                <p class$="{{model.MessageCss}}">{{model.Message}}</p>
-            </template>
-        </div>
-        <div class="form-horizontal" juicy-style="width: 10%; height: 45px;">
-            <label class="control-label">Username</label>
-        </div>
-        <div juicy-style="width: 90%; height: 45px;">
-            <input type="text" value="{{model.Username::change}}" class="form-control" readonly />
-        </div>
-        <div class="form-horizontal" juicy-style="width: 10%; height: 45px;">
-            <label class="control-label">Email</label>
-        </div>
-        <div juicy-style="width: 90%; height: 45px;">
-            <input type="email" value="{{model.Email$::change}}" placeholder="Email" class="form-control" />
-        </div>
-        <div class="form-horizontal" juicy-style="width: 10%; height: 30px;">
-            <label class="control-label">&nbsp;</label>
-        </div>
-        <button type="button" class="btn btn-primary" value="{{model.UpdateClick$::click}}"
-                juicy-style="width: 90%; height: 30px;" disabled="{{model.UpdateClick$}}" onmouseup="++this.value;">
+        <h2 slot="SignIn/profile-header">User profile</h2>
+        <template is="dom-if" if="{{model.Message}}">
+            <p slot="SignIn/message" class$="{{model.MessageCss}}">{{model.Message}}</p>
+        </template>
+        <label slot="SignIn/username-label" class="control-label">Username</label>
+        <input slot="SignIn/username-input" type="text" value="{{model.Username::change}}" class="form-control" readonly />
+        <label slot="SignIn/email-label" class="control-label">Email</label>
+        <input slot="SignIn/email-input" type="email" value="{{model.Email$::change}}" placeholder="Email" class="form-control" />
+        <button slot="SignIn/update-profile-button" type="button" class="btn btn-primary" value="{{model.UpdateClick$::click}}"
+                disabled="{{model.UpdateClick$}}" onmouseup="++this.value;">
             Update
         </button>
-        <h2>Change password</h2>
-        <div class="form-horizontal" juicy-style="width: 10%; height: 45px;">
-            <label class="control-label">Old password</label>
+        <h2 slot="SignIn/password-header">Change password</h2>
+        <label slot="SignIn/old-password-label" class="control-label">Old password</label>
+        <input slot="SignIn/old-password-input" type="password" placeholder="Old password" value="{{model.OldPassword$::change}}" class="form-control"/>
+        <label slot="SignIn/new-password-label" class="control-label">New password</label>
+        <input slot="SignIn/new-password-input" type="password" placeholder="New password" value="{{model.NewPassword$::change}}" class="form-control"/>
+        <label slot="SignIn/repeat-password-label" class="control-label">Repeat password</label>
+        <input slot="SignIn/repeat-password-input" type="password" placeholder="Repeat password" value="{{model.RepeatPassword$::change}}" class="form-control" />
+        <button slot="SignIn/update-password-button" type="button" class="btn btn-primary" value="{{model.ChangePasswordClick$::click}}" 
+                disabled="{{model.ChangePasswordClick$}}" onmouseup="++this.value;">Change password</button>
+    </template>
+    <template is="declarative-shadow-dom">
+        <style>
+            .signin-profile {
+                display: flex;
+                flex-direction: column;
+                max-width: 500px;
+            }
+            .signin-profile__table {
+                display: table;
+                width: 100%;
+                border-spacing: 0 15px;
+            }
+
+            .signin-profile__row {
+                display: table-row;
+            }
+
+            .signin-profile__label,
+            .signin-profile__input {
+                display: table-cell;
+                margin: 0 5px;
+            }
+
+            .signin-profile__label ::content label {
+                font-weight: bold;
+            }
+            
+        </style>
+        <content select="[slot='SignIn/message']"></content>
+        <div class="signin-profile">
+            <content select="[slot='SignIn/profile-header']"></content>
+            <div class="signin-profile__table">
+                <div class="signin-profile__row">
+                    <div class="signin-profile__label">
+                        <content select="[slot='SignIn/username-label']"></content>
+                    </div>
+                    <div class="signin-profile__input">
+                        <content select="[slot='SignIn/username-input']"></content>
+                    </div>
+                </div>
+                <div class="signin-profile__row">
+                    <div class="signin-profile__label">
+                        <content select="[slot='SignIn/email-label']"></content>
+                    </div>
+                    <div class="signin-profile__input">
+                        <content select="[slot='SignIn/email-input']"></content>
+                    </div>
+                </div>
+            </div>
+            <content select="[slot='SignIn/update-profile-button']"></content>
+            <content select="[slot='SignIn/password-header']"></content>
+            <div class="signin-profile__table">
+                <div class="signin-profile__row">
+                    <div class="signin-profile__label">
+                        <content select="[slot='SignIn/old-password-label']"></content>
+                    </div>
+                    <div class="signin-profile__input">
+                        <content select="[slot='SignIn/old-password-input']"></content>
+                    </div>
+                </div>
+                <div class="signin-profile__row">
+                    <div class="signin-profile__label">
+                        <content select="[slot='SignIn/new-password-label']"></content>
+                    </div>
+                    <div class="signin-profile__input">
+                        <content select="[slot='SignIn/new-password-input']"></content>
+                    </div>
+                </div>
+                <div class="signin-profile__row">
+                    <div class="signin-profile__label">
+                        <content select="[slot='SignIn/repeat-password-label']"></content>
+                    </div>
+                    <div class="signin-profile__input">
+                        <content select="[slot='SignIn/repeat-password-input']"></content>
+                    </div>
+                </div>
+            </div>
+
+            <content select="[slot='SignIn/update-password-button']"></content>
         </div>
-        <div juicy-style="width: 90%; height: 45px;">
-            <input type="password" placeholder="Old password" class="form-control" value="{{model.OldPassword$::change}}" />
-        </div>
-        <div class="form-horizontal" juicy-style="width: 10%; height: 45px;">
-            <label class="control-label">New password</label>
-        </div>
-        <div juicy-style="width: 90%; height: 45px;">
-            <input type="password" placeholder="New password" class="form-control" value="{{model.NewPassword$::change}}" />
-        </div>
-        <div class="form-horizontal" juicy-style="width: 10%; height: 45px;">
-            <label class="control-label">Repeat password</label>
-        </div>
-        <div juicy-style="width: 90%; height: 45px;">
-            <input type="password" placeholder="Repeat password" class="form-control" value="{{model.RepeatPassword$::change}}" />
-        </div>
-        <div class="form-horizontal" juicy-style="width: 10%; height: 30px;">
-            <label class="control-label">&nbsp;</label>
-        </div>
-        <button type="button" class="btn btn-primary" value="{{model.ChangePasswordClick$::click}}" 
-                juicy-style="width: 90%; height: 30px;" disabled="{{model.ChangePasswordClick$}}" onmouseup="++this.value;">Change password</button>
     </template>
 </template>
