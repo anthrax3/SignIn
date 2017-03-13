@@ -42,51 +42,22 @@
 
     <template is="declarative-shadow-dom">
         <style>
-            .signin {
-                display: flex;
-                flex-direction: column;
-                max-width: 500px;
-            }
-            .signin__table {
-                display: table;
-                width: 100%;
-                border-spacing: 0 15px;
-            }
-
-            .signin__row {
-                display: table-row;
-            }
-
-            .signin__label,
-            .signin__input {
-                display: table-cell;
-                margin: 0 5px;
-            }
-
-            .signin__label ::content label {
-                font-weight: bold;
-            }
-
-            .signin__area {
-                display: flex;
-                flex-direction: row;
-                margin-bottom: 15px;
-            }
+            @import url("/SignIn/css/signin.css");
         </style>
         <content select="[slot='SignIn/header']"></content>
-        <div class="signin">
+        <div class="signin-page">
             <content select="[slot='SignIn/message']"></content>
-            <div class="signin__table">
-                <div class="signin__row">
-                    <div class="signin__label">
+            <div class="signin-form">
+                <div class="signin-form__row">
+                    <div class="signin-form__label">
                         <content select="[slot='SignIn/username-label']"></content>
                     </div>
                     <div class="signin-profile__input">
                         <content select="[slot='SignIn/username-input']"></content>
                     </div>
                 </div>
-                <div class="signin__row">
-                    <div class="signin__label">
+                <div class="signin-form__row">
+                    <div class="signin-form__label">
                         <content select="[slot='SignIn/password-label']"></content>
                     </div>
                     <div class="signin-profile__input">
@@ -94,13 +65,13 @@
                     </div>
                 </div>
             </div>
-            <div class="signin__area">
+            <div class="signin-form__toolbar">
                 <label>
                     <content select="[slot='SignIn/rememberme-checkbox']"></content>
                     <content select="[slot='SignIn/rememberme-label']"></content>
                 </label>
             </div>
-            <div class="signin__area">
+            <div class="signin-form__toolbar">
                 <content select="[slot='SignIn/submit-button']"></content>
                 <content select="[slot='SignIn/forgot-button']"></content>
             </div>

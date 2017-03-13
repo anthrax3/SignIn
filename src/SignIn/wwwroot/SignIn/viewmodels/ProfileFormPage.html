@@ -24,77 +24,53 @@
     </template>
     <template is="declarative-shadow-dom">
         <style>
-            .signin-profile {
-                display: flex;
-                flex-direction: column;
-                max-width: 500px;
-            }
-            .signin-profile__table {
-                display: table;
-                width: 100%;
-                border-spacing: 0 15px;
-            }
-
-            .signin-profile__row {
-                display: table-row;
-            }
-
-            .signin-profile__label,
-            .signin-profile__input {
-                display: table-cell;
-                margin: 0 5px;
-            }
-
-            .signin-profile__label ::content label {
-                font-weight: bold;
-            }
-            
+            @import url("/SignIn/css/signin.css");
         </style>
         <content select="[slot='SignIn/message']"></content>
-        <div class="signin-profile">
+        <div class="signin-page">
             <content select="[slot='SignIn/profile-header']"></content>
-            <div class="signin-profile__table">
-                <div class="signin-profile__row">
-                    <div class="signin-profile__label">
+            <div class="signin-form">
+                <div class="signin-form__row">
+                    <div class="signin-form__label">
                         <content select="[slot='SignIn/username-label']"></content>
                     </div>
-                    <div class="signin-profile__input">
+                    <div class="signin-form__input">
                         <content select="[slot='SignIn/username-input']"></content>
                     </div>
                 </div>
-                <div class="signin-profile__row">
-                    <div class="signin-profile__label">
+                <div class="signin-form__row">
+                    <div class="signin-form__label">
                         <content select="[slot='SignIn/email-label']"></content>
                     </div>
-                    <div class="signin-profile__input">
+                    <div class="signin-form__input">
                         <content select="[slot='SignIn/email-input']"></content>
                     </div>
                 </div>
             </div>
             <content select="[slot='SignIn/update-profile-button']"></content>
             <content select="[slot='SignIn/password-header']"></content>
-            <div class="signin-profile__table">
-                <div class="signin-profile__row">
-                    <div class="signin-profile__label">
+            <div class="signin-form">
+                <div class="signin-form__row">
+                    <div class="signin-form__label">
                         <content select="[slot='SignIn/old-password-label']"></content>
                     </div>
-                    <div class="signin-profile__input">
+                    <div class="signin-form__input">
                         <content select="[slot='SignIn/old-password-input']"></content>
                     </div>
                 </div>
-                <div class="signin-profile__row">
-                    <div class="signin-profile__label">
+                <div class="signin-form__row">
+                    <div class="signin-form__label">
                         <content select="[slot='SignIn/new-password-label']"></content>
                     </div>
-                    <div class="signin-profile__input">
+                    <div class="signin-form__input">
                         <content select="[slot='SignIn/new-password-input']"></content>
                     </div>
                 </div>
-                <div class="signin-profile__row">
-                    <div class="signin-profile__label">
+                <div class="signin-form__row">
+                    <div class="signin-form__label">
                         <content select="[slot='SignIn/repeat-password-label']"></content>
                     </div>
-                    <div class="signin-profile__input">
+                    <div class="signin-form__input">
                         <content select="[slot='SignIn/repeat-password-input']"></content>
                     </div>
                 </div>

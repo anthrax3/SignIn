@@ -1,0 +1,31 @@
+﻿.signin-page {
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+}
+
+.signin-form {
+    display: table;
+    width: 100%;
+    border-spacing: 0 15px;
+}
+
+.signin-form__row {
+    display: table-row;
+}
+
+.signin-form__label,
+.signin-form__input {
+    display: table-cell;
+    margin: 0 5px;
+}
+
+.signin-form__label ::content label {
+    font-weight: bold;
+}
+
+.signin-form__toolbar {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 15px;
+}
