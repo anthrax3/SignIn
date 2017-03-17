@@ -5,6 +5,11 @@
 <template>
     <template is="dom-bind">
         <sgb-property-metadata items="{{model.PropertyMetadataItems}}"></sgb-property-metadata>
+        <template is="dom-if" if="{{model.SuccessMessage}}">
+            <div class="alert alert-success">
+                {{model.SuccessMessage}}
+            </div>
+        </template>
         <h3>General</h3>
         <div class="form-horizontal">
             <label class="control-label" for="SiteHost$">Site Host</label>
@@ -60,9 +65,6 @@
         <div>
             <input id="Password$" type="password" disabled$="{{!model.Enabled$ }}" value="{{model.Password$::change}}" placeholder="Password" class="form-control" />
         </div>
-        <template is="dom-if" if="{{model.Message}}">
-            <p>{{model.Message}}</p>
-        </template>
         <button class="btn btn-primary" disabled$="{{isSaveDisabled(model.IsInvalid, model.IsPristine)}}" onclick="++this.value;" value="{{model.Save$::click}}">Save</button>
         <button class="btn btn-default" disabled$="{{model.IsPristine}}" onclick="++this.value;" value="{{model.Rollback$::click}}">Undo</button>
         <button class="btn btn-default" onclick="++this.value;" value="{{model.Close$::click}}">Close</button>

@@ -35,7 +35,7 @@ namespace SignIn.ViewModels
                 this.Transaction.Commit();
             }
 
-            this.RedirectUrl = "/signin/profile";
+            this.SuccessMessage = "Changes saved";
         }
 
         void Handle(Input.Close action)
