@@ -115,6 +115,9 @@
     <Compile Include="ViewModels\SystemUserAuthenticationSettings.json.cs">
       <DependentUpon>SystemUserAuthenticationSettings.json</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\UserImagePage.json.cs">
+      <DependentUpon>UserImagePage.json</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="wwwroot\SignIn\viewmodels\ResetPasswordPage.html" />
@@ -136,6 +139,7 @@
     <None Include="wwwroot\SignIn\viewmodels\SettingsPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\SignInFormPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\SignInPage.html" />
+    <Content Include="wwwroot\SignIn\viewmodels\UserImagePage.html" />
   </ItemGroup>
   <ItemGroup>
     <TypedJSON Include="ViewModels\SignInFormPage.json">
@@ -181,6 +185,9 @@
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
     <TypedJSON Include="ViewModels\PropertyMetadata\PropertyMetadataPage.json">
+      <Generator>MsBuild:Compile</Generator>
+    </TypedJSON>
+    <TypedJSON Include="ViewModels\UserImagePage.json">
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
     <None Include="weaver.ignore">

@@ -123,6 +123,9 @@ namespace SignIn
             Handle.GET("/signin/partial/main-form", () => new MainFormPage() { Data = null },
                 new HandlerOptions() { SelfOnly = true });
 
+            Handle.GET("/signin/partials/user/image/{?}", (string objectId) => new Json(),
+                new HandlerOptions {SelfOnly = true});
+
             Handle.GET("/signin/generateadminuser", (Request request) =>
             {
                 if (Db.SQL("SELECT o FROM Simplified.Ring3.SystemUser o").First != null)
