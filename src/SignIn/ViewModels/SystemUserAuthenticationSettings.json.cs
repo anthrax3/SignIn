@@ -8,7 +8,7 @@ using Starcounter;
 // FORGOT PASSWORD:
 // http://www.asp.net/identity/overview/features-api/account-confirmation-and-password-recovery-with-aspnet-identity
 
-namespace SignIn.ViewModels
+namespace SignIn
 {
     partial class SystemUserAuthenticationSettings : PropertyMetadataPage, IBound<SystemUser>
     {

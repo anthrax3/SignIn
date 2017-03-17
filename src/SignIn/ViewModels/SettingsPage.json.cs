@@ -1,7 +1,7 @@
 using System.Net;
 using Smorgasbord.PropertyMetadata;
 
-namespace SignIn.ViewModels
+namespace SignIn
 {
     [SettingsPage_json]
     partial class SettingsPage : PropertyMetadataPage
