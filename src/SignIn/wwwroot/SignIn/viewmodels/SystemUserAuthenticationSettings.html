@@ -19,8 +19,8 @@
             <h3>Authentication settings</h3>
 
             <div>
-                <button class="btn btn-default btn-sm" onclick="++this.value;" value="{{model.NewPasswordClick$::click}}">Set New Password</button>
-                <button class="btn btn-default btn-sm" disabled$="{{!model.ResetPassword_Enabled}}" onclick="++this.value;" value="{{model.ResetPassword$::click}}">Reset Password</button>
+                <button class="btn btn-default btn-sm" onmousedown="++this.value;" value="{{model.NewPasswordClick$::click}}">Set New Password</button>
+                <button class="btn btn-default btn-sm" disabled$="{{!model.ResetPassword_Enabled}}" onmousedown="++this.value;" value="{{model.ResetPassword$::click}}">Reset Password</button>
             </div>
 
             <template is="dom-if" if="{{model.NewPasswordClick$}}">
@@ -40,8 +40,8 @@
                         <input id="NewPasswordRepeat" type="password" value="{{model.NewPasswordRepeat$::change}}" update-on="input" class="form-control" />
                     </div>
                     <div>
-                        <button class="btn btn-primary btn-sm" onclick="++this.value;" value="{{model.SaveNewPassword$::click}}">Apply new password</button>
-                        <button class="btn btn-default btn-sm" onclick="++this.value;" value="{{model.CancelNewPassword$::click}}">Clear</button>
+                        <button class="btn btn-primary btn-sm" onmousedown="++this.value;" value="{{model.SaveNewPassword$::click}}">Apply new password</button>
+                        <button class="btn btn-default btn-sm" onmousedown="++this.value;" value="{{model.CancelNewPassword$::click}}">Clear</button>
                     </div>
                 </div>
             </template>

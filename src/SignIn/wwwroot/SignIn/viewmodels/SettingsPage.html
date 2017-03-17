@@ -65,9 +65,9 @@
         <div>
             <input id="Password$" type="password" disabled$="{{!model.Enabled$ }}" value="{{model.Password$::change}}" placeholder="Password" class="form-control" />
         </div>
-        <button class="btn btn-primary" disabled$="{{isSaveDisabled(model.IsInvalid, model.IsPristine)}}" onclick="++this.value;" value="{{model.Save$::click}}">Save</button>
-        <button class="btn btn-default" disabled$="{{model.IsPristine}}" onclick="++this.value;" value="{{model.Rollback$::click}}">Undo</button>
-        <button class="btn btn-default" onclick="++this.value;" value="{{model.Close$::click}}">Close</button>
+        <button class="btn btn-primary" disabled$="{{isSaveDisabled(model.IsInvalid, model.IsPristine)}}" onmousedown="++this.value;" value="{{model.Save$::click}}">Save</button>
+        <button class="btn btn-default" disabled$="{{model.IsPristine}}" onmousedown="++this.value;" value="{{model.Rollback$::click}}">Undo</button>
+        <button class="btn btn-default" onmousedown="++this.value;" value="{{model.Close$::click}}">Close</button>
         <link is="puppet-redirect" history url$="{{model.RedirectUrl}}" />
     </template>
     <script>
