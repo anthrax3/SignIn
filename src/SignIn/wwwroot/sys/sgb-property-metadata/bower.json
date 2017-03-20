@@ -1,0 +1,18 @@
+{
+  "name": "sgb-property-metadata",
+  "version": "0.0.0",
+  "homepage": "https://github.com/Smorgasbord-Development/sgb-property-metadata",
+  "authors": [
+    "anders.wahlgren@starcounter.com"
+  ],
+  "description": "Polyjuice property metadata helper",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "../",
+    "test",
+    "tests"
+  ]
+}

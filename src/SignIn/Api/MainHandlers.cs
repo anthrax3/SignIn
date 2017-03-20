@@ -6,6 +6,8 @@ using System.Web;
 using Starcounter;
 using Simplified.Ring3;
 using Simplified.Ring5;
+using Simplified.Ring2;
+using Simplified.Ring6;
 
 namespace SignIn
 {
@@ -158,9 +160,128 @@ namespace SignIn
                 return 200;
             }, new HandlerOptions() { SkipRequestFilters = true });
 
+            Handle.GET("/signin/admin/settings", (Request request) =>
+            {
+                Json page;
+                if (!AuthorizationHelper.TryNavigateTo("/signin/admin/settings", request, out page))
+                {
+                    return page;
+                }
+
+                return Db.Scope(() => {
+                    var settingsPage = new SettingsPage
+                    {
+                        Html = "/SignIn/viewmodels/SettingsPage.html",
+                        Uri = request.Uri,
+                        Data = MailSettingsHelper.GetSettings()
+                    };
+                    return settingsPage;
+                });
+            });
+
+            // Reset password
+            Handle.GET("/signin/user/resetpassword?{?}", (string query, Request request) => {
+                NameValueCollection queryCollection = HttpUtility.ParseQueryString(query);
+                string token = queryCollection.Get("token");
+
+                MasterPage master = this.GetMaster();
+
+                if (token == null)
+                {
+                    // TODO:
+                    master.Partial = null; // (ushort)System.Net.HttpStatusCode.NotFound;
+                    return master;
+                }
+
+                // Retrive the resetPassword instance
+                ResetPassword resetPassword = Db.SQL<ResetPassword>("SELECT o FROM Simplified.Ring6.ResetPassword o WHERE o.Token=? AND o.Expire>?", token, DateTime.UtcNow).First;
+
+                if (resetPassword == null)
+                {
+                    // TODO: Show message "Reset token already used or expired"
+                    master.Partial = null; // (ushort)System.Net.HttpStatusCode.NotFound;
+                    return master;
+                }
+
+                if (resetPassword.User == null)
+                {
+                    // TODO: Show message "User deleted"
+                    master.Partial = null; // (ushort)System.Net.HttpStatusCode.NotFound;
+                    return master;
+                }
+
+                SystemUser systemUser = resetPassword.User;
+
+                ResetPasswordPage page = new ResetPasswordPage()
+                {
+                    Html = "/SignIn/viewmodels/ResetPasswordPage.html",
+                    Uri = "/signin/user/resetpassword"
+                    //Uri = request.Uri // TODO:
+                };
+
+                page.ResetPassword = resetPassword;
+
+                if (systemUser.WhoIs != null)
+                {
+                    page.FullName = systemUser.WhoIs.FullName;
+                }
+                else
+                {
+                    page.FullName = systemUser.Username;
+                }
+
+                master.Partial = page;
+
+                return master;
+            });
+
+            Handle.GET("/signin/user/authentication/settings/{?}", (string userid, Request request) =>
+            {
+                Json page;
+                if (!AuthorizationHelper.TryNavigateTo("/signin/user/authentication/settings/{?}", request, out page))
+                {
+                    return new Json();
+                }
+
+                // Get system user
+                SystemUser user = Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.ObjectID = ?", userid).First;
+
+                if (user == null)
+                {
+                    // TODO: Return a "User not found" page
+                    return new Json();
+                    //return (ushort)System.Net.HttpStatusCode.NotFound;
+                }
+
+                SystemUser systemUser = SystemUser.GetCurrentSystemUser();
+                SystemUserGroup adminGroup = Db.SQL<SystemUserGroup>("SELECT o FROM Simplified.Ring3.SystemUserGroup o WHERE o.Name = ?",
+                        AuthorizationHelper.AdminGroupName).First;
+
+                // Check if current user has permission to get this user instance
+                if (AuthorizationHelper.IsMemberOfGroup(systemUser, adminGroup))
+                {
+                    if (user.WhoIs is Person)
+                    {
+                        page = Db.Scope(() => new SystemUserAuthenticationSettings
+                        {
+                            Html = "/SignIn/viewmodels/SystemUserAuthenticationSettings.html",
+                            Uri = request.Uri,
+                            Data = user
+                        });
+
+                        return page;
+                    }
+                }
+
+                return new Json();
+            });
+
             UriMapping.Map("/signin/user", "/sc/mapping/user"); //expandable icon; used in Launcher
             UriMapping.Map("/signin/signinuser", "/sc/mapping/userform"); //inline form; used in RSE Launcher
             UriMapping.Map("/signin/signinuser?{?}", "/sc/mapping/userform?{?}"); //inline form; used in UserAdmin
+            UriMapping.Map("/signin/admin/settings", UriMapping.MappingUriPrefix + "/settings");
+            UriMapping.Map("/signin/user/authentication/settings/{?}", UriMapping.MappingUriPrefix + "/systemuser/authentication/settings/{?}");
+
         }
 
         protected void ClearAuthCookie()
