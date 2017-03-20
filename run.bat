@@ -1,2 +1,5 @@
-@echo off
-star --resourcedir="%~dp0src\SignIn\wwwroot" "%~dp0bin\Debug\SignIn.exe"
+@ECHO OFF
+
+IF "%CONFIGURATION%"=="" SET CONFIGURATION=Debug
+
+star --resourcedir="%~dp0src\SignIn\wwwroot" "%~dp0bin/%CONFIGURATION%/SignIn.exe"
