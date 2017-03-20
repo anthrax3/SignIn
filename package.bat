@@ -1,5 +1,5 @@
 @ECHO OFF
 
-PUSHD %~dp0\src\SignIn
+PUSHD %~dp0src\SignIn
 starpack -p
 POPD
