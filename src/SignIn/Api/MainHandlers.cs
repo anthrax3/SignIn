@@ -276,11 +276,11 @@ namespace SignIn
                 return new Json();
             });
 
-            Blender.MapUri("/signin/user", "/sc/mapping/user"); //expandable icon; used in Launcher
-            Blender.MapUri("/signin/signinuser", "/sc/mapping/userform"); //inline form; used in RSE Launcher
-            Blender.MapUri("/signin/signinuser?{?}", "/sc/mapping/userform?{?}"); //inline form; used in UserAdmin
-            Blender.MapUri("/signin/admin/settings", UriMapping.MappingUriPrefix + "/settings");
-            Blender.MapUri("/signin/user/authentication/settings/{?}", UriMapping.MappingUriPrefix + "/systemuser/authentication/settings/{?}");
+            Blender.MapUri("/signin/user", "/user"); //expandable icon; used in Launcher
+            Blender.MapUri("/signin/signinuser", "/userform"); //inline form; used in RSE Launcher
+            Blender.MapUri("/signin/signinuser?{?}", "/userform?{?}"); //inline form; used in UserAdmin
+            Blender.MapUri("/signin/admin/settings", "/settings");
+            Blender.MapUri("/signin/user/authentication/settings/{?}", "/systemuser/authentication/settings/{?}");
         }
 
         protected void ClearAuthCookie()

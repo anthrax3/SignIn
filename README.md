@@ -24,13 +24,13 @@ This application exposes the following mappable partials:
 
 Kind | URI | Decription
 -----|-----|----------
-UriMapping.Map | `/sc/mapping/user` | Expandable icon; used in Launcher
-UriMapping.Map | `/sc/mapping/userform` | Inline form; used in standalone apps
+Blender.MapUri | `/user` | Expandable icon; used in Launcher
+Blender.MapUri | `/userform` | Inline form; used in standalone apps
 
-To use SignIn apps forms in your app, create an empty partial in your app (e.g. `/myapp/signinform`) and map it to one of the above URIs using `UriMapping` API:
+To use SignIn apps forms in your app, create an empty partial in your app (e.g. `/myapp/signinform`) and map it to one of the above URIs using `Blender` API:
 
 ```cs
-UriMapping.Map("/myapp/signinform", "/sc/mapping/userform");
+Blender.MapUri("/myapp/signinform", "/userform");
 ```
 
 Next, include that partial using in your JSON tree using `Self.GET` when you encounter a user who is not signed in.
