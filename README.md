@@ -1,13 +1,18 @@
 Sign In
 =========
 
-Authenticate **users** with a username and password (default admin/admin).
+Simple user authentication app. Features include:
+
+- authenticate with a username and password
+- password reminder using email
+- change password for existing users
+- settings page to provide email server configuration (SMTP)
 
 ## Developer instructions
 
 ### Default admin user
 
-Open `/signin/generateadminuser` to generate an `admin` user with default credentials. The default user will be generated only if there is no users in database.
+Open `/signin/generateadminuser` to generate an admin user with default credentials (user name `admin`, password `admin`). The default user will be generated only if there is no users in database.
 
 ### How to release a package
 
