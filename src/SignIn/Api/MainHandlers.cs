@@ -278,7 +278,7 @@ namespace SignIn
 
             Blender.MapUri("/signin/user", "user"); //expandable icon; used in Launcher
             Blender.MapUri("/signin/signinuser", "userform"); //inline form; used in RSE Launcher
-            Blender.MapUri("/signin/signinuser?{?}", "userform"); //inline form; used in UserAdmin
+            Blender.MapUri("/signin/signinuser?{?}", "userform-return"); //inline form; used in UserAdmin
             Blender.MapUri("/signin/admin/settings", "settings");
             Blender.MapUri("/signin/user/authentication/settings/{?}", "authentication-settings");
         }
