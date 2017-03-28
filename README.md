@@ -44,6 +44,18 @@ Screenshot:
 
 Settings page. Includes the mail server configuration form (SMTP). Used in Launcher.
 
+#### Settings for Gmail
+
+The following settings work for using Gmail as the SMTP server:
+
+- Host: `smtp.gmail.com`
+- Port: `587`
+- Enable SSL: (checked)
+- Username: (your Gmail email address)
+- Password: (your Gmail password)
+
+Note that you need to set `Allow less secure apps` to `ON` in your Google Account settings.
+
 Screenshot:
 
 ![image](docs/screenshot-signin-admin-settings.png)
