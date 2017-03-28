@@ -10,7 +10,7 @@ Simple user authentication app. Features include:
 
 ### Default admin user
 
-Open `/signin/generateadminuser` to generate an admin user with default credentials (user name `admin`, password `admin`). The default user will be generated only if there is no users in database.
+Open `/signin/generateadminuser` to generate an admin user with default credentials (username `admin`, password `admin`). The default user will be generated only if there are no users in database.
 
 ## Partials
 
@@ -18,31 +18,60 @@ Open `/signin/generateadminuser` to generate an admin user with default credenti
 
 Expandable icon with a sign-in form and a button to restore the password. Used in toolbars (Launcher, Website, etc).
 
+For a signed in user, the icon displays triggers partial from the Images app, which displays the Illustration of the Person that is assigned to the System User.
+
+Screenshot:
+
+![image](docs/screenshot-signin-user.gif)
+
 ### GET /signin/signinuser
 
 Inline sign-in form and a button to restore the password. Used as a full page form in standalone apps.
+
+Screenshot:
+
+![image](docs/screenshot-signin-signinuser.png)
 
 ### GET /signin/signinuser?`{string OriginalUrl}`
 
 Same as above but with redirection to a URL after successful sign-in. Used in UserAdmin.
 
+Screenshot:
+
+![image](docs/screenshot-signin-signinuser.png)
+
 ### GET /signin/admin/settings
 
 Settings page. Includes the mail server configuration form (SMTP). Used in Launcher.
+
+Screenshot:
+
+![image](docs/screenshot-signin-admin-settings.png)
 
 ### GET /signin/user/authentication/settings/`{SystemUser ObjectID}`
 
 Password change form for existing users. Used in UserAdmin.
 
+Screenshot:
+
+![image](docs/screenshot-signin-user-authentication-settings.png)
+
 ### Usage
 
-To use Sign In apps' forms in your app, create an empty partial in your app (e.g. `/myapp/signinform`) and map it to one of the above URIs using `UriMapping` API:
+To use Sign In apps' forms in your app, create an empty partial in your app (e.g. `/YOURAPP/YOURPAGE?{?}`) and map it to one of the above URIs using `UriMapping` API:
 
 ```cs
-UriMapping.Map("/myapp/signinform", "/sc/mapping/userform");
+StarcounterEnvironment.RunWithinApplication("SignIn", () => {
+    Handle.GET("/signin/signinuser-YOURAPP?{?}", (string objectId) => {
+        return Self.GET("/signin/signinuser?{?}" + objectId);
+    });
+
+    UriMapping.Map("/signin/signinuser-YOURAPP?{?}", "/sc/mapping/signinuser-YOURAPP?{?}");
+});
+UriMapping.Map("/YOURAPP/YOURPAGE?{?}", "/sc/mapping/signinuser-YOURAPP?{?}");
 ```
 
-Next, include that partial using in your JSON tree using `Self.GET` when you encounter a user who is not signed in.
+Next, include that partial using in your JSON tree using `Self.GET("/YOURAPP/YOURPAGE?" + originalUrl)` when you encounter a user who is not signed in.
 
 ## Developer instructions
 
