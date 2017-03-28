@@ -24,13 +24,13 @@ This application exposes the following mappable partials:
 
 Kind | URI | Decription
 -----|-----|----------
-Blender.MapUri | `/user` | Expandable icon; used in Launcher
-Blender.MapUri | `/userform` | Inline form; used in standalone apps
+Blender.MapUri | `user` | Expandable icon; used in Launcher
+Blender.MapUri | `userform` | Inline form; used in standalone apps
 
 To use SignIn apps forms in your app, create an empty partial in your app (e.g. `/myapp/signinform`) and map it to one of the above URIs using `Blender` API:
 
 ```cs
-Blender.MapUri("/myapp/signinform", "/userform");
+Blender.MapUri("/myapp/signinform", "userform");
 ```
 
 Next, include that partial using in your JSON tree using `Self.GET` when you encounter a user who is not signed in.
