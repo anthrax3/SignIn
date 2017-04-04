@@ -1,0 +1,31 @@
+{
+  "Html": "",
+  
+  "Message": "",
+
+  "NewPasswordClick$": 0,
+  "NewPassword$": "",
+  "NewPasswordRepeat$": "",
+  "SaveNewPassword$": 0,
+  "CancelNewPassword$": 0,
+
+  "ResetPassword$": 0,
+  "$ResetPassword_Enabled": { "Bind": "ResetPassword_Enabled_" },
+  "ResetPassword_Enabled": false,
+
+  // Inherited from PropertyMetadataItem
+  "PropertyMetadataItems": [
+    {
+      "$": { "Reuse": "PropertyMetadataItem" }
+    }
+  ],
+  "$IsDirty": { "Bind": "IsDirty_" },
+  "IsDirty": false,
+  "$IsPristine": { "Bind": "IsPristine_" },
+  "IsPristine": true,
+  "$IsValid": { "Bind": "IsValid_" },
+  "IsValid": true,
+  "$IsInvalid": { "Bind": "IsInvalid_" },
+  "IsInvalid": false,
+  "Rollback$": 0
+}

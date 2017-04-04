@@ -74,7 +74,7 @@ namespace SignIn
 
         protected void SendNewPassword(string Name, string Username, string NewPassword, string Email)
         {
-            SettingsMailServer settings = this.GetSettings();
+            SettingsMailServer settings = MailSettingsHelper.GetSettings();
             MailMessage mail = new MailMessage(settings.Username, Email);
             SmtpClient client = new SmtpClient();
 
@@ -92,32 +92,6 @@ namespace SignIn
                     Name, Username, NewPassword);
             mail.IsBodyHtml = true;
             client.Send(mail);
-        }
-
-        protected SettingsMailServer GetSettings()
-        {
-            string name = "SignInRestorePassword";
-            SettingsMailServer settings =
-                Db.SQL<SettingsMailServer>("SELECT s FROM Simplified.Ring6.SettingsMailServer s WHERE s.Name = ?", name)
-                    .First;
-
-            if (settings == null)
-            {
-                Db.Transact(() =>
-                {
-                    settings = new SettingsMailServer()
-                    {
-                        Name = name,
-                        Port = 587,
-                        Host = "mail.your-server.de",
-                        Username = "signinapp@starcounter.io",
-                        Password = "*****", // replace for real password
-                        EnableSsl = true
-                    };
-                });
-            }
-
-            return settings;
         }
 
         protected MainFormPage MainForm

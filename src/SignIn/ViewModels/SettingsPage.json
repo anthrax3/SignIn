@@ -1,0 +1,37 @@
+{
+  "Uri": "",
+  "Html": "",
+  "RedirectUrl": "",
+
+  // General settings
+  "SiteHost$": "",
+  "SitePort$": 0,
+
+  // Email settings
+  "Enabled$": false,
+  "Host$": "",
+  "Port$": 0,
+  "EnableSsl$": true,
+  "Username$": "",
+  "Password$": "",
+
+  "SuccessMessage": "",
+  "Save$": 0,
+  "Close$": 0,
+
+  // Inherited from PropertyMetadataItem
+  "PropertyMetadataItems": [
+    {
+      "$": { "Reuse": "PropertyMetadataItem" }
+    }
+  ],
+  "$IsDirty": { "Bind": "IsDirty_" },
+  "IsDirty": false,
+  "$IsPristine": { "Bind": "IsPristine_" },
+  "IsPristine": true,
+  "$IsValid": { "Bind": "IsValid_" },
+  "IsValid": true,
+  "$IsInvalid": { "Bind": "IsInvalid_" },
+  "IsInvalid": false,
+  "Rollback$": 0
+}

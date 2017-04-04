@@ -1,0 +1,88 @@
+﻿<link rel="import" href="/sys/puppet-redirect/puppet-redirect.html" />
+<link rel="import" href="/sys/sgb-property-metadata/sgb-property-metadata.html" />
+<link rel="import" href="/sys/bootstrap.html">
+
+<template>
+    <template is="dom-bind">
+        <sgb-property-metadata items="{{model.PropertyMetadataItems}}"></sgb-property-metadata>
+        <template is="dom-if" if="{{model.SuccessMessage}}">
+            <div class="alert alert-success">
+                {{model.SuccessMessage}}
+            </div>
+        </template>
+        <h3>General</h3>
+        <div class="form-horizontal">
+            <label class="control-label" for="SiteHost$">Site Host</label>
+        </div>
+        <div>
+            <input id="SiteHost$" type="text" value="{{model.SiteHost$::change}}" placeholder="Site host name" class="form-control" />
+        </div>
+        <div class="form-horizontal">
+            <label class="control-label" for="SitePort$">Site Port</label>
+        </div>
+        <div>
+            <input id="SitePort$" type="number" value="{{model.SitePort$::change}}" placeholder="Site Port" class="form-control" />
+        </div>
+        <h3>Mail Server</h3>
+        <div>
+            <label>
+                <input id="Enabled$" type="checkbox" checked="{{model.Enabled$::change}}" />
+                <span>Enabled</span>
+            </label>
+        </div>
+        <div class="form-horizontal">
+            <label class="control-label" for="Host$">Host</label>
+        </div>
+        <div>
+            <input id="Host$" type="text" disabled$="{{!model.Enabled$}}" value="{{model.Host$::change}}" placeholder="Host" class="form-control" />
+        </div>
+        <div class="form-horizontal">
+            <label class="control-label" for="Port$">Port</label>
+        </div>
+        <div>
+            <input id="Port$" type="number" disabled$="{{!model.Enabled$}}" value="{{model.Port$::change}}" placeholder="Port" class="form-control" />
+        </div>
+        <div>
+            <template is="dom-if" if="{{isFeedbackVisible(model.Port_Feedback.TypeNo)}}">
+                <span class="{{getFeedbackClass(model.Port_Feedback.Type)}}">{{model.Port_Feedback.Message}}</span>
+            </template>
+        </div>
+        <div>
+            <label for="EnableSsl$">
+                <input id="EnableSsl$" type="checkbox" disabled$="{{!model.Enabled$}}" checked="{{model.EnableSsl$::change}}" />
+                <span>Enable SSL</span>
+            </label>
+        </div>
+        <div class="form-horizontal">
+            <label class="control-label" for="Username$">Username</label>
+        </div>
+        <div>
+            <input id="Username$" type="text" disabled$="{{!model.Enabled$}}" value="{{model.Username$::change}}" placeholder="Username" class="form-control" />
+        </div>
+        <div class="form-horizontal">
+            <label class="control-label" for="Password$">Password</label>
+        </div>
+        <div>
+            <input id="Password$" type="password" disabled$="{{!model.Enabled$ }}" value="{{model.Password$::change}}" placeholder="Password" class="form-control" />
+        </div>
+        <button class="btn btn-primary" disabled$="{{isSaveDisabled(model.IsInvalid, model.IsPristine)}}" onmousedown="++this.value;" value="{{model.Save$::click}}">Save</button>
+        <button class="btn btn-default" disabled$="{{model.IsPristine}}" onmousedown="++this.value;" value="{{model.Rollback$::click}}">Undo</button>
+        <button class="btn btn-default" onmousedown="++this.value;" value="{{model.Close$::click}}">Close</button>
+        <link is="puppet-redirect" history url$="{{model.RedirectUrl}}" />
+    </template>
+    <script>
+        (function (template) {
+            template.isFeedbackVisible = function (type) {
+                return type >= 0;
+            };
+
+            template.getFeedbackClass = function (type) {
+                return "isa_" + type;
+            };
+
+            template.isSaveDisabled = function (IsInvalid, IsPristine) {
+                return IsInvalid || IsPristine;
+            };
+        })(document.currentScript.previousElementSibling);
+    </script>
+</template>
