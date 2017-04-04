@@ -73,24 +73,24 @@
 <template>
     <template is="dom-bind" strip-whitespace>
 
-        <div class="signin-detailed">
+        <div class="signin-detailed" slot="SignIn/current-user-div">
             <!-- User signed in -->
             <template is="dom-if" if="{{model.IsSignedIn}}" restamp strip-whitespace>
                 <juicy-popover position="bottom left" handleselector="paper-button.handle" expandableselector=".expandable">
                     <paper-button class="handle signin-popup-handle">
                         <div class="signin-popup-user-image">
-                            <starcounter-include slot="SignIn/user-image/0" partial="{{model.UserImage}}"></starcounter-include>
+                            <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
                         </div>
-                        <div slot="SignIn/user-name-div" class="signin-popup-user-name">{{model.FullName}}</div>
+                        <div class="signin-popup-user-name">{{model.FullName}}</div>
                     </paper-button>
                     <div class="expandable signin-popup-window">
                         <div class="signin-popup-window__user-image">
-                            <starcounter-include slot="SignIn/user-image/1" partial="{{model.UserImage}}"></starcounter-include>
+                            <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
                         </div>
                         <p class="signin-popup-window__user-name">
-                            <a href="/signin/profile" slot="SignIn/user-name-link">{{model.FullName}}</a>
+                            <a href="/signin/profile">{{model.FullName}}</a>
                         </p>
-                        <button slot="SignIn/sign-out-button" on-click="signOut" class="btn btn-primary" role="button">Sign out</button>
+                        <button on-click="signOut" class="btn btn-primary" role="button">Sign out</button>
                     </div>
                 </juicy-popover>
             </template>
@@ -102,24 +102,24 @@
                         <form on-submit="preventSubmit">
                             <div>
                                 <template is="dom-if" if="{{model.Message}}" strip-whitespace restamp>
-                                    <div slot="SignIn/message" class="signin-popup-window__error">{{model.Message}}</div>
+                                    <div class="signin-popup-window__error">{{model.Message}}</div>
                                 </template>
                             </div>
                             <div>
-                                <input slot="SignIn/username-input" name="username" class="form-control signin-popup-window__control" type="text" placeholder="Username" value="{{local.username::input}}" on-keypress="txtKeypress" />
+                                <input name="username" class="form-control signin-popup-window__control" type="text" placeholder="Username" value="{{local.username::input}}" on-keypress="txtKeypress" />
                             </div>
                             <div>
-                                <input slot="SignIn/password-input" name="password" class="form-control signin-popup-window__control" type="password" placeholder="Password" value="{{local.password::input}}" on-keypress="txtKeypress" />
+                                <input name="password" class="form-control signin-popup-window__control" type="password" placeholder="Password" value="{{local.password::input}}" on-keypress="txtKeypress" />
                             </div>
                             <div class="checkbox">
                                 <label>
-                                    <input slot="SignIn/rememberme-checkbox" type="checkbox" checked="{{local.rememberMe::change}}" />
-                                    <span slot="SignIn/rememberme-label">Remember me</span>
+                                    <input type="checkbox" checked="{{local.rememberMe::change}}" />
+                                    <span>Remember me</span>
                                 </label>
                             </div>
                             <div>
-                                <button slot="SignIn/signin-button" type="submit" class="btn btn-primary" role="button" value="{{model.SignInClick$::click}}" disabled="{{model.SignInClick$}}" onmousedown="++this.value;">Sign in</button>
-                                <a slot="SignIn/forgot-button" href="/signin/signinuser" class="btn btn-link btn-sm" on-mouseover="btnFormHover">
+                                <button type="submit" class="btn btn-primary" role="button" value="{{model.SignInClick$::click}}" disabled="{{model.SignInClick$}}" onmousedown="++this.value;">Sign in</button>
+                                <a href="/signin/signinuser" class="btn btn-link btn-sm" on-mouseover="btnFormHover">
                                     Forgot password?
                                 </a>
                             </div>
