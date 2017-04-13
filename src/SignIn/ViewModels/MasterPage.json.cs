@@ -3,7 +3,7 @@ using Simplified.Ring3;
 
 namespace SignIn
 {
-    partial class MasterPage : Page
+    partial class MasterPage : Json
     {
         protected string url;
 

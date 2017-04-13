@@ -3,7 +3,7 @@ using Starcounter;
 
 namespace SignIn
 {
-    partial class SignInFormPage : Page
+    partial class SignInFormPage : Json
     {
         protected override void OnData()
         {

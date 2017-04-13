@@ -3,7 +3,7 @@ using Simplified.Ring3;
 
 namespace SignIn
 {
-    partial class AlreadyInPage : Page
+    partial class AlreadyInPage : Json
     {
         protected override void OnData()
         {

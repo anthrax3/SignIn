@@ -2,7 +2,7 @@ using Starcounter;
 
 namespace SignIn
 {
-    partial class AccessDeniedPage : Page
+    partial class AccessDeniedPage : Json
     {
     }
 }
