@@ -58,22 +58,22 @@ namespace SignIn
 
             Handle.GET("/signin/user", () =>
             {
-                SessionContainer container = this.GetSessionContainer();
+                MasterPage master = this.GetMaster();
 
-                if (container.SignIn != null)
+                if (master.SignInPage != null)
                 {
-                    return container.SignIn;
+                    return master.SignInPage;
                 }
 
                 Cookie cookie = GetSignInCookie();
                 SignInPage page = new SignInPage() { Data = null };
 
-                container.SignIn = page;
+                master.SignInPage = page;
 
                 if (cookie != null)
                 {
                     SystemUser.SignInSystemUser(cookie.Value);
-                    this.RefreshSignInState();
+                    master.RefreshSignInState();
                 }
 
                 //Testing JWT
@@ -340,43 +340,24 @@ namespace SignIn
             Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
         }
 
-        protected SessionContainer GetSessionContainer()
+        protected MasterPage GetMaster()
         {
             Session session = Session.Current;
 
             if (session != null && session.Data != null)
             {
-                return session.Data as SessionContainer;
+                return session.Data as MasterPage;
             }
 
-            SessionContainer container = new SessionContainer();
+            MasterPage master = new MasterPage();
 
             if (session == null)
             {
                 session = new Session(SessionOptions.PatchVersioning);
             }
 
-            container.Session = session;
-            return container;
-        }
-
-        protected MasterPage GetMaster()
-        {
-            SessionContainer container = this.GetSessionContainer();
-
-            if (container.Master == null)
-            {
-                container.Master = new MasterPage();
-            }
-
-            return container.Master;
-        }
-
-        protected void RefreshSignInState()
-        {
-            SessionContainer container = this.GetSessionContainer();
-
-            container.RefreshSignInState();
+            master.Session = session;
+            return master;
         }
 
         protected void HandleSignIn(string Username, string Password, string RememberMe)
@@ -387,16 +368,15 @@ namespace SignIn
 
             if (session == null)
             {
-                SessionContainer container = GetSessionContainer();
-                MasterPage master = container.Master;
+                MasterPage master = GetMaster();
                 string message = "Invalid username or password!";
 
-                if (container.SignIn != null)
+                if (master.SignInPage != null)
                 {
-                    container.SignIn.Message = message;
+                    master.SignInPage.Message = message;
                 }
 
-                if (master != null && master.Partial is MainFormPage)
+                if (master.Partial is MainFormPage)
                 {
                     MainFormPage page = (MainFormPage)master.Partial;
                     if (page.CurrentForm is SignInFormPage)
@@ -406,7 +386,7 @@ namespace SignIn
                     }
                 }
 
-                if (master != null && master.Partial is SignInFormPage)
+                if (master.Partial is SignInFormPage)
                 {
                     SignInFormPage page = master.Partial as SignInFormPage;
                     page.Message = message;
@@ -447,7 +427,7 @@ namespace SignIn
             SystemUser.SignOutSystemUser();
             ClearAuthCookie();
 
-            return this.GetSessionContainer();
+            return this.GetMaster();
         }
 
         protected Cookie GetSignInCookie()
