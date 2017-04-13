@@ -123,7 +123,7 @@ namespace SignIn
                 new HandlerOptions() { SelfOnly = true });
 
             Handle.GET("/signin/partials/user/image/{?}", (string objectId) => new Json(),
-                new HandlerOptions {SelfOnly = true});
+                new HandlerOptions { SelfOnly = true });
 
             Handle.GET("/signin/generateadminuser", (Request request) =>
             {
