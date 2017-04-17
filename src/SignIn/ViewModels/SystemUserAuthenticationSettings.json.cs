@@ -17,7 +17,7 @@ namespace SignIn
             get
             {
                 var emailAddress = Utils.GetUserEmailAddress(this.Data);
-                return MailSettingsHelper.GetSettings().Enabled && Utils.IsValidEmail(emailAddress.EMail);
+                return emailAddress != null && MailSettingsHelper.GetSettings().Enabled && Utils.IsValidEmail(emailAddress.EMail);
             }
         }
 

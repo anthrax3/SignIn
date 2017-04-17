@@ -2,37 +2,20 @@
 
 <template>
     <template is="dom-bind">
-        <h2>Sign-in!</h2>
-        <form on-submit="preventSubmit">
-            <div>
-                <template is="dom-if" if="{{model.Message}}">
-                    <p class="alert alert-danger">{{model.Message}}</p>
-                </template>
-            </div>
-            <div class="form-horizontal" juicy-style="width: 10%; height: 45px;">
-                <label class="control-label" for="txtUsername">Username</label>
-            </div>
-            <div juicy-style="width: 90%; height: 45px;">
-                <input id="txtUsername" name="username" type="text" value="{{local.username::input}}" placeholder="Username" class="form-control" on-keypress="txtKeypress" />
-            </div>
-            <div class="form-horizontal" juicy-style="width: 10%; height: 45px;">
-                <label class="control-label" for="txtPassword">Password</label>
-            </div>
-            <div juicy-style="width: 90%; height: 45px;">
-                <input id="txtPassword" name="password" type="password" value="{{local.password::input}}" placeholder="Password" class="form-control" on-keypress="txtKeypress" />
-            </div>
-            <div juicy-style="width: 90%; height: 45px;">
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" checked="{{local.rememberMe::change}}" />
-                        <span>Remember me</span>
-                    </label>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary" value="{{model.SignInClick$::click}}" disabled="{{model.SignInClick$}}" onmouseup="++this.value;" juicy-style="width: 74px; height: 30px;">Sign in</button>
-            <button type="button" class="btn btn-link" value="{{model.RestoreClick$::click}}" disabled="{{model.RestoreClick$::click}}" onmouseup="++this.value;" juicy-style="width: 100px; height: 30px;">Forgot password?</button>
-            <signin-element username="{{local.username}}" password="{{local.password}}" remember-me="{{local.rememberMe}}" submit="{{model.Submit}}" session-uri="{{model.SessionUri}}"></signin-element>
-        </form>
+        <h2 slot="SignIn/header">Sign-in!</h2>
+        <template is="dom-if" if="{{model.Message}}">
+            <p class="alert alert-danger" slot="SignIn/message">{{model.Message}}</p>
+        </template>
+        <label slot="SignIn/username-label" for="txtUsername">Username</label>
+        <input slot="SignIn/username-input" id="txtUsername" name="username" type="text" value="{{local.username::input}}" placeholder="Username" class="form-control" on-keypress="txtKeypress"/>
+        <label slot="SignIn/password-label" for="txtPassword">Password</label>
+        <assas action="{{thing}}"></assas>
+        <input slot="SignIn/password-input" id="txtPassword" name="password" type="password" value="{{local.password::input}}" placeholder="Password" class="form-control" on-keypress="txtKeypress"/>
+        <input slot="SignIn/rememberme-checkbox" type="checkbox" checked="{{local.rememberMe::change}}"/>
+        <span slot="SignIn/rememberme-label">Remember me</span>
+        <button slot="SignIn/submit-button" type="submit" class="btn btn-primary" value="{{model.SignInClick$::click}}" disabled="{{model.SignInClick$}}" onmouseup="++this.value;">Sign in</button>
+        <button slot="SignIn/forgot-button" type="button" class="btn btn-link" value="{{model.RestoreClick$::click}}" disabled="{{model.RestoreClick$::click}}" onmouseup="++this.value;">Forgot password?</button>
+        <signin-element slot="SignIn/signin-element" username="{{local.username}}" password="{{local.password}}" remember-me="{{local.rememberMe}}" submit="{{model.Submit}}" session-uri="{{model.SessionUri}}"></signin-element>
     </template>
     <script>
         (function () {
@@ -43,10 +26,6 @@
                 username: "",
                 password: "",
                 rememberMe: false
-            };
-
-            template.preventSubmit = function(e) {
-                e.preventDefault();
             };
 
             template.txtKeypress = function (e) {
@@ -60,4 +39,43 @@
             };
         })();
     </script>
+
+    <template is="declarative-shadow-dom">
+        <style>
+            @import url("/SignIn/css/signin.css");
+        </style>
+        <content select="[slot='SignIn/header']"></content>
+        <div class="signin-page">
+            <content select="[slot='SignIn/message']"></content>
+            <div class="signin-form">
+                <div class="signin-form__row">
+                    <div class="signin-form__label">
+                        <content select="[slot='SignIn/username-label']"></content>
+                    </div>
+                    <div class="signin-profile__input">
+                        <content select="[slot='SignIn/username-input']"></content>
+                    </div>
+                </div>
+                <div class="signin-form__row">
+                    <div class="signin-form__label">
+                        <content select="[slot='SignIn/password-label']"></content>
+                    </div>
+                    <div class="signin-profile__input">
+                        <content select="[slot='SignIn/password-input']"></content>
+                    </div>
+                </div>
+            </div>
+            <div class="signin-form__toolbar">
+                <label>
+                    <content select="[slot='SignIn/rememberme-checkbox']"></content>
+                    <content select="[slot='SignIn/rememberme-label']"></content>
+                </label>
+            </div>
+            <div class="signin-form__toolbar">
+                <content select="[slot='SignIn/submit-button']"></content>
+                <content select="[slot='SignIn/forgot-button']"></content>
+            </div>
+        </div>
+        <content select="[slot='SignIn/signin-element']"></content>
+    </template>
 </template>
