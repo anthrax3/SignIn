@@ -100,9 +100,6 @@
     <Compile Include="ViewModels\RestorePasswordFormPage.json.cs">
       <DependentUpon>RestorePasswordFormPage.json</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\SessionContainer.json.cs">
-      <DependentUpon>SessionContainer.json</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\SettingsPage.json.cs">
       <DependentUpon>SettingsPage.json</DependentUpon>
     </Compile>
@@ -171,9 +168,6 @@
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
     <TypedJSON Include="ViewModels\MainFormPage.json">
-      <Generator>MsBuild:Compile</Generator>
-    </TypedJSON>
-    <TypedJSON Include="ViewModels\SessionContainer.json">
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
     <TypedJSON Include="ViewModels\SettingsPage.json">

@@ -21,22 +21,11 @@ namespace SignIn
 
         protected void RefreshSignInState()
         {
-            SessionContainer container = GetSessionContainer();
-
-            if (container != null)
-            {
-                container.RefreshSignInState();
-            }
-        }
-
-        protected SessionContainer GetSessionContainer()
-        {
             if (Session.Current != null)
             {
-                return Session.Current.Data as SessionContainer;
+                var master = Session.Current.Data as MasterPage;
+                master.RefreshSignInState();
             }
-
-            return null;
         }
     }
 }

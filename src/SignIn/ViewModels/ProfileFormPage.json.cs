@@ -5,7 +5,7 @@ using Simplified.Ring5;
 
 namespace SignIn
 {
-    partial class ProfileFormPage : Page
+    partial class ProfileFormPage : Json
     {
         protected override void OnData()
         {
