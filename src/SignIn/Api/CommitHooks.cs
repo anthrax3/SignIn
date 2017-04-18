@@ -1,9 +1,4 @@
-﻿using System;
-using System.Web;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using Starcounter;
-using Starcounter.Internal;
+﻿using Starcounter;
 using Simplified.Ring5;
 
 namespace SignIn
@@ -13,9 +8,7 @@ namespace SignIn
         public void Register()
         {
             Hook<SystemUserSession>.CommitInsert += (s, a) => { this.RefreshSignInState(); };
-
             Hook<SystemUserSession>.CommitDelete += (s, a) => { this.RefreshSignInState(); };
-
             Hook<SystemUserSession>.CommitUpdate += (s, a) => { this.RefreshSignInState(); };
         }
 
@@ -24,7 +17,7 @@ namespace SignIn
             if (Session.Current != null)
             {
                 var master = Session.Current.Data as MasterPage;
-                master.RefreshSignInState();
+                master?.RefreshSignInState();
             }
         }
     }
