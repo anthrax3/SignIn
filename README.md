@@ -12,6 +12,10 @@ Simple user authentication app. Features include:
 
 Open `/signin/generateadminuser` to generate an admin user with default credentials (username `admin`, password `admin`). The default user will be generated only if there are no users in database.
 
+## Developer instructions
+
+For developer instructions, go to [CONTRIBUTING](CONTRIBUTING.md)
+
 ## Mappable partial views
 
 ### GET /signin/user
