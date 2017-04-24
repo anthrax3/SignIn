@@ -3,8 +3,10 @@ using Simplified.Ring3;
 
 namespace SignIn
 {
-    partial class MasterPage : Page
+    partial class MasterPage : Json
     {
+        public SignInPage SignInPage;
+
         protected string url;
 
         public void Open(string Url)
@@ -39,6 +41,8 @@ namespace SignIn
             {
                 this.Partial = Self.GET("/signin/partial/alreadyin-form");
             }
+
+            this.SignInPage?.RefreshSignInState();
         }
     }
 }

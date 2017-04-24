@@ -4,7 +4,7 @@ using Simplified.Ring5;
 
 namespace SignIn
 {
-    partial class SignInPage : Page
+    partial class SignInPage : Json
     {
         protected override void OnData()
         {

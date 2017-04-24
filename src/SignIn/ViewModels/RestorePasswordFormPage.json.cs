@@ -8,7 +8,7 @@ using Simplified.Ring6;
 
 namespace SignIn
 {
-    partial class RestorePasswordFormPage : Page
+    partial class RestorePasswordFormPage : Json
     {
         void Handle(Input.SignInClick action)
         {

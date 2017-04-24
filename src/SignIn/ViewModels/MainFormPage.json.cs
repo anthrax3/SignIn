@@ -2,7 +2,7 @@ using Starcounter;
 
 namespace SignIn
 {
-    partial class MainFormPage : Page
+    partial class MainFormPage : Json
     {
         protected override void OnData()
         {
