@@ -8,9 +8,9 @@ Simple user authentication app. Features include:
 - change password for existing users
 - settings page to provide mail server configuration (SMTP)
 
-### Default admin user
+## Create the first user
 
-Open `/signin/generateadminuser` to generate an admin user with default credentials (username `admin`, password `admin`). The default user will be generated only if there are no users in database.
+To create the first user, open `http://localhost:8080/SignIn/generateadminuser`. This generates an admin user with default credentials (username `admin`, password `admin`). The default user will be generated only if there are no users in database.
 
 ## Developer instructions
 
