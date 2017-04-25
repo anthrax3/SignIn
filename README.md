@@ -8,9 +8,15 @@ Simple user authentication app. Features include:
 - change password for existing users
 - settings page to provide mail server configuration (SMTP)
 
-### Default admin user
+## Create the first user
 
-Open `/signin/generateadminuser` to generate an admin user with default credentials (username `admin`, password `admin`). The default user will be generated only if there are no users in database.
+To create the first user, open `http://localhost:8080/signin/generateadminuser`. This generates an admin user with default credentials (username `admin`, password `admin`). The default user will be generated only if there are no users in database.
+
+## Sign in an existing user
+
+To sign in an existing user in standalone mode, go to `http://localhost:8080/signin/signinuser`.
+
+It's also possible to sign in using one of the partial views listed below when they are mapped to a blending point in any other app. By default, it's configured to show the expandable sign in form (`/signin/signinuser`) in [Launcher](https://github.com/StarcounterApps/Launcher) and [Website](https://github.com/StarcounterApps/Website) apps.
 
 ## Developer instructions
 
