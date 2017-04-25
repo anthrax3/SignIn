@@ -12,6 +12,12 @@ Simple user authentication app. Features include:
 
 To create the first user, open `http://localhost:8080/SignIn/generateadminuser`. This generates an admin user with default credentials (username `admin`, password `admin`). The default user will be generated only if there are no users in database.
 
+## Sign in an existing user
+
+To sign in an existing user in standalone mode, go to `http://localhost:8080/signin/signinuser`.
+
+It's also possible to sign in using the expandable sign in form When running together an app that has [`/signin/user`](#get-signinuser) mapped to its toolbar, such as [Launcher](https://github.com/StarcounterApps/Launcher) or [Website app](https://github.com/StarcounterApps/Website).
+
 ## Developer instructions
 
 For developer instructions, go to [CONTRIBUTING](CONTRIBUTING.md)
