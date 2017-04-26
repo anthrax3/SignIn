@@ -416,7 +416,7 @@ namespace SignIn
             var settings = DataHelper.GetSettings();
             MasterPage master = this.GetMaster();
 
-            if (settings.SignInFormAsFullPage && Handle.IncomingRequest.HandlerAppName != "SignIn")
+            if (settings.SignInFormAsFullPage && Handle.CallLevel > 0)
             {
                 master.RedirectUrl = "/signin/signinuser?" + originalUrl;
             }
