@@ -4,9 +4,9 @@ Param
 	[Parameter(Mandatory=$true)][string] $nunitVersion, 
 	[Parameter(Mandatory=$true)][string] $browsersToRun, 
 	[Parameter(Mandatory=$true)][string] $testedApp, 
-	[Parameter(Mandatory=$true)][string[]] $appsToRun, 
-	[Parameter(Mandatory=$false)][string[]] $helpersToRun, 
-	[Parameter(Mandatory=$false)] $testsPath
+	[Parameter(Mandatory=$true)][string] $appsToRun, 
+	[Parameter(Mandatory=$false)][string] $helpersToRun, 
+	[Parameter(Mandatory=$false)][string] $testsPath
 )
 
 $StarcounterDir = "$checkoutDir\sc"
@@ -29,7 +29,7 @@ Function createRepo()
 
 Function runApps($apps, $source)
 {
-	foreach ($app in $apps)
+	foreach ($app in $apps -split ",")
 	{
 		$AppWWWPath = "$checkoutDir\$testedApp\$source\$app\wwwroot"
 		$AppExePath = "$checkoutDir\$testedApp\$source\$app\bin\Debug\$app.exe"
