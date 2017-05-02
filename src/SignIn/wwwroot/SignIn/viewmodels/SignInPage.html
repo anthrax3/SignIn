@@ -1,5 +1,4 @@
 ﻿<link rel="import" href="/sys/iron-icons/iron-icons.html" />
-<link rel="import" href="/sys/paper-icon-button/paper-icon-button.html" />
 <link rel="import" href="/sys/juicy-popover/src/juicy-popover.html" />
 <link rel="import" href="/SignIn/elements/signin-element.html" />
 
@@ -76,13 +75,13 @@
         <div class="signin-detailed" slot="SignIn/current-user">
             <!-- User signed in -->
             <template is="dom-if" if="{{model.IsSignedIn}}" restamp strip-whitespace>
-                <juicy-popover position="bottom left" handleselector="paper-button.handle" expandableselector=".expandable">
-                    <paper-button class="handle signin-popup-handle">
+                <juicy-popover position="bottom left" handleselector="div.handle" expandableselector=".expandable">
+                    <div class="handle signin-popup-handle">
                         <div class="signin-popup-user-image">
                             <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
                         </div>
                         <div class="signin-popup-user-name">{{model.FullName}}</div>
-                    </paper-button>
+                    </div>
                     <div class="expandable signin-popup-window">
                         <div class="signin-popup-window__user-image">
                             <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
@@ -96,8 +95,12 @@
             </template>
             <!-- User NOT signed in -->
             <template is="dom-if" if="{{!model.IsSignedIn}}" restamp strip-whitespace>
-                <juicy-popover class="signin-popover" position="bottom left" handleselector="paper-icon-button.handle" expandableselector=".expandable">
-                    <paper-icon-button class="handle signin-popup-handle" icon="account-circle" on-click="focusPopover"></paper-icon-button>
+                <juicy-popover class="signin-popover" position="bottom left" handleselector="div.handle" expandableselector=".expandable">
+                    <div class="handle signin-popup-handle signin-popup-user-image">
+                        <svg viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <use xlink:href="/SignIn/css/empty_user.svg#empty-user" />
+                        </svg>
+                    </div>
                     <div class="expandable signin-popup-window">
                         <form on-submit="preventSubmit">
                             <div>
