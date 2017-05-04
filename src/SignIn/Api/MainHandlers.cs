@@ -411,21 +411,13 @@ namespace SignIn
             return this.HandleSignInForm(string.Empty);
         }
 
-        protected Response HandleSignInForm(string originalUrl)
+        protected Response HandleSignInForm(string OriginalUrl)
         {
-            var settings = DataHelper.GetSettings();
             MasterPage master = this.GetMaster();
 
-            if (settings.SignInFormAsFullPage && Handle.CallLevel > 0)
-            {
-                master.RedirectUrl = "/signin/signinuser?" + originalUrl;
-            }
-            else
-            {
-                master.RequireSignIn = false;
-                master.OriginalUrl = HttpUtility.UrlDecode(originalUrl);
-                master.Open("/signin/partial/main-form");
-            }
+            master.RequireSignIn = false;
+            master.OriginalUrl = HttpUtility.UrlDecode(OriginalUrl);
+            master.Open("/signin/partial/main-form");
 
             return master;
         }
