@@ -69,7 +69,6 @@
     <Compile Include="Api\CommitHooks.cs" />
     <Compile Include="Api\MainHandlers.cs" />
     <Compile Include="Helpers\AuthorizationHelper.cs" />
-    <Compile Include="Helpers\DataHelper.cs" />
     <Compile Include="Helpers\MailSettingsHelper.cs" />
     <Compile Include="Helpers\SignInJwt.cs" />
     <Compile Include="Helpers\SignInOut.cs" />
