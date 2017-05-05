@@ -43,9 +43,15 @@ namespace SignIn
                 this.Partial = Self.GET("/signin/partial/alreadyin-form");
             }
 
-            if ((userSession == null && this.SignInPage.Data != null) || !userSession.Equals(this.SignInPage.Data))
+            if (this.SignInPage != null)
             {
-                this.SignInPage.Data = userSession;
+                if (
+                    (userSession == null && this.SignInPage.Data != null) || //switching state to signed in
+                    (userSession != null && !userSession.Equals(this.SignInPage.Data)) //switching state to signed out
+                 )
+                {
+                    this.SignInPage.Data = userSession;
+                }
             }
         }
     }
