@@ -80,7 +80,7 @@ Screenshot:
 
 ### Usage
 
-To use Sign In apps' forms in your app, create an empty partial in your app (e.g. `/YOURAPP/YOURPAGE?{?}`) and map it to one of the above URIs using `UriMapping` API:
+To use Sign In apps' forms in your app, create an empty partial in your app (e.g. `/YOURAPP/YOURPAGE?{?}`) and map it to one of the above URIs using `Blender` API:
 
 ```cs
 StarcounterEnvironment.RunWithinApplication("SignIn", () => {
@@ -88,9 +88,9 @@ StarcounterEnvironment.RunWithinApplication("SignIn", () => {
         return Self.GET("/signin/signinuser?{?}" + objectId);
     });
 
-    UriMapping.Map("/signin/signinuser-YOURAPP?{?}", "/sc/mapping/signinuser-YOURAPP?{?}");
+    Blender.MapUri("/signin/signinuser-YOURAPP?{?}", "signinuser-YOURAPP");
 });
-UriMapping.Map("/YOURAPP/YOURPAGE?{?}", "/sc/mapping/signinuser-YOURAPP?{?}");
+Blender.MapUri("/YOURAPP/YOURPAGE?{?}", "signinuser-YOURAPP");
 ```
 
 Next, include that partial using in your JSON tree using `Self.GET("/YOURAPP/YOURPAGE?" + originalUrl)` when you encounter a user who is not signed in.

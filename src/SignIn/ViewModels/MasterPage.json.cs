@@ -1,5 +1,6 @@
 using Starcounter;
 using Simplified.Ring3;
+using Simplified.Ring5;
 
 namespace SignIn
 {
@@ -17,17 +18,17 @@ namespace SignIn
 
         public void RefreshSignInState()
         {
-            SystemUser user = SystemUser.GetCurrentSystemUser();
+            SystemUserSession userSession = SystemUser.GetCurrentSystemUserSession();
 
-            if (this.RequireSignIn && user != null)
+            if (this.RequireSignIn && userSession != null)
             {
                 this.Partial = Self.GET(this.url);
             }
-            else if (this.RequireSignIn && user == null)
+            else if (this.RequireSignIn && userSession == null)
             {
                 this.Partial = Self.GET("/signin/partial/accessdenied-form");
             }
-            else if (user == null && !string.IsNullOrEmpty(this.url))
+            else if (userSession == null && !string.IsNullOrEmpty(this.url))
             {
                 this.Partial = Self.GET(this.url);
             }
@@ -37,12 +38,21 @@ namespace SignIn
                 this.RedirectUrl = this.OriginalUrl;
                 this.OriginalUrl = null;
             }
-            else if (user != null)
+            else if (userSession != null)
             {
                 this.Partial = Self.GET("/signin/partial/alreadyin-form");
             }
 
-            this.SignInPage?.RefreshSignInState();
+            if (this.SignInPage != null)
+            {
+                if (
+                    (userSession == null && this.SignInPage.Data != null) || //switching state to signed in
+                    (userSession != null && !userSession.Equals(this.SignInPage.Data)) //switching state to signed out
+                 )
+                {
+                    this.SignInPage.Data = userSession;
+                }
+            }
         }
     }
 }

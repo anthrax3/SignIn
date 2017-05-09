@@ -1,61 +1,42 @@
 using Starcounter;
-using Simplified.Ring3;
 using Simplified.Ring5;
 
 namespace SignIn
 {
-    partial class SignInPage : Json
+    partial class SignInPage : Json, IBound<SystemUserSession>
     {
+        public bool IsSignedIn => this.Data != null;
+
+        static SignInPage()
+        {
+            DefaultTemplate.FullName.Bind = "Token.User.WhoIs.FullName";
+        }
+
         protected override void OnData()
         {
             base.OnData();
             this.SessionUri = Session.Current.SessionUri;
+            if (this.IsSignedIn)
+            {
+                this.SetAuthorizedState();
+            }
         }
 
         void Handle(Input.SignInClick action)
         {
-            this.Message = null;
+            this.Message = string.Empty;
             action.Cancel();
 
             this.Submit++;
         }
 
-        public void SetAuthorizedState(SystemUserSession Session)
+        public void SetAuthorizedState()
         {
             this.Message = string.Empty;
 
-            if (Session.Token.User.WhoIs != null)
+            if (this.Data.Token.User.WhoIs != null)
             {
-                this.FullName = Session.Token.User.WhoIs.FullName;
-                this.UserImage = Self.GET<Json>("/signin/partials/user/image/" + Session.Token.User.WhoIs.GetObjectID(), () => new UserImagePage());
-            }
-
-            if (string.IsNullOrEmpty(this.FullName))
-            {
-                this.FullName = Session.Token.User.Username;
-            }
-
-            this.IsSignedIn = true;
-        }
-
-        public void SetAnonymousState()
-        {
-            this.FullName = string.Empty;
-            this.Message = Message;
-            this.IsSignedIn = false;
-        }
-
-        public void RefreshSignInState()
-        {
-            SystemUserSession session = SystemUser.GetCurrentSystemUserSession();
-
-            if (session != null)
-            {
-                this.SetAuthorizedState(session);
-            }
-            else
-            {
-                this.SetAnonymousState();
+                this.UserImage = Self.GET<Json>("/signin/partials/user/image/" + this.Data.Token.User.WhoIs.GetObjectID(), () => new UserImagePage());
             }
         }
     }

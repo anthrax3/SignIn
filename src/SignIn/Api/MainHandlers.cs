@@ -276,12 +276,11 @@ namespace SignIn
                 return new Json();
             });
 
-            UriMapping.Map("/signin/user", "/sc/mapping/user"); //expandable icon; used in Launcher
-            UriMapping.Map("/signin/signinuser", "/sc/mapping/userform"); //inline form; used in RSE Launcher
-            UriMapping.Map("/signin/signinuser?{?}", "/sc/mapping/userform?{?}"); //inline form; used in UserAdmin
-            UriMapping.Map("/signin/admin/settings", UriMapping.MappingUriPrefix + "/settings");
-            UriMapping.Map("/signin/user/authentication/settings/{?}", UriMapping.MappingUriPrefix + "/systemuser/authentication/settings/{?}");
-
+            Blender.MapUri("/signin/user", "user"); //expandable icon; used in Launcher
+            Blender.MapUri("/signin/signinuser", "userform"); //inline form; used in RSE Launcher
+            Blender.MapUri("/signin/signinuser?{?}", "userform-return"); //inline form; used in UserAdmin
+            Blender.MapUri("/signin/admin/settings", "settings");
+            Blender.MapUri("/signin/user/authentication/settings/{?}", "authentication-settings");
         }
 
         protected void ClearAuthCookie()
