@@ -96,9 +96,7 @@
             <template is="dom-if" if="{{!model.IsSignedIn}}" restamp strip-whitespace>
                 <juicy-popover class="signin-popover" position="bottom left" handleselector="div.signin-popup-handle" expandableselector=".signin-popup-window">
                     <div class="signin-popup-handle signin-popup-user-image">
-                        <svg viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                            <use xlink:href="/SignIn/css/empty_user.svg#empty-user" />
-                        </svg>
+                        <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
                     </div>
                     <div class="signin-popup-window">
                         <form on-submit="preventSubmit">

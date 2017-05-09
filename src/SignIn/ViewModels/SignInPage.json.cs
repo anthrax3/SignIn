@@ -20,6 +20,10 @@ namespace SignIn
             {
                 this.SetAuthorizedState();
             }
+            else
+            {
+                this.SetAnonymousState();
+            }
         }
 
         void Handle(Input.SignInClick action)
@@ -28,6 +32,11 @@ namespace SignIn
             action.Cancel();
 
             this.Submit++;
+        }
+
+        public void SetAnonymousState()
+        {
+            this.UserImage = Self.GET<Json>("/signin/partials/user/image", () => new UserImagePage());
         }
 
         public void SetAuthorizedState()
