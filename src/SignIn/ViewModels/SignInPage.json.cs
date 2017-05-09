@@ -16,14 +16,7 @@ namespace SignIn
         {
             base.OnData();
             this.SessionUri = Session.Current.SessionUri;
-            if (this.IsSignedIn)
-            {
-                this.SetAuthorizedState();
-            }
-            else
-            {
-                this.SetAnonymousState();
-            }
+            this.SetAuthorizedState();
         }
 
         void Handle(Input.SignInClick action)
@@ -34,16 +27,15 @@ namespace SignIn
             this.Submit++;
         }
 
-        public void SetAnonymousState()
-        {
-            this.UserImage = Self.GET<Json>("/signin/partials/user/image", () => new UserImagePage());
-        }
-
         public void SetAuthorizedState()
         {
             this.Message = string.Empty;
 
-            if (this.Data.Token.User.WhoIs != null)
+            if (!this.IsSignedIn)
+            {
+                this.UserImage = Self.GET<Json>("/signin/partials/user/image", () => new UserImagePage());
+            }
+            else if (this.Data.Token.User.WhoIs != null)
             {
                 this.UserImage = Self.GET<Json>("/signin/partials/user/image/" + this.Data.Token.User.WhoIs.GetObjectID(), () => new UserImagePage());
             }
