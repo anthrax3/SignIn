@@ -100,6 +100,9 @@
     <Compile Include="ViewModels\RestorePasswordFormPage.json.cs">
       <DependentUpon>RestorePasswordFormPage.json</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\SetPasswordPage.json.cs">
+      <DependentUpon>SetPasswordPage.json</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\SettingsPage.json.cs">
       <DependentUpon>SettingsPage.json</DependentUpon>
     </Compile>
@@ -117,6 +120,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <TypedJSON Include="ViewModels\SetPasswordPage.json">
+      <Generator>MsBuild:Compile</Generator>
+    </TypedJSON>
     <None Include="wwwroot\SignIn\viewmodels\ResetPasswordPage.html" />
     <Content Include="wwwroot\SignIn\css\empty_user.svg" />
     <Content Include="wwwroot\SignIn\css\signin.css" />
@@ -135,6 +141,7 @@
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
     <None Include="wwwroot\SignIn\viewmodels\SettingsPage.html" />
+    <None Include="wwwroot\SignIn\viewmodels\SetPasswordPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\SignInFormPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\SignInPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\UserImagePage.html" />
