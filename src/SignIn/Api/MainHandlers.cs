@@ -269,7 +269,8 @@ namespace SignIn
                         {
                             Html = "/SignIn/viewmodels/SystemUserAuthenticationSettings.html",
                             Uri = request.Uri,
-                            Data = user
+                            Data = user,
+                            UserPassword = Self.GET("/signin/user/authentication/password/" + user.GetObjectID())
                         });
 
                         return page;
@@ -282,10 +283,10 @@ namespace SignIn
             Handle.GET("/signin/user/authentication/password/{?}", (string userid, Request request) =>
             {
                 Json page;
-                if (!AuthorizationHelper.TryNavigateTo("/signin/user/authentication/password/{?}", request, out page))
-                {
-                    return new Json();
-                }
+                //if (!AuthorizationHelper.TryNavigateTo("/signin/user/authentication/password/{?}", request, out page))
+                //{
+                //    return new Json();
+                //}
 
                 // Get system user
                 SystemUser user = Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.ObjectID = ?", userid).First;
@@ -306,7 +307,7 @@ namespace SignIn
                     {
                         page = Db.Scope(() => new SetPasswordPage
                         {
-                            Html = "/SignIn/viewmodels/SystemUserAuthenticationSettings.html",
+                            Html = "/SignIn/viewmodels/SetPasswordPage.html",
                             Uri = request.Uri,
                             Data = user
                         });

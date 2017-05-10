@@ -1,13 +1,12 @@
 {
   "Html": "",
-  
+
   "Message": "",
 
   "NewPasswordClick$": 0,
-  "NewPassword$": "",
-  "NewPasswordRepeat$": "",
   "SaveNewPassword$": 0,
   "CancelNewPassword$": 0,
+  "UserPassword": {},
 
   "ResetPassword$": 0,
   "$ResetPassword_Enabled": { "Bind": "ResetPassword_Enabled_" },
