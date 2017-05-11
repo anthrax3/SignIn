@@ -29,13 +29,6 @@ namespace SignIn
                 return;
             }
 
-            //AssureNewPasswordPropertyFeedback();
-
-            if (this.IsInvalid)
-            {
-                return;
-            }
-
             Db.Transact(() =>
             {
                 // Set the new password

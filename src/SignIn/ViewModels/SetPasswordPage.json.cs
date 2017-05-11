@@ -6,14 +6,6 @@ namespace SignIn.ViewModels
 {
     partial class SetPasswordPage : PropertyMetadataPage, IBound<SystemUser>
     {
-        protected override void OnData()
-        {
-            base.OnData();
-            SystemUser user = this.Data;
-            //UserHelper.SetPassword(user, NewPassword);
-            //this.SessionUri = Session.Current.SessionUri;
-        }
-
         private void Handle(Input.PasswordToSet action)
         {
             this.PasswordToSet = action.Value;
@@ -28,10 +20,14 @@ namespace SignIn.ViewModels
 
         private void ValidatePassword()
         {
-            if (PasswordRepeat == PasswordToSet)
+            this.AssureNewPasswordPropertyFeedback();
+
+            if (this.IsInvalid)
             {
-                UserHelper.SetPassword(this.Data, PasswordToSet);
+                return;
             }
+
+            UserHelper.SetPassword(this.Data, PasswordToSet);
         }
 
 
@@ -46,7 +42,7 @@ namespace SignIn.ViewModels
                 {
                     Message = "Password must not be empty!",
                     ErrorLevel = 1,
-                    PropertyName = "NewPassword"
+                    PropertyName = "PasswordToSet"
                 });
                 this.Message = message;
             }
@@ -57,20 +53,20 @@ namespace SignIn.ViewModels
                 {
                     Message = message,
                     ErrorLevel = 1,
-                    PropertyName = "NewPassword"
+                    PropertyName = "PasswordToSet"
                 });
                 this.AddPropertyFeedback(new PropertyMetadataItem
                 {
                     Message = message,
                     ErrorLevel = 1,
-                    PropertyName = "NewPasswordRepeat"
+                    PropertyName = "PasswordRepeat"
                 });
                 this.Message = message;
             }
             else
             {
-                this.RemovePropertyFeedback("NewPassword");
-                this.RemovePropertyFeedback("NewPasswordRepeat");
+                this.RemovePropertyFeedback("PasswordToSet");
+                this.RemovePropertyFeedback("PasswordRepeat");
                 this.Message = null;
             }
 

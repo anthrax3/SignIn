@@ -282,12 +282,6 @@ namespace SignIn
 
             Handle.GET("/signin/user/authentication/password/{?}", (string userid, Request request) =>
             {
-                Json page;
-                //if (!AuthorizationHelper.TryNavigateTo("/signin/user/authentication/password/{?}", request, out page))
-                //{
-                //    return new Json();
-                //}
-
                 // Get system user
                 SystemUser user = Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.ObjectID = ?", userid).First;
 
@@ -296,27 +290,14 @@ namespace SignIn
                     return new Json();
                 }
 
-                SystemUser systemUser = SystemUser.GetCurrentSystemUser();
-                SystemUserGroup adminGroup = Db.SQL<SystemUserGroup>("SELECT o FROM Simplified.Ring3.SystemUserGroup o WHERE o.Name = ?",
-                    AuthorizationHelper.AdminGroupName).First;
-
-                // Check if current user has permission to get this user instance
-                if (AuthorizationHelper.IsMemberOfGroup(systemUser, adminGroup))
+                Json page = Db.Scope(() => new SetPasswordPage
                 {
-                    if (user.WhoIs is Person)
-                    {
-                        page = Db.Scope(() => new SetPasswordPage
-                        {
-                            Html = "/SignIn/viewmodels/SetPasswordPage.html",
-                            Uri = request.Uri,
-                            Data = user
-                        });
+                    Html = "/SignIn/viewmodels/SetPasswordPage.html",
+                    Uri = request.Uri,
+                    Data = user
+                });
 
-                        return page;
-                    }
-                }
-
-                return new Json();
+                return page;
             });
 
             Blender.MapUri("/signin/user", "user"); //expandable icon; used in Launcher
