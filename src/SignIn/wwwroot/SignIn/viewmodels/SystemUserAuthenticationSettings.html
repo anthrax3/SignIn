@@ -12,23 +12,25 @@
         <div class="signin-auth-settings">
             <sgb-property-metadata items="{{model.PropertyMetadataItems}}"></sgb-property-metadata>
 
-
+            <template is="dom-if" if="{{model.Message}}">
+                <p class="alert alert-danger">{{model.Message}}</p>
+            </template>
 
             <h3>Authentication settings</h3>
 
             <div>
                 <button class="btn btn-default btn-sm" onmousedown="++this.value;" value="{{model.NewPasswordClick$::click}}">Set New Password</button>
-                <button class="btn btn-default btn-sm" disabled$="{{!model.ResetPassword_Enabled}}" onmousedown="++this.value;" value="{{model.ResetPassword$::click}}">Reset Password</button>
+                <button class="btn btn-default btn-sm" disabled$="{{model.ResetPassword_Enabled}}" onmousedown="++this.value;" value="{{model.ResetPassword$::click}}">Reset Password</button>
             </div>
 
             <template is="dom-if" if="{{model.NewPasswordClick$}}">
                 <div>
                     <starcounter-include partial="{{model.UserPassword}}"></starcounter-include>
                     <br />
-                    <div>
+                    <!--<div>
                         <button class="btn btn-primary btn-sm" onmousedown="++this.value;" value="{{model.SaveNewPassword$::click}}">Apply new password</button>
                         <button class="btn btn-default btn-sm" onmousedown="++this.value;" value="{{model.CancelNewPassword$::click}}">Clear</button>
-                    </div>
+                    </div>-->
                 </div>
             </template>
         </div>

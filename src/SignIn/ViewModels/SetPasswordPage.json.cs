@@ -6,6 +6,15 @@ namespace SignIn.ViewModels
 {
     partial class SetPasswordPage : PropertyMetadataPage, IBound<SystemUser>
     {
+        private SystemUser _baseData;
+
+        protected override void OnData()
+        {
+            base.OnData();
+            _baseData = this.Data;
+
+        }
+
         private void Handle(Input.PasswordToSet action)
         {
             this.PasswordToSet = action.Value;
@@ -24,6 +33,8 @@ namespace SignIn.ViewModels
 
             if (this.IsInvalid)
             {
+                this.Data.Password = _baseData.Password;
+                this.Data.PasswordSalt = _baseData.PasswordSalt;
                 return;
             }
 
