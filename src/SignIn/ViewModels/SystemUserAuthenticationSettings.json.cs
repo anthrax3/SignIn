@@ -21,41 +21,6 @@ namespace SignIn
             }
         }
 
-        //private void Handle(Input.SaveNewPassword action)
-        //{
-        //    // Validate new data
-        //    if (NewPasswordClick <= 0)
-        //    {
-        //        return;
-        //    }
-
-        //    //Db.Transact(() =>
-        //    //{
-        //    //    // Set the new password
-        //    SystemUser user = this.Data;
-        //    //    //UserHelper.SetPassword(user, NewPassword);
-
-        //    //    // Sign out the changed user if required
-        //    if (SystemUser.GetCurrentSystemUser() != user)
-        //    {
-        //        SystemUser.SignOutSystemUser(user);
-        //    }
-
-        //    Transaction.Commit();
-        //    //});
-
-        //    // TODO: Set message with success status
-        //}
-
-        //private void Handle(Input.CancelNewPassword action)
-        //{
-        //    // Reset all fields
-        //    Message = null;
-        //    NewPasswordClick = 0;
-        //    SaveNewPassword = 0;
-        //    CancelNewPassword = 0;
-        //}
-
         void Handle(Input.ResetPassword action)
         {
             // Go to "Reset password" form

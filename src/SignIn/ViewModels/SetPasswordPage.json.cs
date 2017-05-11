@@ -6,13 +6,14 @@ namespace SignIn.ViewModels
 {
     partial class SetPasswordPage : PropertyMetadataPage, IBound<SystemUser>
     {
-        private SystemUser _baseData;
+        private string _oldPassword;
+        private string _oldPasswordSalt;
 
         protected override void OnData()
         {
             base.OnData();
-            _baseData = this.Data;
-
+            _oldPassword = this.Data.Password;
+            _oldPasswordSalt = this.Data.PasswordSalt;
         }
 
         private void Handle(Input.PasswordToSet action)
@@ -33,19 +34,17 @@ namespace SignIn.ViewModels
 
             if (this.IsInvalid)
             {
-                this.Data.Password = _baseData.Password;
-                this.Data.PasswordSalt = _baseData.PasswordSalt;
+                this.Data.Password = this._oldPassword;
+                this.Data.PasswordSalt = this._oldPasswordSalt;
                 return;
             }
 
             UserHelper.SetPassword(this.Data, PasswordToSet);
         }
 
-
         #region Validate properties
         protected void AssureNewPasswordPropertyFeedback()
         {
-
             if (string.IsNullOrEmpty(PasswordToSet))
             {
                 var message = "Password must not be empty!";
@@ -55,6 +54,7 @@ namespace SignIn.ViewModels
                     ErrorLevel = 1,
                     PropertyName = "PasswordToSet"
                 });
+                this.IsInvalid = true;
                 this.Message = message;
             }
             else if (PasswordToSet != PasswordRepeat)
@@ -72,6 +72,7 @@ namespace SignIn.ViewModels
                     ErrorLevel = 1,
                     PropertyName = "PasswordRepeat"
                 });
+                this.IsInvalid = true;
                 this.Message = message;
             }
             else
@@ -80,7 +81,6 @@ namespace SignIn.ViewModels
                 this.RemovePropertyFeedback("PasswordRepeat");
                 this.Message = null;
             }
-
         }
         #endregion
     }
