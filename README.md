@@ -78,6 +78,14 @@ Screenshot:
 
 ![image](docs/screenshot-signin-user-authentication-settings.png)
 
+### GET /signin/partial/user/image
+
+Default user image.
+
+Screenshot:
+
+![image](docs/screenshot-signin-userimage-default.png)
+
 ### Usage
 
 To use Sign In apps' forms in your app, create an empty partial in your app (e.g. `/YOURAPP/YOURPAGE?{?}`) and map it to one of the above URIs using `Blender` API:

@@ -33,11 +33,12 @@ namespace SignIn
 
             if (!this.IsSignedIn)
             {
-                this.UserImage = Self.GET<Json>("/signin/partials/user/image", () => new UserImagePage());
+                this.UserImage = Self.GET<Json>("/signin/partial/user/image");
             }
             else if (this.Data.Token.User.WhoIs != null)
             {
-                this.UserImage = Self.GET<Json>("/signin/partials/user/image/" + this.Data.Token.User.WhoIs.GetObjectID(), () => new UserImagePage());
+                this.UserImage = Self.GET<Json>("/signin/partial/user/image/" + this.Data.Token.User.WhoIs.GetObjectID(),
+                    () => Self.GET("/signin/partial/user/image"));
             }
         }
     }

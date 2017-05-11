@@ -122,7 +122,8 @@ namespace SignIn
             Handle.GET("/signin/partial/main-form", () => new MainFormPage() { Data = null },
                 new HandlerOptions() { SelfOnly = true });
 
-            Handle.GET("/signin/partials/user/image/{?}", (string objectId) => new Json(),
+            Handle.GET("/signin/partial/user/image", () => new UserImagePage());
+            Handle.GET("/signin/partial/user/image/{?}", (string objectId) => new Json(),
                 new HandlerOptions { SelfOnly = true });
 
             Handle.GET("/signin/generateadminuser", (Request request) =>
@@ -281,6 +282,7 @@ namespace SignIn
             Blender.MapUri("/signin/signinuser?{?}", "userform-return"); //inline form; used in UserAdmin
             Blender.MapUri("/signin/admin/settings", "settings");
             Blender.MapUri("/signin/user/authentication/settings/{?}", "authentication-settings");
+            Blender.MapUri("/signin/partial/user/image", "userimage-default");  // default user image
         }
 
         protected void ClearAuthCookie()
