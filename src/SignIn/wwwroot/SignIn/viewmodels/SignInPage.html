@@ -1,6 +1,4 @@
-﻿<link rel="import" href="/sys/iron-icons/iron-icons.html" />
-<link rel="import" href="/sys/paper-icon-button/paper-icon-button.html" />
-<link rel="import" href="/sys/juicy-popover/src/juicy-popover.html" />
+﻿<link rel="import" href="/sys/juicy-popover/src/juicy-popover.html" />
 <link rel="import" href="/SignIn/elements/signin-element.html" />
 
 <style>
@@ -76,14 +74,14 @@
         <div class="signin-detailed" slot="SignIn/current-user">
             <!-- User signed in -->
             <template is="dom-if" if="{{model.IsSignedIn}}" restamp strip-whitespace>
-                <juicy-popover position="bottom left" handleselector="paper-button.handle" expandableselector=".expandable">
-                    <paper-button class="handle signin-popup-handle">
+                <juicy-popover position="bottom left" handleselector="div.signin-popup-handle" expandableselector=".signin-popup-window">
+                    <div class="signin-popup-handle">
                         <div class="signin-popup-user-image">
                             <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
                         </div>
                         <div class="signin-popup-user-name">{{model.FullName}}</div>
-                    </paper-button>
-                    <div class="expandable signin-popup-window">
+                    </div>
+                    <div class="signin-popup-window">
                         <div class="signin-popup-window__user-image">
                             <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
                         </div>
@@ -96,9 +94,11 @@
             </template>
             <!-- User NOT signed in -->
             <template is="dom-if" if="{{!model.IsSignedIn}}" restamp strip-whitespace>
-                <juicy-popover class="signin-popover" position="bottom left" handleselector="paper-icon-button.handle" expandableselector=".expandable">
-                    <paper-icon-button class="handle signin-popup-handle" icon="account-circle" on-click="focusPopover"></paper-icon-button>
-                    <div class="expandable signin-popup-window">
+                <juicy-popover class="signin-popover" position="bottom left" handleselector="div.signin-popup-handle" expandableselector=".signin-popup-window">
+                    <div class="signin-popup-handle signin-popup-user-image">
+                        <starcounter-include partial="{{model.UserImage}}"></starcounter-include>
+                    </div>
+                    <div class="signin-popup-window">
                         <form on-submit="preventSubmit">
                             <div>
                                 <template is="dom-if" if="{{model.Message}}" strip-whitespace restamp>

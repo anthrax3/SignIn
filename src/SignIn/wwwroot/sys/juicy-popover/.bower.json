@@ -27,7 +27,7 @@
     "tag": "0.0.3",
     "commit": "22c799b33dc1d4e65948994317dba6fa54d68e3d"
   },
-  "_source": "git://github.com/Juicy/juicy-popover.git",
+  "_source": "https://github.com/Juicy/juicy-popover.git",
   "_target": "~0.0.3",
   "_originalSource": "Juicy/juicy-popover"
 }
