@@ -247,7 +247,7 @@ namespace SignIn
                 }
 
                 // Get system user
-                SystemUser user = Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.ObjectID = ?", userid).First;
+                SystemUser user = Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.ObjectID = ?", userid).FirstOrDefault();
 
                 if (user == null)
                 {
@@ -258,7 +258,7 @@ namespace SignIn
 
                 SystemUser systemUser = SystemUser.GetCurrentSystemUser();
                 SystemUserGroup adminGroup = Db.SQL<SystemUserGroup>("SELECT o FROM Simplified.Ring3.SystemUserGroup o WHERE o.Name = ?",
-                        AuthorizationHelper.AdminGroupName).First;
+                        AuthorizationHelper.AdminGroupName).FirstOrDefault();
 
                 // Check if current user has permission to get this user instance
                 if (AuthorizationHelper.IsMemberOfGroup(systemUser, adminGroup))
@@ -278,12 +278,12 @@ namespace SignIn
                 }
 
                 return new Json();
-            });
+            }, new HandlerOptions { SelfOnly = true });
 
             Handle.GET("/signin/user/authentication/password/{?}", (string userid, Request request) =>
             {
                 // Get system user
-                SystemUser user = Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.ObjectID = ?", userid).First;
+                SystemUser user = Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.ObjectID = ?", userid).FirstOrDefault();
 
                 if (user == null)
                 {
@@ -293,12 +293,11 @@ namespace SignIn
                 Json page = Db.Scope(() => new SetPasswordPage
                 {
                     Html = "/SignIn/viewmodels/SetPasswordPage.html",
-                    Uri = request.Uri,
                     Data = user
                 });
 
                 return page;
-            });
+            }, new HandlerOptions { SelfOnly = true });
 
             Blender.MapUri("/signin/user", "user"); //expandable icon; used in Launcher
             Blender.MapUri("/signin/signinuser", "userform"); //inline form; used in RSE Launcher
