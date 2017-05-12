@@ -47,12 +47,9 @@ namespace SignIn.ViewModels
         #region Validate properties
         protected void AssureNewPasswordPropertyFeedback()
         {
-            // Must contains: digit from 0-9, one lowercase, one uppercase, length: 6 to 20
-            var regex = new Regex("((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,20})");
-
-            if (!regex.IsMatch(PasswordToSet))
+            if (string.IsNullOrEmpty(PasswordToSet))
             {
-                this.Message = "Password must contains from 6 to 20 characters, with at least one uppercase letter, lowercase letter and number.";
+                this.Message = "Password must not be empty!";
                 this._isInvalid = true;
             }
             else if (PasswordToSet != PasswordRepeat)
