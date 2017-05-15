@@ -1,9 +1,7 @@
-using System.Text.RegularExpressions;
 using Simplified.Ring3;
-using Smorgasbord.PropertyMetadata;
 using Starcounter;
 
-namespace SignIn.ViewModels
+namespace SignIn
 {
     partial class SetPasswordPage : Json, IBound<SystemUser>
     {
@@ -14,8 +12,8 @@ namespace SignIn.ViewModels
         protected override void OnData()
         {
             base.OnData();
-            _oldPassword = this.Data.Password;
-            _oldPasswordSalt = this.Data.PasswordSalt;
+            this._oldPassword = this.Data.Password;
+            this._oldPasswordSalt = this.Data.PasswordSalt;
         }
 
         private void Handle(Input.PasswordToSet action)
