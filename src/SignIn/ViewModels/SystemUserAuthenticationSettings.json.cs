@@ -21,48 +21,6 @@ namespace SignIn
             }
         }
 
-        private void Handle(Input.SaveNewPassword action)
-        {
-            // Validate new data
-            if (NewPasswordClick <= 0)
-            {
-                return;
-            }
-
-            AssureNewPasswordPropertyFeedback();
-
-            if (this.IsInvalid)
-            {
-                return;
-            }
-
-            Db.Transact(() =>
-            {
-                // Set the new password
-                SystemUser user = this.Data;
-                UserHelper.SetPassword(user, NewPassword);
-
-                // Sign out the changed user if required
-                if (SystemUser.GetCurrentSystemUser() != user)
-                {
-                    SystemUser.SignOutSystemUser(user);
-                }
-            });
-
-            // TODO: Set message with success status
-        }
-
-        private void Handle(Input.CancelNewPassword action)
-        {
-            // Reset all fields
-            Message = null;
-            NewPassword = string.Empty;
-            NewPasswordRepeat = string.Empty;
-            NewPasswordClick = 0;
-            SaveNewPassword = 0;
-            CancelNewPassword = 0;
-        }
-
         void Handle(Input.ResetPassword action)
         {
             // Go to "Reset password" form
@@ -144,44 +102,5 @@ namespace SignIn
             }
         }
 
-        #region Validate properties
-        protected void AssureNewPasswordPropertyFeedback()
-        {
-            if (string.IsNullOrEmpty(NewPassword))
-            {
-                var message = "Password must not be empty!";
-                this.AddPropertyFeedback(new PropertyMetadataItem
-                {
-                    Message = "Password must not be empty!",
-                    ErrorLevel = 1,
-                    PropertyName = "NewPassword"
-                });
-                this.Message = message;
-            }
-            else if (NewPassword != NewPasswordRepeat)
-            {
-                var message = "Password repeat does not match the Password!";
-                this.AddPropertyFeedback(new PropertyMetadataItem
-                {
-                    Message = message,
-                    ErrorLevel = 1,
-                    PropertyName = "NewPassword"
-                });
-                this.AddPropertyFeedback(new PropertyMetadataItem
-                {
-                    Message = message,
-                    ErrorLevel = 1,
-                    PropertyName = "NewPasswordRepeat"
-                });
-                this.Message = message;
-            }
-            else
-            {
-                this.RemovePropertyFeedback("NewPassword");
-                this.RemovePropertyFeedback("NewPasswordRepeat");
-                this.Message = null;
-            }
-        }
-        #endregion
     }
 }

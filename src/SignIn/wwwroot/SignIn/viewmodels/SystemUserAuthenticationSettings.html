@@ -24,26 +24,7 @@
             </div>
 
             <template is="dom-if" if="{{model.NewPasswordClick$}}">
-                <div>
-                    <h4>New Password</h4>
-                    <div class="form-horizontal">
-                        <label class="control-label" for="NewPassword">New Password</label>
-                    </div>
-                    <div>
-                        <input id="NewPassword" type="password" value="{{model.NewPassword$::change}}" update-on="input" class="form-control" />
-                    </div>
-
-                    <div class="form-horizontal">
-                        <label class="control-label" for="NewPasswordRepeat">Repeat Password</label>
-                    </div>
-                    <div>
-                        <input id="NewPasswordRepeat" type="password" value="{{model.NewPasswordRepeat$::change}}" update-on="input" class="form-control" />
-                    </div>
-                    <div>
-                        <button class="btn btn-primary btn-sm" onmousedown="++this.value;" value="{{model.SaveNewPassword$::click}}">Apply new password</button>
-                        <button class="btn btn-default btn-sm" onmousedown="++this.value;" value="{{model.CancelNewPassword$::click}}">Clear</button>
-                    </div>
-                </div>
+                <starcounter-include partial="{{model.UserPassword}}"></starcounter-include>
             </template>
         </div>
     </template>

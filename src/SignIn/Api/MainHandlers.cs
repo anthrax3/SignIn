@@ -169,7 +169,8 @@ namespace SignIn
                     return page;
                 }
 
-                return Db.Scope(() => {
+                return Db.Scope(() =>
+                {
                     var settingsPage = new SettingsPage
                     {
                         Html = "/SignIn/viewmodels/SettingsPage.html",
@@ -181,7 +182,8 @@ namespace SignIn
             });
 
             // Reset password
-            Handle.GET("/signin/user/resetpassword?{?}", (string query, Request request) => {
+            Handle.GET("/signin/user/resetpassword?{?}", (string query, Request request) =>
+            {
                 NameValueCollection queryCollection = HttpUtility.ParseQueryString(query);
                 string token = queryCollection.Get("token");
 
@@ -245,7 +247,7 @@ namespace SignIn
                 }
 
                 // Get system user
-                SystemUser user = Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.ObjectID = ?", userid).First;
+                SystemUser user = Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.ObjectID = ?", userid).FirstOrDefault();
 
                 if (user == null)
                 {
@@ -256,7 +258,7 @@ namespace SignIn
 
                 SystemUser systemUser = SystemUser.GetCurrentSystemUser();
                 SystemUserGroup adminGroup = Db.SQL<SystemUserGroup>("SELECT o FROM Simplified.Ring3.SystemUserGroup o WHERE o.Name = ?",
-                        AuthorizationHelper.AdminGroupName).First;
+                        AuthorizationHelper.AdminGroupName).FirstOrDefault();
 
                 // Check if current user has permission to get this user instance
                 if (AuthorizationHelper.IsMemberOfGroup(systemUser, adminGroup))
@@ -267,7 +269,8 @@ namespace SignIn
                         {
                             Html = "/SignIn/viewmodels/SystemUserAuthenticationSettings.html",
                             Uri = request.Uri,
-                            Data = user
+                            Data = user,
+                            UserPassword = Self.GET("/signin/user/authentication/password/" + user.GetObjectID())
                         });
 
                         return page;
@@ -275,12 +278,32 @@ namespace SignIn
                 }
 
                 return new Json();
-            });
+            }, new HandlerOptions { SelfOnly = true });
+
+            Handle.GET("/signin/user/authentication/password/{?}", (string userid, Request request) =>
+            {
+                // Get system user
+                SystemUser user = Db.SQL<SystemUser>("SELECT o FROM Simplified.Ring3.SystemUser o WHERE o.ObjectID = ?", userid).FirstOrDefault();
+
+                if (user == null)
+                {
+                    return new Json();
+                }
+
+                Json page = Db.Scope(() => new SetPasswordPage
+                {
+                    Html = "/SignIn/viewmodels/SetPasswordPage.html",
+                    Data = user
+                });
+
+                return page;
+            }, new HandlerOptions { SelfOnly = true });
 
             Blender.MapUri("/signin/user", "user"); //expandable icon; used in Launcher
             Blender.MapUri("/signin/signinuser", "userform"); //inline form; used in RSE Launcher
             Blender.MapUri("/signin/signinuser?{?}", "userform-return"); //inline form; used in UserAdmin
             Blender.MapUri("/signin/admin/settings", "settings");
+            Blender.MapUri("/signin/user/authentication/password/{?}", "authentication-password");
             Blender.MapUri("/signin/user/authentication/settings/{?}", "authentication-settings");
             Blender.MapUri("/signin/partial/user/image", "userimage-default");  // default user image
         }
