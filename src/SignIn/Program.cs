@@ -1,4 +1,6 @@
-﻿namespace SignIn
+﻿using SignIn.Api;
+
+namespace SignIn
 {
     class Program
     {
@@ -8,9 +10,13 @@
 
             CommitHooks hooks = new CommitHooks();
             MainHandlers handlers = new MainHandlers();
+            OntologyMap ontology = new OntologyMap();
+            MappingHandlers mapping = new MappingHandlers();
 
             hooks.Register();
             handlers.Register();
+            mapping.Register();
+            ontology.Register();
         }
     }
 }
