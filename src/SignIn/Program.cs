@@ -10,7 +10,7 @@ namespace SignIn
 
             CommitHooks hooks = new CommitHooks();
             MainHandlers handlers = new MainHandlers();
-            OntologyMap ontology = new OntologyMap();
+            BlenderMaps ontology = new BlenderMaps();
             MappingHandlers mapping = new MappingHandlers();
 
             hooks.Register();

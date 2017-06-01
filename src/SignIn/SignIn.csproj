@@ -69,7 +69,7 @@
     <Compile Include="Api\CommitHooks.cs" />
     <Compile Include="Api\MainHandlers.cs" />
     <Compile Include="Api\MappingHandlers.cs" />
-    <Compile Include="Api\OntologyMap.cs" />
+    <Compile Include="Api\BlenderMaps.cs" />
     <Compile Include="Helpers\AuthorizationHelper.cs" />
     <Compile Include="Helpers\MailSettingsHelper.cs" />
     <Compile Include="Helpers\SignInJwt.cs" />
