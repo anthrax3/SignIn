@@ -129,7 +129,9 @@
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
     <None Include="wwwroot\SignIn\viewmodels\ResetPasswordPage.html" />
-    <Content Include="wwwroot\SignIn\css\empty_user.svg" />
+    <Content Include="wwwroot\SignIn\css\empty_user.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="wwwroot\SignIn\css\signin.css" />
     <Content Include="wwwroot\SignIn\elements\signin-element.html" />
     <Content Include="wwwroot\SignIn\viewmodels\AccessDeniedPage.html" />
