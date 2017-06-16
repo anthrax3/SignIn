@@ -68,6 +68,8 @@
   <ItemGroup>
     <Compile Include="Api\CommitHooks.cs" />
     <Compile Include="Api\MainHandlers.cs" />
+    <Compile Include="Api\MappingHandlers.cs" />
+    <Compile Include="Api\BlenderMaps.cs" />
     <Compile Include="Helpers\AuthorizationHelper.cs" />
     <Compile Include="Helpers\MailSettingsHelper.cs" />
     <Compile Include="Helpers\SignInJwt.cs" />
@@ -123,12 +125,18 @@
     <TypedJSON Include="ViewModels\SetPasswordPage.json">
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
+    <TypedJSON Include="ViewModels\AppName.json">
+      <Generator>MsBuild:Compile</Generator>
+    </TypedJSON>
     <None Include="wwwroot\SignIn\viewmodels\ResetPasswordPage.html" />
-    <Content Include="wwwroot\SignIn\css\empty_user.svg" />
+    <Content Include="wwwroot\SignIn\css\empty_user.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="wwwroot\SignIn\css\signin.css" />
     <Content Include="wwwroot\SignIn\elements\signin-element.html" />
     <Content Include="wwwroot\SignIn\viewmodels\AccessDeniedPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\AlreadyInPage.html" />
+    <None Include="wwwroot\SignIn\viewmodels\AppIcon.html" />
     <Content Include="wwwroot\SignIn\viewmodels\MainFormPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\MasterPage.html" />
     <Content Include="wwwroot\SignIn\viewmodels\ProfileFormPage.html" />
