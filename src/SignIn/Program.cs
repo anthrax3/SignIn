@@ -8,13 +8,9 @@ namespace SignIn
         {
             AuthorizationHelper.SetupPermissions();
 
-            CommitHooks hooks = new CommitHooks();
-            MainHandlers handlers = new MainHandlers();
-            BlenderMaps ontology = new BlenderMaps();
-
-            hooks.Register();
-            handlers.Register();
-            ontology.Register();
+            new CommitHooks().Register();
+            new MainHandlers().Register();
+            new BlenderMaps().Register();
         }
     }
 }
