@@ -43,6 +43,8 @@ namespace SignIn
                 return null;
             });
 
+            Handle.GET("/signin/app-name", () => new AppName());
+
             Handle.GET("/signin/user", () =>
             {
                 MasterPage master = this.GetMaster();

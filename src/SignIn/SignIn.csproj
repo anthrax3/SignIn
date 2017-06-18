@@ -68,7 +68,6 @@
   <ItemGroup>
     <Compile Include="Api\CommitHooks.cs" />
     <Compile Include="Api\MainHandlers.cs" />
-    <Compile Include="Api\MappingHandlers.cs" />
     <Compile Include="Api\BlenderMaps.cs" />
     <Compile Include="Helpers\AuthorizationHelper.cs" />
     <Compile Include="Helpers\MailSettingsHelper.cs" />
