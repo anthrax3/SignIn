@@ -18,31 +18,6 @@ namespace SignIn
 
         public void Register()
         {
-            Application.Current.Use(new HtmlFromJsonProvider());
-            Application.Current.Use(new PartialToStandaloneHtmlProvider());
-
-            Application.Current.Use((Request req) =>
-            {
-                Cookie cookie = GetSignInCookie();
-
-                if (cookie != null)
-                {
-                    if (Session.Current == null)
-                    {
-                        Session.Current = new Session(SessionOptions.PatchVersioning);
-                    }
-
-                    SystemUserSession session = SystemUser.SignInSystemUser(cookie.Value);
-
-                    if (session != null)
-                    {
-                        RefreshAuthCookie(session);
-                    }
-                }
-
-                return null;
-            });
-
             Handle.GET("/signin/app-name", () => new AppName());
 
             Handle.GET("/signin/user", () =>
@@ -68,8 +43,6 @@ namespace SignIn
                 return page;
             });
 
-            Handle.GET("/signin/partial/signout", HandleSignOut, new HandlerOptions() { SkipRequestFilters = true });
-
             Handle.GET("/signin/signinuser", HandleSignInForm);
             Handle.GET<string>("/signin/signinuser?{?}", HandleSignInForm);
 
@@ -82,23 +55,6 @@ namespace SignIn
 
                 return master;
             });
-
-            Handle.GET("/signin/partial/signin-form", () => new SignInFormPage() { Data = null }, new HandlerOptions() { SelfOnly = true });
-            Handle.GET("/signin/partial/alreadyin-form", () => new AlreadyInPage() { Data = null },
-                new HandlerOptions() { SelfOnly = true });
-            Handle.GET("/signin/partial/restore-form", () => new RestorePasswordFormPage(),
-                new HandlerOptions() { SelfOnly = true });
-            Handle.GET("/signin/partial/profile-form", () => new ProfileFormPage() { Data = null },
-                new HandlerOptions() { SelfOnly = true });
-            Handle.GET("/signin/partial/accessdenied-form", () => new AccessDeniedPage(),
-                new HandlerOptions() { SelfOnly = true });
-
-            Handle.GET("/signin/partial/main-form", () => new MainFormPage() { Data = null },
-                new HandlerOptions() { SelfOnly = true });
-
-            Handle.GET("/signin/partial/user/image", () => new UserImagePage());
-            Handle.GET("/signin/partial/user/image/{?}", (string objectId) => new Json(),
-                new HandlerOptions { SelfOnly = true });
 
             Handle.GET("/signin/generateadminuser", (Request request) =>
             {
@@ -120,19 +76,6 @@ namespace SignIn
                 Handle.SetOutgoingStatusCode(403);
                 return "Access denied.";
 
-            }, new HandlerOptions() { SkipRequestFilters = true });
-
-            Handle.POST("/signin/partial/signin", (Request request) =>
-            {
-                NameValueCollection values = HttpUtility.ParseQueryString(request.Body);
-                string username = values["username"];
-                string password = values["password"];
-                string rememberMe = values["rememberMe"];
-
-                HandleSignIn(username, password, rememberMe);
-                Session.Current.CalculatePatchAndPushOnWebSocket();
-
-                return 200;
             }, new HandlerOptions() { SkipRequestFilters = true });
 
             Handle.GET("/signin/admin/settings", (Request request) =>
@@ -274,62 +217,6 @@ namespace SignIn
             }, new HandlerOptions { SelfOnly = true });
         }
 
-        protected void ClearAuthCookie()
-        {
-            this.SetAuthCookie(null);
-        }
-
-        protected void RefreshAuthCookie(SystemUserSession Session)
-        {
-            Cookie cookie = GetSignInCookie();
-
-            if (cookie == null)
-            {
-                return;
-            }
-
-            Db.Transact(() =>
-            {
-                Session.Token = SystemUser.RenewAuthToken(Session.Token);
-                if (Session.Token.IsPersistent)
-                {
-                    Session.Token.Expires = DateTime.UtcNow.AddDays(rememberMeDays);
-                }
-            });
-
-            cookie.Value = Session.Token.Token;
-            if (Session.Token.IsPersistent)
-            {
-                cookie.Expires = Session.Token.Expires;
-            }
-
-            Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
-        }
-
-        protected void SetAuthCookie(SystemUserTokenKey token)
-        {
-            Cookie cookie = new Cookie()
-            {
-                Name = AuthCookieName
-            };
-
-            if (token == null)
-            {
-                //to delete a cookie, explicitly use a date in the past
-                cookie.Expires = DateTime.Now.AddDays(-1).ToUniversalTime();
-            }
-            else
-            {
-                cookie.Value = token.Token;
-                if (token.IsPersistent)
-                {
-                    cookie.Expires = token.Expires;
-                }
-            }
-
-            Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
-        }
-
         protected MasterPage GetMaster()
         {
             Session session = Session.Current;
@@ -350,52 +237,6 @@ namespace SignIn
             return master;
         }
 
-        protected void HandleSignIn(string Username, string Password, string RememberMe)
-        {
-            Username = Uri.UnescapeDataString(Username);
-
-            SystemUserSession session = SystemUser.SignInSystemUser(Username, Password);
-
-            if (session == null)
-            {
-                MasterPage master = GetMaster();
-                string message = "Invalid username or password!";
-
-                if (master.SignInPage != null)
-                {
-                    master.SignInPage.Message = message;
-                }
-
-                if (master.Partial is MainFormPage)
-                {
-                    MainFormPage page = (MainFormPage)master.Partial;
-                    if (page.CurrentForm is SignInFormPage)
-                    {
-                        SignInFormPage form = (SignInFormPage)page.CurrentForm;
-                        form.Message = message;
-                    }
-                }
-
-                if (master.Partial is SignInFormPage)
-                {
-                    SignInFormPage page = master.Partial as SignInFormPage;
-                    page.Message = message;
-                }
-            }
-            else
-            {
-                if (RememberMe == "true")
-                {
-                    Db.Transact(() =>
-                    {
-                        session.Token.Expires = DateTime.UtcNow.AddDays(rememberMeDays);
-                        session.Token.IsPersistent = true;
-                    });
-                }
-                SetAuthCookie(session.Token);
-            }
-        }
-
         protected Response HandleSignInForm()
         {
             return this.HandleSignInForm(string.Empty);
@@ -410,14 +251,6 @@ namespace SignIn
             master.Open("/signin/partial/main-form");
 
             return master;
-        }
-
-        protected Response HandleSignOut()
-        {
-            SystemUser.SignOutSystemUser();
-            ClearAuthCookie();
-
-            return this.GetMaster();
         }
 
         protected Cookie GetSignInCookie()
