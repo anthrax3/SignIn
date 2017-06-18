@@ -18,6 +18,8 @@ namespace SignIn.Api
 
         internal void Register()
         {
+            HandlerOptions internalOption = new HandlerOptions() { SkipRequestFilters = true };
+
             Handle.POST("/signin/partial/signin", (Request request) =>
             {
                 NameValueCollection values = HttpUtility.ParseQueryString(request.Body);
@@ -29,26 +31,17 @@ namespace SignIn.Api
                 Session.Current.CalculatePatchAndPushOnWebSocket();
 
                 return 200;
-            }, new HandlerOptions() { SkipRequestFilters = true });
+            }, internalOption);
 
-            Handle.GET("/signin/partial/signin-form", () => new SignInFormPage() { Data = null }, new HandlerOptions() { SelfOnly = true });
-            Handle.GET("/signin/partial/alreadyin-form", () => new AlreadyInPage() { Data = null },
-                new HandlerOptions() { SelfOnly = true });
-            Handle.GET("/signin/partial/restore-form", () => new RestorePasswordFormPage(),
-                new HandlerOptions() { SelfOnly = true });
-            Handle.GET("/signin/partial/profile-form", () => new ProfileFormPage() { Data = null },
-                new HandlerOptions() { SelfOnly = true });
-            Handle.GET("/signin/partial/accessdenied-form", () => new AccessDeniedPage(),
-                new HandlerOptions() { SelfOnly = true });
-
-            Handle.GET("/signin/partial/main-form", () => new MainFormPage() { Data = null },
-                new HandlerOptions() { SelfOnly = true });
-
+            Handle.GET("/signin/partial/signin-form", () => new SignInFormPage() { Data = null }, internalOption);
+            Handle.GET("/signin/partial/alreadyin-form", () => new AlreadyInPage() { Data = null }, internalOption);
+            Handle.GET("/signin/partial/restore-form", () => new RestorePasswordFormPage(), internalOption);
+            Handle.GET("/signin/partial/profile-form", () => new ProfileFormPage() { Data = null }, internalOption);
+            Handle.GET("/signin/partial/accessdenied-form", () => new AccessDeniedPage(), internalOption);
+            Handle.GET("/signin/partial/main-form", () => new MainFormPage() { Data = null }, internalOption);
             Handle.GET("/signin/partial/user/image", () => new UserImagePage());
-            Handle.GET("/signin/partial/user/image/{?}", (string objectId) => new Json(),
-                new HandlerOptions { SelfOnly = true });
-
-            Handle.GET("/signin/partial/signout", HandleSignOut, new HandlerOptions() { SkipRequestFilters = true });
+            Handle.GET("/signin/partial/user/image/{?}", (string objectId) => new Json(), internalOption);
+            Handle.GET("/signin/partial/signout", HandleSignOut, internalOption);
         }
 
         protected void HandleSignIn(string Username, string Password, string RememberMe)
