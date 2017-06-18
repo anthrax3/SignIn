@@ -1,20 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Web;
 using Starcounter;
 using Simplified.Ring3;
-using Simplified.Ring5;
 using Simplified.Ring2;
 using Simplified.Ring6;
+using SignIn.Helpers;
 
 namespace SignIn
 {
     internal class MainHandlers
     {
-        protected string AuthCookieName = "soauthtoken";
-        protected int rememberMeDays = 30;
+        private CookieHelpers cookieHelpers = new CookieHelpers();
 
         public void Register()
         {
@@ -29,7 +27,7 @@ namespace SignIn
                     return master.SignInPage;
                 }
 
-                Cookie cookie = GetSignInCookie();
+                Cookie cookie = cookieHelpers.GetSignInCookie();
                 SignInPage page = new SignInPage() { Data = null };
 
                 master.SignInPage = page;
@@ -217,7 +215,7 @@ namespace SignIn
             }, new HandlerOptions { SelfOnly = true });
         }
 
-        protected MasterPage GetMaster()
+        internal MasterPage GetMaster()
         {
             Session session = Session.Current;
 
@@ -251,14 +249,6 @@ namespace SignIn
             master.Open("/signin/partial/main-form");
 
             return master;
-        }
-
-        protected Cookie GetSignInCookie()
-        {
-            List<Cookie> cookies = Handle.IncomingRequest.Cookies.Where(val => !string.IsNullOrEmpty(val)).Select(x => new Cookie(x)).ToList();
-            Cookie cookie = cookies.FirstOrDefault(x => x.Name == AuthCookieName);
-
-            return cookie;
         }
     }
 }

@@ -1,23 +1,21 @@
-﻿using Simplified.Ring3;
+﻿using SignIn.Helpers;
+using Simplified.Ring3;
 using Simplified.Ring5;
 using Starcounter;
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace SignIn.Api
 {
     internal class PartialHandlers
     {
-        protected string AuthCookieName = "soauthtoken";
-        protected int rememberMeDays = 30;
+        private CookieHelpers cookieHelper = new CookieHelpers();
+        private MainHandlers mainHandlers = new MainHandlers();
 
         internal void Register()
         {
+
             HandlerOptions internalOption = new HandlerOptions() { SkipRequestFilters = true };
 
             Handle.POST("/signin/partial/signin", (Request request) =>
@@ -52,7 +50,7 @@ namespace SignIn.Api
 
             if (session == null)
             {
-                MasterPage master = GetMaster();
+                MasterPage master = mainHandlers.GetMaster();
                 string message = "Invalid username or password!";
 
                 if (master.SignInPage != null)
@@ -82,69 +80,20 @@ namespace SignIn.Api
                 {
                     Db.Transact(() =>
                     {
-                        session.Token.Expires = DateTime.UtcNow.AddDays(rememberMeDays);
+                        session.Token.Expires = DateTime.UtcNow.AddDays(cookieHelper.rememberMeDays);
                         session.Token.IsPersistent = true;
                     });
                 }
-                SetAuthCookie(session.Token);
+                cookieHelper.SetAuthCookie(session.Token);
             }
-        }
-
-        protected MasterPage GetMaster()
-        {
-            Session session = Session.Current;
-
-            if (session != null && session.Data != null)
-            {
-                return session.Data as MasterPage;
-            }
-
-            MasterPage master = new MasterPage();
-
-            if (session == null)
-            {
-                session = new Session(SessionOptions.PatchVersioning);
-            }
-
-            master.Session = session;
-            return master;
-        }
-
-        protected void SetAuthCookie(SystemUserTokenKey token)
-        {
-            Cookie cookie = new Cookie()
-            {
-                Name = AuthCookieName
-            };
-
-            if (token == null)
-            {
-                //to delete a cookie, explicitly use a date in the past
-                cookie.Expires = DateTime.Now.AddDays(-1).ToUniversalTime();
-            }
-            else
-            {
-                cookie.Value = token.Token;
-                if (token.IsPersistent)
-                {
-                    cookie.Expires = token.Expires;
-                }
-            }
-
-            Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
         }
 
         protected Response HandleSignOut()
         {
             SystemUser.SignOutSystemUser();
-            ClearAuthCookie();
+            cookieHelper.ClearAuthCookie();
 
-            return this.GetMaster();
-        }
-
-        protected void ClearAuthCookie()
-        {
-            this.SetAuthCookie(null);
+            return mainHandlers.GetMaster();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Simplified.Ring3;
+﻿using SignIn.Helpers;
+using Simplified.Ring3;
 using Simplified.Ring5;
 using Starcounter;
 using System;
@@ -9,8 +10,7 @@ namespace SignIn.Api
 {
     internal class Middleware
     {
-        protected string AuthCookieName = "soauthtoken";
-        protected int rememberMeDays = 30;
+        private CookieHelpers cookieHelpers = new CookieHelpers();
 
         internal void Register()
         {
@@ -19,7 +19,7 @@ namespace SignIn.Api
 
             Application.Current.Use((Request req) =>
             {
-                Cookie cookie = GetSignInCookie();
+                Cookie cookie = cookieHelpers.GetSignInCookie();
 
                 if (cookie != null)
                 {
@@ -32,48 +32,12 @@ namespace SignIn.Api
 
                     if (session != null)
                     {
-                        RefreshAuthCookie(session);
+                        cookieHelpers.RefreshAuthCookie(session);
                     }
                 }
 
                 return null;
             });
-        }
-
-
-        protected Cookie GetSignInCookie()
-        {
-            List<Cookie> cookies = Handle.IncomingRequest.Cookies.Where(val => !string.IsNullOrEmpty(val)).Select(x => new Cookie(x)).ToList();
-            Cookie cookie = cookies.FirstOrDefault(x => x.Name == AuthCookieName);
-
-            return cookie;
-        }
-
-        protected void RefreshAuthCookie(SystemUserSession Session)
-        {
-            Cookie cookie = GetSignInCookie();
-
-            if (cookie == null)
-            {
-                return;
-            }
-
-            Db.Transact(() =>
-            {
-                Session.Token = SystemUser.RenewAuthToken(Session.Token);
-                if (Session.Token.IsPersistent)
-                {
-                    Session.Token.Expires = DateTime.UtcNow.AddDays(rememberMeDays);
-                }
-            });
-
-            cookie.Value = Session.Token.Token;
-            if (Session.Token.IsPersistent)
-            {
-                cookie.Expires = Session.Token.Expires;
-            }
-
-            Handle.AddOutgoingCookie(cookie.Name, cookie.GetFullValueString());
         }
     }
 }
