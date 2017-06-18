@@ -21,19 +21,6 @@ namespace SignIn
             Application.Current.Use(new HtmlFromJsonProvider());
             Application.Current.Use(new PartialToStandaloneHtmlProvider());
 
-            //Testing JWT
-            /*Handle.GET("/signin/jwt/{?}/{?}", (string Username, string Password) => {
-                string message;
-                SystemUserSession session = SignInOut.SignInSystemUser(Username, Password, null, out message);
-
-                if (session != null) {
-                    string jwt = JWT.JsonWebToken.Encode(new { Username = Username, Issuer = "Polyjuice.SignIn" }, session.Token.User.Password, JWT.JwtHashAlgorithm.HS256);
-                    Handle.AddOutgoingHeader("x-jwt", jwt);
-                }
-
-                return 200;
-            });*/
-
             Application.Current.Use((Request req) =>
             {
                 Cookie cookie = GetSignInCookie();
@@ -75,21 +62,6 @@ namespace SignIn
                     SystemUser.SignInSystemUser(cookie.Value);
                     master.RefreshSignInState();
                 }
-
-                //Testing JWT
-                /*if (Handle.IncomingRequest.HeadersDictionary.ContainsKey("x-jwt")) {
-                    System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
-                    string jwt = Handle.IncomingRequest.HeadersDictionary["x-jwt"];
-                    Dictionary<string, string> payload = JWT.JsonWebToken.DecodeToObject<Dictionary<string, string>>(jwt, string.Empty, false);
-                    string username = payload["Username"];
-                    SystemUser user = Db.SQL<SystemUser>("SELECT su FROM Simplified.Ring3.SystemUser su WHERE su.Username = ?", username).First;
-
-                    try {
-                        JWT.JsonWebToken.DecodeToObject<Dictionary<string, string>>(jwt, user.Password, true);
-                        page.SetAuthorizedState(SignInOut.SignInSystemUser(user));
-                    } catch (JWT.SignatureVerificationException) { 
-                    }
-                }*/
 
                 return page;
             });
@@ -299,9 +271,9 @@ namespace SignIn
                 return page;
             }, new HandlerOptions { SelfOnly = true });
 
-            Blender.MapUri("/signin/user", "user"); //expandable icon; used in Launcher
-            Blender.MapUri("/signin/signinuser", "userform"); //inline form; used in RSE Launcher
-            Blender.MapUri("/signin/signinuser?{?}", "userform-return"); //inline form; used in UserAdmin
+            Blender.MapUri("/signin/user", "user"); //expandable icon
+            Blender.MapUri("/signin/signinuser", "userform"); //inline form
+            Blender.MapUri("/signin/signinuser?{?}", "userform-return"); //inline form
             Blender.MapUri("/signin/admin/settings", "settings");
             Blender.MapUri("/signin/user/authentication/password/{?}", "authentication-password");
             Blender.MapUri("/signin/user/authentication/settings/{?}", "authentication-settings");
