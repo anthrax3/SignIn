@@ -10,7 +10,7 @@ namespace SignIn
 
             new CommitHooks().Register();
             new MainHandlers().Register();
-            new BlenderMaps().Register();
+            new BlenderMapping().Register();
         }
     }
 }
