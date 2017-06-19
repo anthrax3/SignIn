@@ -7,9 +7,9 @@ namespace SignIn
     {
         public void Register()
         {
-            Hook<SystemUserSession>.CommitInsert += (s, a) => { this.RefreshSignInState(); };
-            Hook<SystemUserSession>.CommitDelete += (s, a) => { this.RefreshSignInState(); };
-            Hook<SystemUserSession>.CommitUpdate += (s, a) => { this.RefreshSignInState(); };
+            Hook<SystemUserSession>.CommitInsert += (s, a) => this.RefreshSignInState();
+            Hook<SystemUserSession>.CommitDelete += (s, a) => this.RefreshSignInState();
+            Hook<SystemUserSession>.CommitUpdate += (s, a) => this.RefreshSignInState();
         }
 
         protected void RefreshSignInState()

@@ -68,9 +68,11 @@
   <ItemGroup>
     <Compile Include="Api\CommitHooks.cs" />
     <Compile Include="Api\MainHandlers.cs" />
-    <Compile Include="Api\MappingHandlers.cs" />
-    <Compile Include="Api\BlenderMaps.cs" />
+    <Compile Include="Api\BlenderMapping.cs" />
+    <Compile Include="Api\Middleware.cs" />
+    <Compile Include="Api\PartialHandlers.cs" />
     <Compile Include="Helpers\AuthorizationHelper.cs" />
+    <Compile Include="Helpers\CookieHelpers.cs" />
     <Compile Include="Helpers\MailSettingsHelper.cs" />
     <Compile Include="Helpers\SignInJwt.cs" />
     <Compile Include="Helpers\SignInOut.cs" />
