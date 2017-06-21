@@ -19,8 +19,7 @@
     </template>
     <script>
         (function () {
-            var script = document._currentScript || document.currentScript;
-            var template = script.previousElementSibling;
+            var template = document.currentScript.previousElementSibling;
 
             template.local = {
                 username: "",
