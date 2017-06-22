@@ -5,7 +5,8 @@
     </template>
     <script>
         (function () {
-            var template = document.currentScript.previousElementSibling;
+            var script = document._currentScript || document.currentScript;
+            var template = script.previousElementSibling;
 
             template.signOut = function () {
                 document.querySelector("puppet-client").network.changeState("/signin/partial/signout");
