@@ -242,11 +242,20 @@ namespace SignIn
 
         protected Response HandleSignInForm(string OriginalUrl)
         {
-            MasterPage master = this.GetMaster();
+            var settings = DataHelper.GetSettings();
 
+            MasterPage master = this.GetMaster();
             master.RequireSignIn = false;
-            master.OriginalUrl = HttpUtility.UrlDecode(OriginalUrl);
-            master.Open("/signin/partial/main-form");
+
+            if (settings.SignInFormAsFullPage && Handle.CallLevel > 0 && !string.IsNullOrEmpty(OriginalUrl))
+            {
+                master.Redirect("/signin/signinuser?" + OriginalUrl);
+            }
+            else
+            {
+                master.OriginalUrl = HttpUtility.UrlDecode(OriginalUrl);
+                master.Open("/signin/partial/main-form");
+            }
 
             return master;
         }
