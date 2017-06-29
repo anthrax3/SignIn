@@ -14,9 +14,9 @@ namespace SignIn
 
         protected void RefreshSignInState()
         {
-            if (Session.Current != null)
+            if (Session.CurrentOrDefault != null)
             {
-                var master = Session.Current.Data as MasterPage;
+                var master = Session.Current.Store[nameof(MasterPage)] as MasterPage;
                 master?.RefreshSignInState();
             }
         }
