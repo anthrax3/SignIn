@@ -19,6 +19,7 @@ namespace SignIn.Api
 
             Application.Current.Use((Request req) =>
             {
+                Session.Ensure();
                 Cookie cookie = cookieHelpers.GetSignInCookie();
 
                 if (cookie != null)
