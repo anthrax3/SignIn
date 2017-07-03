@@ -217,7 +217,7 @@ namespace SignIn
 
         internal MasterPage GetMaster()
         {
-            MasterPage master = Session.Current.Store[nameof(MasterPage)] as MasterPage;
+            MasterPage master = Session.Ensure().Store[nameof(MasterPage)] as MasterPage;
             if (master == null) 
             {
                 master = new MasterPage();
