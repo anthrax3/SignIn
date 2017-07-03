@@ -93,7 +93,7 @@ namespace SignIn.Api
             SystemUser.SignOutSystemUser();
             cookieHelper.ClearAuthCookie();
 
-            return mainHandlers.GetMaster();
+            return 200;
         }
     }
 }
