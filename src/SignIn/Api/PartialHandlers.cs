@@ -26,8 +26,6 @@ namespace SignIn.Api
                 string rememberMe = values["rememberMe"];
 
                 HandleSignIn(username, password, rememberMe);
-                Session.Current.CalculatePatchAndPushOnWebSocket();
-
                 return 200;
             }, internalOption);
 
