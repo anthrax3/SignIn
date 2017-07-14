@@ -18,6 +18,11 @@ namespace SignIn
         {
             Handle.GET("/signin/app-name", () => new AppName());
 
+            Handle.GET("/signin", () =>
+            {
+                return Self.GET("/signin/signinuser");
+            });
+
             Handle.GET("/signin/user", () =>
             {
                 MasterPage master = this.GetMaster();

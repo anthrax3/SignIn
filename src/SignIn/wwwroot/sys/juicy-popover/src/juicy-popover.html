@@ -1,7 +1,7 @@
 <!--
 `juicy-popover` - Custom Element that expands an area when clicked on a handle
 @element juicy-popover
-version: 0.0.3
+version: 1.1.0
 -->
 <template id="juicy-popover-template">
     <style>
@@ -23,10 +23,12 @@ version: 0.0.3
     </style>
     <div id="container">
         <span id="handle">
-            <content select="{{handleSelector}}"></content>
+            <slot name="handle"></slot>
+            <content select="[slot='handle']"></content>
         </span>
         <span id="expandable">
-            <content select="{{expandableSelector}}"></content>
+            <slot name="expendable"></slot>
+            <content select="[slot='expendable']"></content>
         </span>
     </div>
 </template>
@@ -47,22 +49,67 @@ version: 0.0.3
 
         JuicyPopoverElementPrototype.attributeChangedCallback = function (attributeName, oldVal, newVal) {
             switch (attributeName) {
-                case "handleSelector":
-                    this.shadowRoot.querySelector("#handle content").setAttribute("select", newVal || ".handle");
+                case "disabled":
+                    var shouldBeDisabled = (newVal !== null);
+                    this.disabled = shouldBeDisabled;
                     break;
 
-                case "expandableSelector":
-                    this.shadowRoot.querySelector("#expandable content").setAttribute("select", newVal || ".expandable");
+                case "expanded":
+                    var shouldBeExpanded = (newVal !== null);
+                    this.expanded = shouldBeExpanded;
                     break;
             }
         };
 
         JuicyPopoverElementPrototype.createdCallback = function () {
+            var disabled = false;
+            Object.defineProperty(this, 'disabled',{
+                set: function (val) {
+                    if (disabled !== val) {
+                        disabled = val;
+                        if (val) {
+                            this.expanded = false;
+                            this.setAttribute('disabled', '');
+                        }
+                        else {
+                            this.removeAttribute('disabled');
+                        }
+                    }
+                },
+                get: function(){
+                    return disabled;
+                }
+            });
+
+            var expanded = false;
+            Object.defineProperty(this, 'expanded',{
+                set: function (val) {
+                    if (expanded !== val) {
+                        expanded = val;
+                        if(val) {
+                            this.setAttribute('expanded', '');
+                            this._expand();
+                        } else {
+                            this.removeAttribute('expanded');
+                            this._collapse();
+                        }
+                    }
+                },
+                get: function(){
+                    return expanded;
+                }
+            });
+
             var t = importDoc.querySelector('#juicy-popover-template');
             var clone = document.importNode(t.content, true);
-            clone.querySelector("#handle content").setAttribute("select", this.getAttribute("handleSelector") || ".handle");
-            clone.querySelector("#expandable content").setAttribute("select", this.getAttribute("expandableSelector") || ".expandable");
-            this.createShadowRoot().appendChild(clone);
+            var root;
+            if (this.attachShadow) {
+                root = this.attachShadow({ mode: 'open' });
+            } else {
+                root = this.createShadowRoot();
+            }
+
+            root.appendChild(clone);
 
             var ignore = false;
             var handle = this.shadowRoot.querySelector("#handle");
@@ -81,7 +128,7 @@ version: 0.0.3
                 }
             }.bind(this));
 
-            expandable.addEventListener("mouseup", function (ev) {
+            expandable.addEventListener("mousedown", function (ev) {
                 ignore = true;
             }.bind(this));
 
@@ -118,22 +165,37 @@ version: 0.0.3
         };
 
         JuicyPopoverElementPrototype.expand = function (elem) {
-            var expandable = this.shadowRoot.querySelector("#expandable");
-            expandable.classList.toggle("expanded");
-            this.classList.toggle("expanded");
-
             this.expandedOnElement = elem;
+            this.expanded = true;
+        };
+
+        JuicyPopoverElementPrototype._expand = function () {
+            if (this.disabled) {
+                return;
+            }
+            var expandable = this.shadowRoot.querySelector("#expandable");
+            expandable.classList.add("expanded");
+            this.classList.add("expanded");
+
             this.reposition();
 
             var e = new Event("juicy-popover-expand");
             this.dispatchEvent(e);
+            var e = new Event("expanded-changed");
+            this.dispatchEvent(e);
         };
 
         JuicyPopoverElementPrototype.collapse = function () {
+            this.expanded = false;
+        };
+
+        JuicyPopoverElementPrototype._collapse = function () {
             this.shadowRoot.querySelector("#expandable").classList.remove("expanded");
             this.classList.remove("expanded");
 
             var e = new Event("juicy-popover-collapse");
+            this.dispatchEvent(e);
+            var e = new Event("expanded-changed");
             this.dispatchEvent(e);
         };
 
