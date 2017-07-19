@@ -44,38 +44,38 @@
         <style>
             @import url("/SignIn/css/signin.css");
         </style>
-        <content select="[slot='SignIn/header']"></content>
+        <slot name="SignIn/header"></slot>
         <div class="signin-page">
-            <content select="[slot='SignIn/message']"></content>
+            <slot name="SignIn/message"></slot>
             <div class="signin-form">
                 <div class="signin-form__row">
                     <div class="signin-form__label">
-                        <content select="[slot='SignIn/username-label']"></content>
+                        <slot name="SignIn/username-label"></slot>
                     </div>
                     <div class="signin-profile__input">
-                        <content select="[slot='SignIn/username-input']"></content>
+                        <slot name="SignIn/username-input"></slot>
                     </div>
                 </div>
                 <div class="signin-form__row">
                     <div class="signin-form__label">
-                        <content select="[slot='SignIn/password-label']"></content>
+                        <slot name="SignIn/password-label"></slot>
                     </div>
                     <div class="signin-profile__input">
-                        <content select="[slot='SignIn/password-input']"></content>
+                        <slot name="SignIn/password-input"></slot>
                     </div>
                 </div>
             </div>
             <div class="signin-form__toolbar">
                 <label>
-                    <content select="[slot='SignIn/rememberme-checkbox']"></content>
-                    <content select="[slot='SignIn/rememberme-label']"></content>
+                    <slot name="SignIn/rememberme-checkbox"></slot>
+                    <slot name="SignIn/rememberme-label"></slot>
                 </label>
             </div>
             <div class="signin-form__toolbar">
-                <content select="[slot='SignIn/submit-button']"></content>
-                <content select="[slot='SignIn/forgot-button']"></content>
+                <slot name="SignIn/submit-button"></slot>
+                <slot name="SignIn/forgot-button"></slot>
             </div>
         </div>
-        <content select="[slot='SignIn/signin-element']"></content>
+        <slot name="SignIn/signin-element"></slot>
     </template>
 </template>
