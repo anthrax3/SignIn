@@ -23,11 +23,7 @@ namespace SignIn.Api
 
                 if (cookie != null)
                 {
-                    if (Session.Current == null)
-                    {
-                        Session.Current = new Session(SessionOptions.PatchVersioning);
-                    }
-
+                    Session.Ensure();
                     SystemUserSession session = SystemUser.SignInSystemUser(cookie.Value);
 
                     if (session != null)

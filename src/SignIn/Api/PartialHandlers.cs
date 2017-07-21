@@ -26,8 +26,8 @@ namespace SignIn.Api
                 string rememberMe = values["rememberMe"];
 
                 HandleSignIn(username, password, rememberMe);
-                Session.Current.CalculatePatchAndPushOnWebSocket();
 
+                Session.Current?.CalculatePatchAndPushOnWebSocket();
                 return 200;
             }, internalOption);
 
@@ -93,7 +93,7 @@ namespace SignIn.Api
             SystemUser.SignOutSystemUser();
             cookieHelper.ClearAuthCookie();
 
-            return mainHandlers.GetMaster();
+            return 200;
         }
     }
 }

@@ -16,7 +16,7 @@ namespace SignIn
         {
             if (Session.Current != null)
             {
-                var master = Session.Current.Data as MasterPage;
+                var master = Session.Current.Store[nameof(MasterPage)] as MasterPage;
                 master?.RefreshSignInState();
             }
         }

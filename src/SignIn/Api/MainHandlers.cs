@@ -35,8 +35,8 @@ namespace SignIn
                 Cookie cookie = cookieHelpers.GetSignInCookie();
                 SignInPage page = new SignInPage() { Data = null };
 
-                master.SignInPage = page;
-
+                Session.Current.Store[nameof(SignInPage)] = page;
+                
                 if (cookie != null)
                 {
                     SystemUser.SignInSystemUser(cookie.Value);
@@ -222,21 +222,12 @@ namespace SignIn
 
         internal MasterPage GetMaster()
         {
-            Session session = Session.Current;
-
-            if (session != null && session.Data != null)
+            MasterPage master = Session.Ensure().Store[nameof(MasterPage)] as MasterPage;
+            if (master == null) 
             {
-                return session.Data as MasterPage;
+                master = new MasterPage();
+                Session.Current.Store[nameof(MasterPage)] = master;
             }
-
-            MasterPage master = new MasterPage();
-
-            if (session == null)
-            {
-                session = new Session(SessionOptions.PatchVersioning);
-            }
-
-            master.Session = session;
             return master;
         }
 
