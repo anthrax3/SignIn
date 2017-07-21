@@ -73,6 +73,7 @@
     <Compile Include="Api\PartialHandlers.cs" />
     <Compile Include="Helpers\AuthorizationHelper.cs" />
     <Compile Include="Helpers\CookieHelpers.cs" />
+    <Compile Include="Helpers\DataHelper.cs" />
     <Compile Include="Helpers\MailSettingsHelper.cs" />
     <Compile Include="Helpers\SignInJwt.cs" />
     <Compile Include="Helpers\SignInOut.cs" />

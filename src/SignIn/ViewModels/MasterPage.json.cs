@@ -14,10 +14,17 @@ namespace SignIn
 
         protected string url;
 
-        public void Open(string Url)
+        public void Open(string contentUri)
         {
-            this.url = Url;
+            this.url = contentUri;
+            this.RedirectUrl = null;
             this.RefreshSignInState();
+        }
+
+        public void Redirect(string redirectUri)
+        {
+            this.OriginalUrl = redirectUri;
+            this.Open(null);
         }
 
         public void RefreshSignInState()
