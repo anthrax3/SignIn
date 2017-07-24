@@ -20,7 +20,7 @@
     margin: 0 5px;
 }
 
-.signin-form__label ::content label {
+.signin-form__label ::slotted label {
     font-weight: bold;
 }
 

@@ -26,57 +26,57 @@
         <style>
             @import url("/SignIn/css/signin.css");
         </style>
-        <content select="[slot='SignIn/message']"></content>
+        <slot name="SignIn/message"></slot>
         <div class="signin-page">
-            <content select="[slot='SignIn/profile-header']"></content>
+            <slot name="SignIn/profile-header"></slot>
             <div class="signin-form">
                 <div class="signin-form__row">
                     <div class="signin-form__label">
-                        <content select="[slot='SignIn/username-label']"></content>
+                        <slot name="SignIn/username-label"></slot>
                     </div>
                     <div class="signin-form__input">
-                        <content select="[slot='SignIn/username-input']"></content>
+                        <slot name="SignIn/username-input"></slot>
                     </div>
                 </div>
                 <div class="signin-form__row">
                     <div class="signin-form__label">
-                        <content select="[slot='SignIn/email-label']"></content>
+                        <slot name="SignIn/email-label"></slot>
                     </div>
                     <div class="signin-form__input">
-                        <content select="[slot='SignIn/email-input']"></content>
+                        <slot name="SignIn/email-input"></slot>
                     </div>
                 </div>
             </div>
-            <content select="[slot='SignIn/update-profile-button']"></content>
-            <content select="[slot='SignIn/password-header']"></content>
+            <slot name="SignIn/update-profile-button"></slot>
+            <slot name="SignIn/password-header"></slot>
             <div class="signin-form">
                 <div class="signin-form__row">
                     <div class="signin-form__label">
-                        <content select="[slot='SignIn/old-password-label']"></content>
+                        <slot name="SignIn/old-password-label"></slot>
                     </div>
                     <div class="signin-form__input">
-                        <content select="[slot='SignIn/old-password-input']"></content>
+                        <slot name="SignIn/old-password-input"></slot>
                     </div>
                 </div>
                 <div class="signin-form__row">
                     <div class="signin-form__label">
-                        <content select="[slot='SignIn/new-password-label']"></content>
+                        <slot name="SignIn/new-password-label"></slot>
                     </div>
                     <div class="signin-form__input">
-                        <content select="[slot='SignIn/new-password-input']"></content>
+                        <slot name="SignIn/new-password-input"></slot>
                     </div>
                 </div>
                 <div class="signin-form__row">
                     <div class="signin-form__label">
-                        <content select="[slot='SignIn/repeat-password-label']"></content>
+                        <slot name="SignIn/repeat-password-label"></slot>
                     </div>
                     <div class="signin-form__input">
-                        <content select="[slot='SignIn/repeat-password-input']"></content>
+                        <slot name="SignIn/repeat-password-input"></slot>
                     </div>
                 </div>
             </div>
 
-            <content select="[slot='SignIn/update-password-button']"></content>
+            <slot name="SignIn/update-password-button"></slot>
         </div>
     </template>
 </template>
