@@ -3,4 +3,8 @@
         You do not have permissions to access this page!
     </p>
     <a slot="SignIn/sign-in-link" href="/signin/signinuser?%2Fsignin%2Fprofile" class="btn btn-link">Sign in</a>
+    <template is="declarative-shadow-dom">
+        <slot name="SignIn/access-denied-message"></slot>
+        <slot name="SignIn/sign-in-link"></slot>
+    </template>
 </template>
