@@ -1,10 +1,10 @@
-﻿using Starcounter;
+using Starcounter;
 
-namespace SignIn.Api
+namespace SignIn_Map
 {
-    internal class BlenderMapping
+    class Program
     {
-        public void Register()
+        static void Main()
         {
             Blender.MapUri("/signin/app-name", "app-name");
             Blender.MapUri("/signin/user", "user"); //expandable icon

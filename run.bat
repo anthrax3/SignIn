@@ -3,3 +3,4 @@
 IF "%CONFIGURATION%"=="" SET CONFIGURATION=Debug
 
 star %* --resourcedir="%~dp0src\SignIn\wwwroot" "%~dp0src/SignIn/bin/%CONFIGURATION%/SignIn.exe"
+star "%~dp0src/SignIn/SignIn_Map.cs"

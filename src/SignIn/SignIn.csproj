@@ -68,7 +68,6 @@
   <ItemGroup>
     <Compile Include="Api\CommitHooks.cs" />
     <Compile Include="Api\MainHandlers.cs" />
-    <Compile Include="Api\BlenderMapping.cs" />
     <Compile Include="Api\Middleware.cs" />
     <Compile Include="Api\PartialHandlers.cs" />
     <Compile Include="Helpers\AuthorizationHelper.cs" />

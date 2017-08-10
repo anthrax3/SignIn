@@ -12,7 +12,6 @@ namespace SignIn
             new CommitHooks().Register();
             new MainHandlers().Register();
             new PartialHandlers().Register();
-            new BlenderMapping().Register();
         }
     }
 }
